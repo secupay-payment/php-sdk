@@ -27,14 +27,14 @@ use Secupay\Sdk\Http\HttpRequest;
 use Secupay\Sdk\ObjectSerializer;
 
 /**
- * HumanUserService service
+ * ShopifySubscriptionSuspensionService service
  *
  * @category Class
  * @package  Secupay\Sdk
  * @author   Secupay AG.
  * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License v2
  */
-class HumanUserService {
+class ShopifySubscriptionSuspensionService {
 
 	/**
 	 * The API client instance.
@@ -71,14 +71,15 @@ class HumanUserService {
 	 *
 	 * Count
 	 *
+	 * @param int $space_id  (required)
 	 * @param \Secupay\Sdk\Model\EntityQueryFilter $filter The filter which restricts the entities which are used to calculate the count. (optional)
 	 * @throws \Secupay\Sdk\ApiException
 	 * @throws \Secupay\Sdk\VersioningException
 	 * @throws \Secupay\Sdk\Http\ConnectionException
 	 * @return int
 	 */
-	public function count($filter = null) {
-		return $this->countWithHttpInfo($filter)->getData();
+	public function count($space_id, $filter = null) {
+		return $this->countWithHttpInfo($space_id, $filter)->getData();
 	}
 
 	/**
@@ -87,13 +88,18 @@ class HumanUserService {
 	 * Count
      
      *
+	 * @param int $space_id  (required)
 	 * @param \Secupay\Sdk\Model\EntityQueryFilter $filter The filter which restricts the entities which are used to calculate the count. (optional)
 	 * @throws \Secupay\Sdk\ApiException
 	 * @throws \Secupay\Sdk\VersioningException
 	 * @throws \Secupay\Sdk\Http\ConnectionException
 	 * @return ApiResponse
 	 */
-	public function countWithHttpInfo($filter = null) {
+	public function countWithHttpInfo($space_id, $filter = null) {
+		// verify the required parameter 'space_id' is set
+		if (is_null($space_id)) {
+			throw new \InvalidArgumentException('Missing the required parameter $space_id when calling count');
+		}
 		// header params
 		$headerParams = [];
 		$headerAccept = $this->apiClient->selectHeaderAccept(['application/json;charset=utf-8']);
@@ -104,9 +110,12 @@ class HumanUserService {
 
 		// query params
 		$queryParams = [];
+		if (!is_null($space_id)) {
+			$queryParams['spaceId'] = $this->apiClient->getSerializer()->toQueryValue($space_id);
+		}
 
 		// path params
-		$resourcePath = '/human-user/count';
+		$resourcePath = '/shopify-subscription-suspension/count';
 		// default format to json
 		$resourcePath = str_replace('{format}', 'json', $resourcePath);
 
@@ -134,7 +143,7 @@ class HumanUserService {
 				$httpBody,
 				$headerParams,
 				'int',
-				'/human-user/count'
+				'/shopify-subscription-suspension/count'
             );
 			return new ApiResponse($response->getStatusCode(), $response->getHeaders(), $this->apiClient->getSerializer()->deserialize($response->getData(), 'int', $response->getHeaders()));
 		} catch (ApiException $e) {
@@ -169,142 +178,42 @@ class HumanUserService {
 	}
 
 	/**
-	 * Operation create
+	 * Operation reactivate
 	 *
-	 * Create
+	 * Reactivate
 	 *
-	 * @param \Secupay\Sdk\Model\HumanUserCreate $entity The human user object with the properties which should be created. (required)
-	 * @throws \Secupay\Sdk\ApiException
-	 * @throws \Secupay\Sdk\VersioningException
-	 * @throws \Secupay\Sdk\Http\ConnectionException
-	 * @return \Secupay\Sdk\Model\HumanUser
-	 */
-	public function create($entity) {
-		return $this->createWithHttpInfo($entity)->getData();
-	}
-
-	/**
-	 * Operation createWithHttpInfo
-	 *
-	 * Create
-     
-     *
-	 * @param \Secupay\Sdk\Model\HumanUserCreate $entity The human user object with the properties which should be created. (required)
-	 * @throws \Secupay\Sdk\ApiException
-	 * @throws \Secupay\Sdk\VersioningException
-	 * @throws \Secupay\Sdk\Http\ConnectionException
-	 * @return ApiResponse
-	 */
-	public function createWithHttpInfo($entity) {
-		// verify the required parameter 'entity' is set
-		if (is_null($entity)) {
-			throw new \InvalidArgumentException('Missing the required parameter $entity when calling create');
-		}
-		// header params
-		$headerParams = [];
-		$headerAccept = $this->apiClient->selectHeaderAccept(['application/json;charset=utf-8']);
-		if (!is_null($headerAccept)) {
-			$headerParams[HttpRequest::HEADER_KEY_ACCEPT] = $headerAccept;
-		}
-		$headerParams[HttpRequest::HEADER_KEY_CONTENT_TYPE] = $this->apiClient->selectHeaderContentType(['application/json;charset=utf-8']);
-
-		// query params
-		$queryParams = [];
-
-		// path params
-		$resourcePath = '/human-user/create';
-		// default format to json
-		$resourcePath = str_replace('{format}', 'json', $resourcePath);
-
-		// form params
-		$formParams = [];
-		// body params
-		$tempBody = null;
-		if (isset($entity)) {
-			$tempBody = $entity;
-		}
-
-		// for model (json/xml)
-		$httpBody = '';
-		if (isset($tempBody)) {
-			$httpBody = $tempBody; // $tempBody is the method argument, if present
-		} elseif (!empty($formParams)) {
-			$httpBody = $formParams; // for HTTP post (form)
-		}
-		// make the API Call
-		try {
-			$response = $this->apiClient->callApi(
-				$resourcePath,
-				'POST',
-				$queryParams,
-				$httpBody,
-				$headerParams,
-				'\Secupay\Sdk\Model\HumanUser',
-				'/human-user/create'
-            );
-			return new ApiResponse($response->getStatusCode(), $response->getHeaders(), $this->apiClient->getSerializer()->deserialize($response->getData(), '\Secupay\Sdk\Model\HumanUser', $response->getHeaders()));
-		} catch (ApiException $e) {
-			switch ($e->getCode()) {
-                case 200:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\HumanUser',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                break;
-                case 442:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\ClientError',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                break;
-                case 542:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\ServerError',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                break;
-			}
-			throw $e;
-		}
-	}
-
-	/**
-	 * Operation delete
-	 *
-	 * Delete
-	 *
-	 * @param int $id  (required)
+	 * @param int $space_id  (required)
+	 * @param int $subscription_id The ID identifies the suspended Shopify subscription which should be reactivated. (required)
 	 * @throws \Secupay\Sdk\ApiException
 	 * @throws \Secupay\Sdk\VersioningException
 	 * @throws \Secupay\Sdk\Http\ConnectionException
 	 * @return void
 	 */
-	public function delete($id) {
-		return $this->deleteWithHttpInfo($id)->getData();
+	public function reactivate($space_id, $subscription_id) {
+		return $this->reactivateWithHttpInfo($space_id, $subscription_id)->getData();
 	}
 
 	/**
-	 * Operation deleteWithHttpInfo
+	 * Operation reactivateWithHttpInfo
 	 *
-	 * Delete
+	 * Reactivate
      
      *
-	 * @param int $id  (required)
+	 * @param int $space_id  (required)
+	 * @param int $subscription_id The ID identifies the suspended Shopify subscription which should be reactivated. (required)
 	 * @throws \Secupay\Sdk\ApiException
 	 * @throws \Secupay\Sdk\VersioningException
 	 * @throws \Secupay\Sdk\Http\ConnectionException
 	 * @return ApiResponse
 	 */
-	public function deleteWithHttpInfo($id) {
-		// verify the required parameter 'id' is set
-		if (is_null($id)) {
-			throw new \InvalidArgumentException('Missing the required parameter $id when calling delete');
+	public function reactivateWithHttpInfo($space_id, $subscription_id) {
+		// verify the required parameter 'space_id' is set
+		if (is_null($space_id)) {
+			throw new \InvalidArgumentException('Missing the required parameter $space_id when calling reactivate');
+		}
+		// verify the required parameter 'subscription_id' is set
+		if (is_null($subscription_id)) {
+			throw new \InvalidArgumentException('Missing the required parameter $subscription_id when calling reactivate');
 		}
 		// header params
 		$headerParams = [];
@@ -312,24 +221,25 @@ class HumanUserService {
 		if (!is_null($headerAccept)) {
 			$headerParams[HttpRequest::HEADER_KEY_ACCEPT] = $headerAccept;
 		}
-		$headerParams[HttpRequest::HEADER_KEY_CONTENT_TYPE] = $this->apiClient->selectHeaderContentType(['application/json;charset=utf-8']);
+		$headerParams[HttpRequest::HEADER_KEY_CONTENT_TYPE] = $this->apiClient->selectHeaderContentType([]);
 
 		// query params
 		$queryParams = [];
+		if (!is_null($space_id)) {
+			$queryParams['spaceId'] = $this->apiClient->getSerializer()->toQueryValue($space_id);
+		}
+		if (!is_null($subscription_id)) {
+			$queryParams['subscriptionId'] = $this->apiClient->getSerializer()->toQueryValue($subscription_id);
+		}
 
 		// path params
-		$resourcePath = '/human-user/delete';
+		$resourcePath = '/shopify-subscription-suspension/reactivate';
 		// default format to json
 		$resourcePath = str_replace('{format}', 'json', $resourcePath);
 
 		// form params
 		$formParams = [];
-		// body params
-		$tempBody = null;
-		if (isset($id)) {
-			$tempBody = $id;
-		}
-
+		
 		// for model (json/xml)
 		$httpBody = '';
 		if (isset($tempBody)) {
@@ -346,125 +256,11 @@ class HumanUserService {
 				$httpBody,
 				$headerParams,
 				null,
-				'/human-user/delete'
+				'/shopify-subscription-suspension/reactivate'
             );
 			return new ApiResponse($response->getStatusCode(), $response->getHeaders());
 		} catch (ApiException $e) {
 			switch ($e->getCode()) {
-                case 409:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\ClientError',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                break;
-                case 442:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\ClientError',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                break;
-                case 542:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\ServerError',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                break;
-			}
-			throw $e;
-		}
-	}
-
-	/**
-	 * Operation export
-	 *
-	 * Export
-	 *
-	 * @param \Secupay\Sdk\Model\EntityExportRequest $request The request controls the entries which are exported. (required)
-	 * @throws \Secupay\Sdk\ApiException
-	 * @throws \Secupay\Sdk\VersioningException
-	 * @throws \Secupay\Sdk\Http\ConnectionException
-	 * @return string
-	 */
-	public function export($request) {
-		return $this->exportWithHttpInfo($request)->getData();
-	}
-
-	/**
-	 * Operation exportWithHttpInfo
-	 *
-	 * Export
-     
-     *
-	 * @param \Secupay\Sdk\Model\EntityExportRequest $request The request controls the entries which are exported. (required)
-	 * @throws \Secupay\Sdk\ApiException
-	 * @throws \Secupay\Sdk\VersioningException
-	 * @throws \Secupay\Sdk\Http\ConnectionException
-	 * @return ApiResponse
-	 */
-	public function exportWithHttpInfo($request) {
-		// verify the required parameter 'request' is set
-		if (is_null($request)) {
-			throw new \InvalidArgumentException('Missing the required parameter $request when calling export');
-		}
-		// header params
-		$headerParams = [];
-		$headerAccept = $this->apiClient->selectHeaderAccept(['application/json;charset=utf-8', 'text/csv']);
-		if (!is_null($headerAccept)) {
-			$headerParams[HttpRequest::HEADER_KEY_ACCEPT] = $headerAccept;
-		}
-		$headerParams[HttpRequest::HEADER_KEY_CONTENT_TYPE] = $this->apiClient->selectHeaderContentType(['application/json;charset=utf-8']);
-
-		// query params
-		$queryParams = [];
-
-		// path params
-		$resourcePath = '/human-user/export';
-		// default format to json
-		$resourcePath = str_replace('{format}', 'json', $resourcePath);
-
-		// form params
-		$formParams = [];
-		// body params
-		$tempBody = null;
-		if (isset($request)) {
-			$tempBody = $request;
-		}
-
-		// for model (json/xml)
-		$httpBody = '';
-		if (isset($tempBody)) {
-			$httpBody = $tempBody; // $tempBody is the method argument, if present
-		} elseif (!empty($formParams)) {
-			$httpBody = $formParams; // for HTTP post (form)
-		}
-		// make the API Call
-		try {
-			$response = $this->apiClient->callApi(
-				$resourcePath,
-				'POST',
-				$queryParams,
-				$httpBody,
-				$headerParams,
-				'string',
-				'/human-user/export'
-            );
-			return new ApiResponse($response->getStatusCode(), $response->getHeaders(), $this->apiClient->getSerializer()->deserialize($response->getData(), 'string', $response->getHeaders()));
-		} catch (ApiException $e) {
-			switch ($e->getCode()) {
-                case 200:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        'string',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                break;
                 case 442:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -491,14 +287,15 @@ class HumanUserService {
 	 *
 	 * Read
 	 *
-	 * @param int $id The id of the human user which should be returned. (required)
+	 * @param int $space_id  (required)
+	 * @param int $id The id of the Shopify subscription suspension which should be returned. (required)
 	 * @throws \Secupay\Sdk\ApiException
 	 * @throws \Secupay\Sdk\VersioningException
 	 * @throws \Secupay\Sdk\Http\ConnectionException
-	 * @return \Secupay\Sdk\Model\HumanUser
+	 * @return \Secupay\Sdk\Model\ShopifySubscriptionSuspension
 	 */
-	public function read($id) {
-		return $this->readWithHttpInfo($id)->getData();
+	public function read($space_id, $id) {
+		return $this->readWithHttpInfo($space_id, $id)->getData();
 	}
 
 	/**
@@ -507,13 +304,18 @@ class HumanUserService {
 	 * Read
      
      *
-	 * @param int $id The id of the human user which should be returned. (required)
+	 * @param int $space_id  (required)
+	 * @param int $id The id of the Shopify subscription suspension which should be returned. (required)
 	 * @throws \Secupay\Sdk\ApiException
 	 * @throws \Secupay\Sdk\VersioningException
 	 * @throws \Secupay\Sdk\Http\ConnectionException
 	 * @return ApiResponse
 	 */
-	public function readWithHttpInfo($id) {
+	public function readWithHttpInfo($space_id, $id) {
+		// verify the required parameter 'space_id' is set
+		if (is_null($space_id)) {
+			throw new \InvalidArgumentException('Missing the required parameter $space_id when calling read');
+		}
 		// verify the required parameter 'id' is set
 		if (is_null($id)) {
 			throw new \InvalidArgumentException('Missing the required parameter $id when calling read');
@@ -528,12 +330,15 @@ class HumanUserService {
 
 		// query params
 		$queryParams = [];
+		if (!is_null($space_id)) {
+			$queryParams['spaceId'] = $this->apiClient->getSerializer()->toQueryValue($space_id);
+		}
 		if (!is_null($id)) {
 			$queryParams['id'] = $this->apiClient->getSerializer()->toQueryValue($id);
 		}
 
 		// path params
-		$resourcePath = '/human-user/read';
+		$resourcePath = '/shopify-subscription-suspension/read';
 		// default format to json
 		$resourcePath = str_replace('{format}', 'json', $resourcePath);
 
@@ -555,16 +360,16 @@ class HumanUserService {
 				$queryParams,
 				$httpBody,
 				$headerParams,
-				'\Secupay\Sdk\Model\HumanUser',
-				'/human-user/read'
+				'\Secupay\Sdk\Model\ShopifySubscriptionSuspension',
+				'/shopify-subscription-suspension/read'
             );
-			return new ApiResponse($response->getStatusCode(), $response->getHeaders(), $this->apiClient->getSerializer()->deserialize($response->getData(), '\Secupay\Sdk\Model\HumanUser', $response->getHeaders()));
+			return new ApiResponse($response->getStatusCode(), $response->getHeaders(), $this->apiClient->getSerializer()->deserialize($response->getData(), '\Secupay\Sdk\Model\ShopifySubscriptionSuspension', $response->getHeaders()));
 		} catch (ApiException $e) {
 			switch ($e->getCode()) {
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\HumanUser',
+                        '\Secupay\Sdk\Model\ShopifySubscriptionSuspension',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -595,14 +400,15 @@ class HumanUserService {
 	 *
 	 * Search
 	 *
-	 * @param \Secupay\Sdk\Model\EntityQuery $query The query restricts the human users which are returned by the search. (required)
+	 * @param int $space_id  (required)
+	 * @param \Secupay\Sdk\Model\EntityQuery $query The query restricts the Shopify subscription suspensions which are returned by the search. (required)
 	 * @throws \Secupay\Sdk\ApiException
 	 * @throws \Secupay\Sdk\VersioningException
 	 * @throws \Secupay\Sdk\Http\ConnectionException
-	 * @return \Secupay\Sdk\Model\HumanUser[]
+	 * @return \Secupay\Sdk\Model\ShopifySubscriptionSuspension[]
 	 */
-	public function search($query) {
-		return $this->searchWithHttpInfo($query)->getData();
+	public function search($space_id, $query) {
+		return $this->searchWithHttpInfo($space_id, $query)->getData();
 	}
 
 	/**
@@ -611,13 +417,18 @@ class HumanUserService {
 	 * Search
      
      *
-	 * @param \Secupay\Sdk\Model\EntityQuery $query The query restricts the human users which are returned by the search. (required)
+	 * @param int $space_id  (required)
+	 * @param \Secupay\Sdk\Model\EntityQuery $query The query restricts the Shopify subscription suspensions which are returned by the search. (required)
 	 * @throws \Secupay\Sdk\ApiException
 	 * @throws \Secupay\Sdk\VersioningException
 	 * @throws \Secupay\Sdk\Http\ConnectionException
 	 * @return ApiResponse
 	 */
-	public function searchWithHttpInfo($query) {
+	public function searchWithHttpInfo($space_id, $query) {
+		// verify the required parameter 'space_id' is set
+		if (is_null($space_id)) {
+			throw new \InvalidArgumentException('Missing the required parameter $space_id when calling search');
+		}
 		// verify the required parameter 'query' is set
 		if (is_null($query)) {
 			throw new \InvalidArgumentException('Missing the required parameter $query when calling search');
@@ -632,9 +443,12 @@ class HumanUserService {
 
 		// query params
 		$queryParams = [];
+		if (!is_null($space_id)) {
+			$queryParams['spaceId'] = $this->apiClient->getSerializer()->toQueryValue($space_id);
+		}
 
 		// path params
-		$resourcePath = '/human-user/search';
+		$resourcePath = '/shopify-subscription-suspension/search';
 		// default format to json
 		$resourcePath = str_replace('{format}', 'json', $resourcePath);
 
@@ -661,16 +475,16 @@ class HumanUserService {
 				$queryParams,
 				$httpBody,
 				$headerParams,
-				'\Secupay\Sdk\Model\HumanUser[]',
-				'/human-user/search'
+				'\Secupay\Sdk\Model\ShopifySubscriptionSuspension[]',
+				'/shopify-subscription-suspension/search'
             );
-			return new ApiResponse($response->getStatusCode(), $response->getHeaders(), $this->apiClient->getSerializer()->deserialize($response->getData(), '\Secupay\Sdk\Model\HumanUser[]', $response->getHeaders()));
+			return new ApiResponse($response->getStatusCode(), $response->getHeaders(), $this->apiClient->getSerializer()->deserialize($response->getData(), '\Secupay\Sdk\Model\ShopifySubscriptionSuspension[]', $response->getHeaders()));
 		} catch (ApiException $e) {
 			switch ($e->getCode()) {
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\HumanUser[]',
+                        '\Secupay\Sdk\Model\ShopifySubscriptionSuspension[]',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -697,36 +511,42 @@ class HumanUserService {
 	}
 
 	/**
-	 * Operation update
+	 * Operation suspend
 	 *
-	 * Update
+	 * Suspend
 	 *
-	 * @param \Secupay\Sdk\Model\HumanUserUpdate $entity The object with all the properties which should be updated. The id and the version are required properties. (required)
+	 * @param int $space_id  (required)
+	 * @param \Secupay\Sdk\Model\ShopifySubscriptionSuspensionCreate $suspension  (required)
 	 * @throws \Secupay\Sdk\ApiException
 	 * @throws \Secupay\Sdk\VersioningException
 	 * @throws \Secupay\Sdk\Http\ConnectionException
-	 * @return \Secupay\Sdk\Model\HumanUser
+	 * @return \Secupay\Sdk\Model\ShopifySubscriptionSuspension
 	 */
-	public function update($entity) {
-		return $this->updateWithHttpInfo($entity)->getData();
+	public function suspend($space_id, $suspension) {
+		return $this->suspendWithHttpInfo($space_id, $suspension)->getData();
 	}
 
 	/**
-	 * Operation updateWithHttpInfo
+	 * Operation suspendWithHttpInfo
 	 *
-	 * Update
+	 * Suspend
      
      *
-	 * @param \Secupay\Sdk\Model\HumanUserUpdate $entity The object with all the properties which should be updated. The id and the version are required properties. (required)
+	 * @param int $space_id  (required)
+	 * @param \Secupay\Sdk\Model\ShopifySubscriptionSuspensionCreate $suspension  (required)
 	 * @throws \Secupay\Sdk\ApiException
 	 * @throws \Secupay\Sdk\VersioningException
 	 * @throws \Secupay\Sdk\Http\ConnectionException
 	 * @return ApiResponse
 	 */
-	public function updateWithHttpInfo($entity) {
-		// verify the required parameter 'entity' is set
-		if (is_null($entity)) {
-			throw new \InvalidArgumentException('Missing the required parameter $entity when calling update');
+	public function suspendWithHttpInfo($space_id, $suspension) {
+		// verify the required parameter 'space_id' is set
+		if (is_null($space_id)) {
+			throw new \InvalidArgumentException('Missing the required parameter $space_id when calling suspend');
+		}
+		// verify the required parameter 'suspension' is set
+		if (is_null($suspension)) {
+			throw new \InvalidArgumentException('Missing the required parameter $suspension when calling suspend');
 		}
 		// header params
 		$headerParams = [];
@@ -738,9 +558,12 @@ class HumanUserService {
 
 		// query params
 		$queryParams = [];
+		if (!is_null($space_id)) {
+			$queryParams['spaceId'] = $this->apiClient->getSerializer()->toQueryValue($space_id);
+		}
 
 		// path params
-		$resourcePath = '/human-user/update';
+		$resourcePath = '/shopify-subscription-suspension/suspend';
 		// default format to json
 		$resourcePath = str_replace('{format}', 'json', $resourcePath);
 
@@ -748,8 +571,8 @@ class HumanUserService {
 		$formParams = [];
 		// body params
 		$tempBody = null;
-		if (isset($entity)) {
-			$tempBody = $entity;
+		if (isset($suspension)) {
+			$tempBody = $suspension;
 		}
 
 		// for model (json/xml)
@@ -767,24 +590,16 @@ class HumanUserService {
 				$queryParams,
 				$httpBody,
 				$headerParams,
-				'\Secupay\Sdk\Model\HumanUser',
-				'/human-user/update'
+				'\Secupay\Sdk\Model\ShopifySubscriptionSuspension',
+				'/shopify-subscription-suspension/suspend'
             );
-			return new ApiResponse($response->getStatusCode(), $response->getHeaders(), $this->apiClient->getSerializer()->deserialize($response->getData(), '\Secupay\Sdk\Model\HumanUser', $response->getHeaders()));
+			return new ApiResponse($response->getStatusCode(), $response->getHeaders(), $this->apiClient->getSerializer()->deserialize($response->getData(), '\Secupay\Sdk\Model\ShopifySubscriptionSuspension', $response->getHeaders()));
 		} catch (ApiException $e) {
 			switch ($e->getCode()) {
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\HumanUser',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                break;
-                case 409:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\ClientError',
+                        '\Secupay\Sdk\Model\ShopifySubscriptionSuspension',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);

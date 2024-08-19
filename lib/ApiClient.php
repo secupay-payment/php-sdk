@@ -909,6 +909,90 @@ final class ApiClient {
         return $this->refundCommentService;
     }
     
+    protected $shopifyRecurringOrderService;
+
+    /**
+     * @return \Secupay\Sdk\Service\ShopifyRecurringOrderService
+     */
+    public function getShopifyRecurringOrderService() {
+        if(is_null($this->shopifyRecurringOrderService)){
+            $this->shopifyRecurringOrderService = new \Secupay\Sdk\Service\ShopifyRecurringOrderService($this);
+        }
+        return $this->shopifyRecurringOrderService;
+    }
+    
+    protected $shopifySubscriberService;
+
+    /**
+     * @return \Secupay\Sdk\Service\ShopifySubscriberService
+     */
+    public function getShopifySubscriberService() {
+        if(is_null($this->shopifySubscriberService)){
+            $this->shopifySubscriberService = new \Secupay\Sdk\Service\ShopifySubscriberService($this);
+        }
+        return $this->shopifySubscriberService;
+    }
+    
+    protected $shopifySubscriptionProductService;
+
+    /**
+     * @return \Secupay\Sdk\Service\ShopifySubscriptionProductService
+     */
+    public function getShopifySubscriptionProductService() {
+        if(is_null($this->shopifySubscriptionProductService)){
+            $this->shopifySubscriptionProductService = new \Secupay\Sdk\Service\ShopifySubscriptionProductService($this);
+        }
+        return $this->shopifySubscriptionProductService;
+    }
+    
+    protected $shopifySubscriptionService;
+
+    /**
+     * @return \Secupay\Sdk\Service\ShopifySubscriptionService
+     */
+    public function getShopifySubscriptionService() {
+        if(is_null($this->shopifySubscriptionService)){
+            $this->shopifySubscriptionService = new \Secupay\Sdk\Service\ShopifySubscriptionService($this);
+        }
+        return $this->shopifySubscriptionService;
+    }
+    
+    protected $shopifySubscriptionSuspensionService;
+
+    /**
+     * @return \Secupay\Sdk\Service\ShopifySubscriptionSuspensionService
+     */
+    public function getShopifySubscriptionSuspensionService() {
+        if(is_null($this->shopifySubscriptionSuspensionService)){
+            $this->shopifySubscriptionSuspensionService = new \Secupay\Sdk\Service\ShopifySubscriptionSuspensionService($this);
+        }
+        return $this->shopifySubscriptionSuspensionService;
+    }
+    
+    protected $shopifySubscriptionVersionService;
+
+    /**
+     * @return \Secupay\Sdk\Service\ShopifySubscriptionVersionService
+     */
+    public function getShopifySubscriptionVersionService() {
+        if(is_null($this->shopifySubscriptionVersionService)){
+            $this->shopifySubscriptionVersionService = new \Secupay\Sdk\Service\ShopifySubscriptionVersionService($this);
+        }
+        return $this->shopifySubscriptionVersionService;
+    }
+    
+    protected $shopifyTransactionService;
+
+    /**
+     * @return \Secupay\Sdk\Service\ShopifyTransactionService
+     */
+    public function getShopifyTransactionService() {
+        if(is_null($this->shopifyTransactionService)){
+            $this->shopifyTransactionService = new \Secupay\Sdk\Service\ShopifyTransactionService($this);
+        }
+        return $this->shopifyTransactionService;
+    }
+    
     protected $spaceService;
 
     /**
@@ -969,6 +1053,18 @@ final class ApiClient {
         return $this->transactionCommentService;
     }
     
+    protected $transactionIframeService;
+
+    /**
+     * @return \Secupay\Sdk\Service\TransactionIframeService
+     */
+    public function getTransactionIframeService() {
+        if(is_null($this->transactionIframeService)){
+            $this->transactionIframeService = new \Secupay\Sdk\Service\TransactionIframeService($this);
+        }
+        return $this->transactionIframeService;
+    }
+    
     protected $transactionInvoiceCommentService;
 
     /**
@@ -993,6 +1089,18 @@ final class ApiClient {
         return $this->transactionInvoiceService;
     }
     
+    protected $transactionLightboxService;
+
+    /**
+     * @return \Secupay\Sdk\Service\TransactionLightboxService
+     */
+    public function getTransactionLightboxService() {
+        if(is_null($this->transactionLightboxService)){
+            $this->transactionLightboxService = new \Secupay\Sdk\Service\TransactionLightboxService($this);
+        }
+        return $this->transactionLightboxService;
+    }
+    
     protected $transactionLineItemVersionService;
 
     /**
@@ -1003,6 +1111,18 @@ final class ApiClient {
             $this->transactionLineItemVersionService = new \Secupay\Sdk\Service\TransactionLineItemVersionService($this);
         }
         return $this->transactionLineItemVersionService;
+    }
+    
+    protected $transactionPaymentPageService;
+
+    /**
+     * @return \Secupay\Sdk\Service\TransactionPaymentPageService
+     */
+    public function getTransactionPaymentPageService() {
+        if(is_null($this->transactionPaymentPageService)){
+            $this->transactionPaymentPageService = new \Secupay\Sdk\Service\TransactionPaymentPageService($this);
+        }
+        return $this->transactionPaymentPageService;
     }
     
     protected $transactionService;
