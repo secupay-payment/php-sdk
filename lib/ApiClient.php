@@ -729,6 +729,18 @@ final class ApiClient {
         return $this->customerService;
     }
     
+    protected $deliveryIndicationService;
+
+    /**
+     * @return \Secupay\Sdk\Service\DeliveryIndicationService
+     */
+    public function getDeliveryIndicationService() {
+        if(is_null($this->deliveryIndicationService)){
+            $this->deliveryIndicationService = new \Secupay\Sdk\Service\DeliveryIndicationService($this);
+        }
+        return $this->deliveryIndicationService;
+    }
+    
     protected $humanUserService;
 
     /**
@@ -907,6 +919,18 @@ final class ApiClient {
             $this->refundCommentService = new \Secupay\Sdk\Service\RefundCommentService($this);
         }
         return $this->refundCommentService;
+    }
+    
+    protected $refundService;
+
+    /**
+     * @return \Secupay\Sdk\Service\RefundService
+     */
+    public function getRefundService() {
+        if(is_null($this->refundService)){
+            $this->refundService = new \Secupay\Sdk\Service\RefundService($this);
+        }
+        return $this->refundService;
     }
     
     protected $shopifyRecurringOrderService;
@@ -1171,6 +1195,30 @@ final class ApiClient {
             $this->webhookEncryptionService = new \Secupay\Sdk\Service\WebhookEncryptionService($this);
         }
         return $this->webhookEncryptionService;
+    }
+    
+    protected $webhookListenerService;
+
+    /**
+     * @return \Secupay\Sdk\Service\WebhookListenerService
+     */
+    public function getWebhookListenerService() {
+        if(is_null($this->webhookListenerService)){
+            $this->webhookListenerService = new \Secupay\Sdk\Service\WebhookListenerService($this);
+        }
+        return $this->webhookListenerService;
+    }
+    
+    protected $webhookUrlService;
+
+    /**
+     * @return \Secupay\Sdk\Service\WebhookUrlService
+     */
+    public function getWebhookUrlService() {
+        if(is_null($this->webhookUrlService)){
+            $this->webhookUrlService = new \Secupay\Sdk\Service\WebhookUrlService($this);
+        }
+        return $this->webhookUrlService;
     }
     
 
