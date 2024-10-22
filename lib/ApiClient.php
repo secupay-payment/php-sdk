@@ -48,7 +48,7 @@ final class ApiClient {
 	 * @var array
 	 */
 	private $defaultHeaders = [
-        'x-meta-sdk-version' => "4.6.0",
+        'x-meta-sdk-version' => "4.7.0",
         'x-meta-sdk-language' => 'php',
         'x-meta-sdk-provider' => "Secupay",
     ];
@@ -58,7 +58,7 @@ final class ApiClient {
 	 *
 	 * @var string
 	 */
-	private $userAgent = 'PHP-Client/4.6.0/php';
+	private $userAgent = 'PHP-Client/4.7.0/php';
 
 	/**
 	 * The path to the certificate authority file.
@@ -741,6 +741,30 @@ final class ApiClient {
         return $this->deliveryIndicationService;
     }
     
+    protected $documentTemplateService;
+
+    /**
+     * @return \Secupay\Sdk\Service\DocumentTemplateService
+     */
+    public function getDocumentTemplateService() {
+        if(is_null($this->documentTemplateService)){
+            $this->documentTemplateService = new \Secupay\Sdk\Service\DocumentTemplateService($this);
+        }
+        return $this->documentTemplateService;
+    }
+    
+    protected $documentTemplateTypeService;
+
+    /**
+     * @return \Secupay\Sdk\Service\DocumentTemplateTypeService
+     */
+    public function getDocumentTemplateTypeService() {
+        if(is_null($this->documentTemplateTypeService)){
+            $this->documentTemplateTypeService = new \Secupay\Sdk\Service\DocumentTemplateTypeService($this);
+        }
+        return $this->documentTemplateTypeService;
+    }
+    
     protected $humanUserService;
 
     /**
@@ -751,6 +775,42 @@ final class ApiClient {
             $this->humanUserService = new \Secupay\Sdk\Service\HumanUserService($this);
         }
         return $this->humanUserService;
+    }
+    
+    protected $invoiceReconciliationRecordInvoiceLinkService;
+
+    /**
+     * @return \Secupay\Sdk\Service\InvoiceReconciliationRecordInvoiceLinkService
+     */
+    public function getInvoiceReconciliationRecordInvoiceLinkService() {
+        if(is_null($this->invoiceReconciliationRecordInvoiceLinkService)){
+            $this->invoiceReconciliationRecordInvoiceLinkService = new \Secupay\Sdk\Service\InvoiceReconciliationRecordInvoiceLinkService($this);
+        }
+        return $this->invoiceReconciliationRecordInvoiceLinkService;
+    }
+    
+    protected $invoiceReconciliationRecordService;
+
+    /**
+     * @return \Secupay\Sdk\Service\InvoiceReconciliationRecordService
+     */
+    public function getInvoiceReconciliationRecordService() {
+        if(is_null($this->invoiceReconciliationRecordService)){
+            $this->invoiceReconciliationRecordService = new \Secupay\Sdk\Service\InvoiceReconciliationRecordService($this);
+        }
+        return $this->invoiceReconciliationRecordService;
+    }
+    
+    protected $invoiceReimbursementService;
+
+    /**
+     * @return \Secupay\Sdk\Service\InvoiceReimbursementService
+     */
+    public function getInvoiceReimbursementService() {
+        if(is_null($this->invoiceReimbursementService)){
+            $this->invoiceReimbursementService = new \Secupay\Sdk\Service\InvoiceReimbursementService($this);
+        }
+        return $this->invoiceReimbursementService;
     }
     
     protected $labelDescriptionGroupService;
@@ -895,6 +955,18 @@ final class ApiClient {
             $this->paymentProcessorService = new \Secupay\Sdk\Service\PaymentProcessorService($this);
         }
         return $this->paymentProcessorService;
+    }
+    
+    protected $paymentWebAppService;
+
+    /**
+     * @return \Secupay\Sdk\Service\PaymentWebAppService
+     */
+    public function getPaymentWebAppService() {
+        if(is_null($this->paymentWebAppService)){
+            $this->paymentWebAppService = new \Secupay\Sdk\Service\PaymentWebAppService($this);
+        }
+        return $this->paymentWebAppService;
     }
     
     protected $permissionService;
@@ -1077,6 +1149,18 @@ final class ApiClient {
         return $this->transactionCommentService;
     }
     
+    protected $transactionCompletionService;
+
+    /**
+     * @return \Secupay\Sdk\Service\TransactionCompletionService
+     */
+    public function getTransactionCompletionService() {
+        if(is_null($this->transactionCompletionService)){
+            $this->transactionCompletionService = new \Secupay\Sdk\Service\TransactionCompletionService($this);
+        }
+        return $this->transactionCompletionService;
+    }
+    
     protected $transactionIframeService;
 
     /**
@@ -1161,6 +1245,18 @@ final class ApiClient {
         return $this->transactionService;
     }
     
+    protected $transactionVoidService;
+
+    /**
+     * @return \Secupay\Sdk\Service\TransactionVoidService
+     */
+    public function getTransactionVoidService() {
+        if(is_null($this->transactionVoidService)){
+            $this->transactionVoidService = new \Secupay\Sdk\Service\TransactionVoidService($this);
+        }
+        return $this->transactionVoidService;
+    }
+    
     protected $userAccountRoleService;
 
     /**
@@ -1183,6 +1279,18 @@ final class ApiClient {
             $this->userSpaceRoleService = new \Secupay\Sdk\Service\UserSpaceRoleService($this);
         }
         return $this->userSpaceRoleService;
+    }
+    
+    protected $webAppService;
+
+    /**
+     * @return \Secupay\Sdk\Service\WebAppService
+     */
+    public function getWebAppService() {
+        if(is_null($this->webAppService)){
+            $this->webAppService = new \Secupay\Sdk\Service\WebAppService($this);
+        }
+        return $this->webAppService;
     }
     
     protected $webhookEncryptionService;

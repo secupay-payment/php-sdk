@@ -24,15 +24,15 @@ use \ArrayAccess;
 use \Secupay\Sdk\ObjectSerializer;
 
 /**
- * ShopifySubscriptionUpdateRequest model
+ * WebAppConfirmationResponse model
  *
  * @category    Class
- * @description 
+ * @description The confirmation response provides details about the installation of the web app.
  * @package     Secupay\Sdk
  * @author      Secupay AG.
  * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache License v2
  */
-class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
+class WebAppConfirmationResponse implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -41,7 +41,7 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'ShopifySubscriptionUpdateRequest';
+    protected static $swaggerModelName = 'WebAppConfirmationResponse';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -49,11 +49,11 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerTypes = [
-        'billing_configuration' => '\Secupay\Sdk\Model\BillingConfiguration',
-        'id' => 'int',
-        'items' => '\Secupay\Sdk\Model\Item[]',
-        'store_order_confirmation_email_enabled' => 'bool',
-        'subscriber_suspension_allowed' => 'bool'
+        'access_token' => 'string',
+        'scope' => 'string',
+        'space' => '\Secupay\Sdk\Model\Space',
+        'state' => 'string',
+        'token_type' => 'string'
     ];
 
     /**
@@ -62,11 +62,11 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerFormats = [
-        'billing_configuration' => null,
-        'id' => 'int64',
-        'items' => null,
-        'store_order_confirmation_email_enabled' => null,
-        'subscriber_suspension_allowed' => null
+        'access_token' => null,
+        'scope' => null,
+        'space' => null,
+        'state' => null,
+        'token_type' => null
     ];
 
     /**
@@ -76,11 +76,11 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'billing_configuration' => 'billingConfiguration',
-        'id' => 'id',
-        'items' => 'items',
-        'store_order_confirmation_email_enabled' => 'storeOrderConfirmationEmailEnabled',
-        'subscriber_suspension_allowed' => 'subscriberSuspensionAllowed'
+        'access_token' => 'access_token',
+        'scope' => 'scope',
+        'space' => 'space',
+        'state' => 'state',
+        'token_type' => 'token_type'
     ];
 
     /**
@@ -89,11 +89,11 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'billing_configuration' => 'setBillingConfiguration',
-        'id' => 'setId',
-        'items' => 'setItems',
-        'store_order_confirmation_email_enabled' => 'setStoreOrderConfirmationEmailEnabled',
-        'subscriber_suspension_allowed' => 'setSubscriberSuspensionAllowed'
+        'access_token' => 'setAccessToken',
+        'scope' => 'setScope',
+        'space' => 'setSpace',
+        'state' => 'setState',
+        'token_type' => 'setTokenType'
     ];
 
     /**
@@ -102,11 +102,11 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'billing_configuration' => 'getBillingConfiguration',
-        'id' => 'getId',
-        'items' => 'getItems',
-        'store_order_confirmation_email_enabled' => 'getStoreOrderConfirmationEmailEnabled',
-        'subscriber_suspension_allowed' => 'getSubscriberSuspensionAllowed'
+        'access_token' => 'getAccessToken',
+        'scope' => 'getScope',
+        'space' => 'getSpace',
+        'state' => 'getState',
+        'token_type' => 'getTokenType'
     ];
 
     
@@ -127,15 +127,15 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
     public function __construct(array $data = null)
     {
         
-        $this->container['billing_configuration'] = isset($data['billing_configuration']) ? $data['billing_configuration'] : null;
+        $this->container['access_token'] = isset($data['access_token']) ? $data['access_token'] : null;
         
-        $this->container['id'] = isset($data['id']) ? $data['id'] : null;
+        $this->container['scope'] = isset($data['scope']) ? $data['scope'] : null;
         
-        $this->container['items'] = isset($data['items']) ? $data['items'] : null;
+        $this->container['space'] = isset($data['space']) ? $data['space'] : null;
         
-        $this->container['store_order_confirmation_email_enabled'] = isset($data['store_order_confirmation_email_enabled']) ? $data['store_order_confirmation_email_enabled'] : null;
+        $this->container['state'] = isset($data['state']) ? $data['state'] : null;
         
-        $this->container['subscriber_suspension_allowed'] = isset($data['subscriber_suspension_allowed']) ? $data['subscriber_suspension_allowed'] : null;
+        $this->container['token_type'] = isset($data['token_type']) ? $data['token_type'] : null;
         
     }
 
@@ -229,125 +229,125 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
     
 
     /**
-     * Gets billing_configuration
+     * Gets access_token
      *
-     * @return \Secupay\Sdk\Model\BillingConfiguration
+     * @return string
      */
-    public function getBillingConfiguration()
+    public function getAccessToken()
     {
-        return $this->container['billing_configuration'];
+        return $this->container['access_token'];
     }
 
     /**
-     * Sets billing_configuration
+     * Sets access_token
      *
-     * @param \Secupay\Sdk\Model\BillingConfiguration $billing_configuration 
+     * @param string $access_token The access code granting permissions to the web service API according to the OAuth standard.
      *
      * @return $this
      */
-    public function setBillingConfiguration($billing_configuration)
+    public function setAccessToken($access_token)
     {
-        $this->container['billing_configuration'] = $billing_configuration;
+        $this->container['access_token'] = $access_token;
 
         return $this;
     }
     
 
     /**
-     * Gets id
+     * Gets scope
      *
-     * @return int
+     * @return string
      */
-    public function getId()
+    public function getScope()
     {
-        return $this->container['id'];
+        return $this->container['scope'];
     }
 
     /**
-     * Sets id
+     * Sets scope
      *
-     * @param int $id 
+     * @param string $scope The list of the permissions granted to the web app within the space.
      *
      * @return $this
      */
-    public function setId($id)
+    public function setScope($scope)
     {
-        $this->container['id'] = $id;
+        $this->container['scope'] = $scope;
 
         return $this;
     }
     
 
     /**
-     * Gets items
+     * Gets space
      *
-     * @return \Secupay\Sdk\Model\Item[]
+     * @return \Secupay\Sdk\Model\Space
      */
-    public function getItems()
+    public function getSpace()
     {
-        return $this->container['items'];
+        return $this->container['space'];
     }
 
     /**
-     * Sets items
+     * Sets space
      *
-     * @param \Secupay\Sdk\Model\Item[] $items 
+     * @param \Secupay\Sdk\Model\Space $space The space that the web app was installed in.
      *
      * @return $this
      */
-    public function setItems($items)
+    public function setSpace($space)
     {
-        $this->container['items'] = $items;
+        $this->container['space'] = $space;
 
         return $this;
     }
     
 
     /**
-     * Gets store_order_confirmation_email_enabled
+     * Gets state
      *
-     * @return bool
+     * @return string
      */
-    public function getStoreOrderConfirmationEmailEnabled()
+    public function getState()
     {
-        return $this->container['store_order_confirmation_email_enabled'];
+        return $this->container['state'];
     }
 
     /**
-     * Sets store_order_confirmation_email_enabled
+     * Sets state
      *
-     * @param bool $store_order_confirmation_email_enabled 
+     * @param string $state The state parameter that was provided in the authorization request.
      *
      * @return $this
      */
-    public function setStoreOrderConfirmationEmailEnabled($store_order_confirmation_email_enabled)
+    public function setState($state)
     {
-        $this->container['store_order_confirmation_email_enabled'] = $store_order_confirmation_email_enabled;
+        $this->container['state'] = $state;
 
         return $this;
     }
     
 
     /**
-     * Gets subscriber_suspension_allowed
+     * Gets token_type
      *
-     * @return bool
+     * @return string
      */
-    public function getSubscriberSuspensionAllowed()
+    public function getTokenType()
     {
-        return $this->container['subscriber_suspension_allowed'];
+        return $this->container['token_type'];
     }
 
     /**
-     * Sets subscriber_suspension_allowed
+     * Sets token_type
      *
-     * @param bool $subscriber_suspension_allowed 
+     * @param string $token_type The type of the access token that determines the authentication mechanism to use for accessing the web service API.
      *
      * @return $this
      */
-    public function setSubscriberSuspensionAllowed($subscriber_suspension_allowed)
+    public function setTokenType($token_type)
     {
-        $this->container['subscriber_suspension_allowed'] = $subscriber_suspension_allowed;
+        $this->container['token_type'] = $token_type;
 
         return $this;
     }

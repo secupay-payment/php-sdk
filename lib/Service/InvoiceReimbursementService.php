@@ -27,14 +27,14 @@ use Secupay\Sdk\Http\HttpRequest;
 use Secupay\Sdk\ObjectSerializer;
 
 /**
- * HumanUserService service
+ * InvoiceReimbursementService service
  *
  * @category Class
  * @package  Secupay\Sdk
  * @author   Secupay AG.
  * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License v2
  */
-class HumanUserService {
+class InvoiceReimbursementService {
 
 	/**
 	 * The API client instance.
@@ -71,14 +71,15 @@ class HumanUserService {
 	 *
 	 * Count
 	 *
+	 * @param int $space_id  (required)
 	 * @param \Secupay\Sdk\Model\EntityQueryFilter $filter The filter which restricts the entities which are used to calculate the count. (optional)
 	 * @throws \Secupay\Sdk\ApiException
 	 * @throws \Secupay\Sdk\VersioningException
 	 * @throws \Secupay\Sdk\Http\ConnectionException
 	 * @return int
 	 */
-	public function count($filter = null) {
-		return $this->countWithHttpInfo($filter)->getData();
+	public function count($space_id, $filter = null) {
+		return $this->countWithHttpInfo($space_id, $filter)->getData();
 	}
 
 	/**
@@ -87,13 +88,18 @@ class HumanUserService {
 	 * Count
      
      *
+	 * @param int $space_id  (required)
 	 * @param \Secupay\Sdk\Model\EntityQueryFilter $filter The filter which restricts the entities which are used to calculate the count. (optional)
 	 * @throws \Secupay\Sdk\ApiException
 	 * @throws \Secupay\Sdk\VersioningException
 	 * @throws \Secupay\Sdk\Http\ConnectionException
 	 * @return ApiResponse
 	 */
-	public function countWithHttpInfo($filter = null) {
+	public function countWithHttpInfo($space_id, $filter = null) {
+		// verify the required parameter 'space_id' is set
+		if (is_null($space_id)) {
+			throw new \InvalidArgumentException('Missing the required parameter $space_id when calling count');
+		}
 		// header params
 		$headerParams = [];
 		$headerAccept = $this->apiClient->selectHeaderAccept(['application/json;charset=utf-8']);
@@ -104,9 +110,12 @@ class HumanUserService {
 
 		// query params
 		$queryParams = [];
+		if (!is_null($space_id)) {
+			$queryParams['spaceId'] = $this->apiClient->getSerializer()->toQueryValue($space_id);
+		}
 
 		// path params
-		$resourcePath = '/human-user/count';
+		$resourcePath = '/invoice-reimbursement-service/count';
 		// default format to json
 		$resourcePath = str_replace('{format}', 'json', $resourcePath);
 
@@ -134,7 +143,7 @@ class HumanUserService {
 				$httpBody,
 				$headerParams,
 				'int',
-				'/human-user/count'
+				'/invoice-reimbursement-service/count'
             );
 			return new ApiResponse($response->getStatusCode(), $response->getHeaders(), $this->apiClient->getSerializer()->deserialize($response->getData(), 'int', $response->getHeaders()));
 		} catch (ApiException $e) {
@@ -169,36 +178,42 @@ class HumanUserService {
 	}
 
 	/**
-	 * Operation create
+	 * Operation read
 	 *
-	 * Create
+	 * Read
 	 *
-	 * @param \Secupay\Sdk\Model\HumanUserCreate $entity The human user object with the properties which should be created. (required)
+	 * @param int $space_id  (required)
+	 * @param int $id The ID of the invoice reimbursement which should be returned. (required)
 	 * @throws \Secupay\Sdk\ApiException
 	 * @throws \Secupay\Sdk\VersioningException
 	 * @throws \Secupay\Sdk\Http\ConnectionException
-	 * @return \Secupay\Sdk\Model\HumanUser
+	 * @return \Secupay\Sdk\Model\InvoiceReimbursement
 	 */
-	public function create($entity) {
-		return $this->createWithHttpInfo($entity)->getData();
+	public function read($space_id, $id) {
+		return $this->readWithHttpInfo($space_id, $id)->getData();
 	}
 
 	/**
-	 * Operation createWithHttpInfo
+	 * Operation readWithHttpInfo
 	 *
-	 * Create
+	 * Read
      
      *
-	 * @param \Secupay\Sdk\Model\HumanUserCreate $entity The human user object with the properties which should be created. (required)
+	 * @param int $space_id  (required)
+	 * @param int $id The ID of the invoice reimbursement which should be returned. (required)
 	 * @throws \Secupay\Sdk\ApiException
 	 * @throws \Secupay\Sdk\VersioningException
 	 * @throws \Secupay\Sdk\Http\ConnectionException
 	 * @return ApiResponse
 	 */
-	public function createWithHttpInfo($entity) {
-		// verify the required parameter 'entity' is set
-		if (is_null($entity)) {
-			throw new \InvalidArgumentException('Missing the required parameter $entity when calling create');
+	public function readWithHttpInfo($space_id, $id) {
+		// verify the required parameter 'space_id' is set
+		if (is_null($space_id)) {
+			throw new \InvalidArgumentException('Missing the required parameter $space_id when calling read');
+		}
+		// verify the required parameter 'id' is set
+		if (is_null($id)) {
+			throw new \InvalidArgumentException('Missing the required parameter $id when calling read');
 		}
 		// header params
 		$headerParams = [];
@@ -206,24 +221,25 @@ class HumanUserService {
 		if (!is_null($headerAccept)) {
 			$headerParams[HttpRequest::HEADER_KEY_ACCEPT] = $headerAccept;
 		}
-		$headerParams[HttpRequest::HEADER_KEY_CONTENT_TYPE] = $this->apiClient->selectHeaderContentType(['application/json;charset=utf-8']);
+		$headerParams[HttpRequest::HEADER_KEY_CONTENT_TYPE] = $this->apiClient->selectHeaderContentType(['*/*']);
 
 		// query params
 		$queryParams = [];
+		if (!is_null($space_id)) {
+			$queryParams['spaceId'] = $this->apiClient->getSerializer()->toQueryValue($space_id);
+		}
+		if (!is_null($id)) {
+			$queryParams['id'] = $this->apiClient->getSerializer()->toQueryValue($id);
+		}
 
 		// path params
-		$resourcePath = '/human-user/create';
+		$resourcePath = '/invoice-reimbursement-service/read';
 		// default format to json
 		$resourcePath = str_replace('{format}', 'json', $resourcePath);
 
 		// form params
 		$formParams = [];
-		// body params
-		$tempBody = null;
-		if (isset($entity)) {
-			$tempBody = $entity;
-		}
-
+		
 		// for model (json/xml)
 		$httpBody = '';
 		if (isset($tempBody)) {
@@ -235,20 +251,20 @@ class HumanUserService {
 		try {
 			$response = $this->apiClient->callApi(
 				$resourcePath,
-				'POST',
+				'GET',
 				$queryParams,
 				$httpBody,
 				$headerParams,
-				'\Secupay\Sdk\Model\HumanUser',
-				'/human-user/create'
+				'\Secupay\Sdk\Model\InvoiceReimbursement',
+				'/invoice-reimbursement-service/read'
             );
-			return new ApiResponse($response->getStatusCode(), $response->getHeaders(), $this->apiClient->getSerializer()->deserialize($response->getData(), '\Secupay\Sdk\Model\HumanUser', $response->getHeaders()));
+			return new ApiResponse($response->getStatusCode(), $response->getHeaders(), $this->apiClient->getSerializer()->deserialize($response->getData(), '\Secupay\Sdk\Model\InvoiceReimbursement', $response->getHeaders()));
 		} catch (ApiException $e) {
 			switch ($e->getCode()) {
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\HumanUser',
+                        '\Secupay\Sdk\Model\InvoiceReimbursement',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -275,36 +291,42 @@ class HumanUserService {
 	}
 
 	/**
-	 * Operation delete
+	 * Operation search
 	 *
-	 * Delete
+	 * Search
 	 *
-	 * @param int $id  (required)
+	 * @param int $space_id  (required)
+	 * @param \Secupay\Sdk\Model\EntityQuery $query The query restricts the invoice reimbursements which are returned by the search. (required)
 	 * @throws \Secupay\Sdk\ApiException
 	 * @throws \Secupay\Sdk\VersioningException
 	 * @throws \Secupay\Sdk\Http\ConnectionException
-	 * @return void
+	 * @return \Secupay\Sdk\Model\InvoiceReimbursementWithRefundReference[]
 	 */
-	public function delete($id) {
-		return $this->deleteWithHttpInfo($id)->getData();
+	public function search($space_id, $query) {
+		return $this->searchWithHttpInfo($space_id, $query)->getData();
 	}
 
 	/**
-	 * Operation deleteWithHttpInfo
+	 * Operation searchWithHttpInfo
 	 *
-	 * Delete
+	 * Search
      
      *
-	 * @param int $id  (required)
+	 * @param int $space_id  (required)
+	 * @param \Secupay\Sdk\Model\EntityQuery $query The query restricts the invoice reimbursements which are returned by the search. (required)
 	 * @throws \Secupay\Sdk\ApiException
 	 * @throws \Secupay\Sdk\VersioningException
 	 * @throws \Secupay\Sdk\Http\ConnectionException
 	 * @return ApiResponse
 	 */
-	public function deleteWithHttpInfo($id) {
-		// verify the required parameter 'id' is set
-		if (is_null($id)) {
-			throw new \InvalidArgumentException('Missing the required parameter $id when calling delete');
+	public function searchWithHttpInfo($space_id, $query) {
+		// verify the required parameter 'space_id' is set
+		if (is_null($space_id)) {
+			throw new \InvalidArgumentException('Missing the required parameter $space_id when calling search');
+		}
+		// verify the required parameter 'query' is set
+		if (is_null($query)) {
+			throw new \InvalidArgumentException('Missing the required parameter $query when calling search');
 		}
 		// header params
 		$headerParams = [];
@@ -316,9 +338,12 @@ class HumanUserService {
 
 		// query params
 		$queryParams = [];
+		if (!is_null($space_id)) {
+			$queryParams['spaceId'] = $this->apiClient->getSerializer()->toQueryValue($space_id);
+		}
 
 		// path params
-		$resourcePath = '/human-user/delete';
+		$resourcePath = '/invoice-reimbursement-service/search';
 		// default format to json
 		$resourcePath = str_replace('{format}', 'json', $resourcePath);
 
@@ -326,8 +351,8 @@ class HumanUserService {
 		$formParams = [];
 		// body params
 		$tempBody = null;
-		if (isset($id)) {
-			$tempBody = $id;
+		if (isset($query)) {
+			$tempBody = $query;
 		}
 
 		// for model (json/xml)
@@ -345,8 +370,130 @@ class HumanUserService {
 				$queryParams,
 				$httpBody,
 				$headerParams,
+				'\Secupay\Sdk\Model\InvoiceReimbursementWithRefundReference[]',
+				'/invoice-reimbursement-service/search'
+            );
+			return new ApiResponse($response->getStatusCode(), $response->getHeaders(), $this->apiClient->getSerializer()->deserialize($response->getData(), '\Secupay\Sdk\Model\InvoiceReimbursementWithRefundReference[]', $response->getHeaders()));
+		} catch (ApiException $e) {
+			switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Secupay\Sdk\Model\InvoiceReimbursementWithRefundReference[]',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                break;
+                case 442:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Secupay\Sdk\Model\ClientError',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                break;
+                case 542:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Secupay\Sdk\Model\ServerError',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                break;
+			}
+			throw $e;
+		}
+	}
+
+	/**
+	 * Operation updateConnector
+	 *
+	 * Update payment connector configuration
+	 *
+	 * @param int $space_id  (required)
+	 * @param int $id The ID of the invoice reimbursement of which connector should be updated. (required)
+	 * @param int $payment_connector_configuration_id  (required)
+	 * @throws \Secupay\Sdk\ApiException
+	 * @throws \Secupay\Sdk\VersioningException
+	 * @throws \Secupay\Sdk\Http\ConnectionException
+	 * @return void
+	 */
+	public function updateConnector($space_id, $id, $payment_connector_configuration_id) {
+		return $this->updateConnectorWithHttpInfo($space_id, $id, $payment_connector_configuration_id)->getData();
+	}
+
+	/**
+	 * Operation updateConnectorWithHttpInfo
+	 *
+	 * Update payment connector configuration
+     
+     *
+	 * @param int $space_id  (required)
+	 * @param int $id The ID of the invoice reimbursement of which connector should be updated. (required)
+	 * @param int $payment_connector_configuration_id  (required)
+	 * @throws \Secupay\Sdk\ApiException
+	 * @throws \Secupay\Sdk\VersioningException
+	 * @throws \Secupay\Sdk\Http\ConnectionException
+	 * @return ApiResponse
+	 */
+	public function updateConnectorWithHttpInfo($space_id, $id, $payment_connector_configuration_id) {
+		// verify the required parameter 'space_id' is set
+		if (is_null($space_id)) {
+			throw new \InvalidArgumentException('Missing the required parameter $space_id when calling updateConnector');
+		}
+		// verify the required parameter 'id' is set
+		if (is_null($id)) {
+			throw new \InvalidArgumentException('Missing the required parameter $id when calling updateConnector');
+		}
+		// verify the required parameter 'payment_connector_configuration_id' is set
+		if (is_null($payment_connector_configuration_id)) {
+			throw new \InvalidArgumentException('Missing the required parameter $payment_connector_configuration_id when calling updateConnector');
+		}
+		// header params
+		$headerParams = [];
+		$headerAccept = $this->apiClient->selectHeaderAccept([]);
+		if (!is_null($headerAccept)) {
+			$headerParams[HttpRequest::HEADER_KEY_ACCEPT] = $headerAccept;
+		}
+		$headerParams[HttpRequest::HEADER_KEY_CONTENT_TYPE] = $this->apiClient->selectHeaderContentType([]);
+
+		// query params
+		$queryParams = [];
+		if (!is_null($space_id)) {
+			$queryParams['spaceId'] = $this->apiClient->getSerializer()->toQueryValue($space_id);
+		}
+		if (!is_null($id)) {
+			$queryParams['id'] = $this->apiClient->getSerializer()->toQueryValue($id);
+		}
+		if (!is_null($payment_connector_configuration_id)) {
+			$queryParams['paymentConnectorConfigurationId'] = $this->apiClient->getSerializer()->toQueryValue($payment_connector_configuration_id);
+		}
+
+		// path params
+		$resourcePath = '/invoice-reimbursement-service/update-connector';
+		// default format to json
+		$resourcePath = str_replace('{format}', 'json', $resourcePath);
+
+		// form params
+		$formParams = [];
+		
+		// for model (json/xml)
+		$httpBody = '';
+		if (isset($tempBody)) {
+			$httpBody = $tempBody; // $tempBody is the method argument, if present
+		} elseif (!empty($formParams)) {
+			$httpBody = $formParams; // for HTTP post (form)
+		}
+		// make the API Call
+		try {
+			$response = $this->apiClient->callApi(
+				$resourcePath,
+				'POST',
+				$queryParams,
+				$httpBody,
+				$headerParams,
 				null,
-				'/human-user/delete'
+				'/invoice-reimbursement-service/update-connector'
             );
 			return new ApiResponse($response->getStatusCode(), $response->getHeaders());
 		} catch (ApiException $e) {
@@ -381,159 +528,72 @@ class HumanUserService {
 	}
 
 	/**
-	 * Operation export
+	 * Operation updateIban
 	 *
-	 * Export
+	 * Update IBAN
 	 *
-	 * @param \Secupay\Sdk\Model\EntityExportRequest $request The request controls the entries which are exported. (required)
+	 * @param int $space_id  (required)
+	 * @param int $id The ID of the invoice reimbursement of which IBANs should be updated. (required)
+	 * @param string $recipient_iban  (optional)
+	 * @param string $sender_iban  (optional)
 	 * @throws \Secupay\Sdk\ApiException
 	 * @throws \Secupay\Sdk\VersioningException
 	 * @throws \Secupay\Sdk\Http\ConnectionException
-	 * @return string
+	 * @return void
 	 */
-	public function export($request) {
-		return $this->exportWithHttpInfo($request)->getData();
+	public function updateIban($space_id, $id, $recipient_iban = null, $sender_iban = null) {
+		return $this->updateIbanWithHttpInfo($space_id, $id, $recipient_iban, $sender_iban)->getData();
 	}
 
 	/**
-	 * Operation exportWithHttpInfo
+	 * Operation updateIbanWithHttpInfo
 	 *
-	 * Export
+	 * Update IBAN
      
      *
-	 * @param \Secupay\Sdk\Model\EntityExportRequest $request The request controls the entries which are exported. (required)
+	 * @param int $space_id  (required)
+	 * @param int $id The ID of the invoice reimbursement of which IBANs should be updated. (required)
+	 * @param string $recipient_iban  (optional)
+	 * @param string $sender_iban  (optional)
 	 * @throws \Secupay\Sdk\ApiException
 	 * @throws \Secupay\Sdk\VersioningException
 	 * @throws \Secupay\Sdk\Http\ConnectionException
 	 * @return ApiResponse
 	 */
-	public function exportWithHttpInfo($request) {
-		// verify the required parameter 'request' is set
-		if (is_null($request)) {
-			throw new \InvalidArgumentException('Missing the required parameter $request when calling export');
+	public function updateIbanWithHttpInfo($space_id, $id, $recipient_iban = null, $sender_iban = null) {
+		// verify the required parameter 'space_id' is set
+		if (is_null($space_id)) {
+			throw new \InvalidArgumentException('Missing the required parameter $space_id when calling updateIban');
 		}
-		// header params
-		$headerParams = [];
-		$headerAccept = $this->apiClient->selectHeaderAccept(['application/json;charset=utf-8', 'text/csv']);
-		if (!is_null($headerAccept)) {
-			$headerParams[HttpRequest::HEADER_KEY_ACCEPT] = $headerAccept;
-		}
-		$headerParams[HttpRequest::HEADER_KEY_CONTENT_TYPE] = $this->apiClient->selectHeaderContentType(['application/json;charset=utf-8']);
-
-		// query params
-		$queryParams = [];
-
-		// path params
-		$resourcePath = '/human-user/export';
-		// default format to json
-		$resourcePath = str_replace('{format}', 'json', $resourcePath);
-
-		// form params
-		$formParams = [];
-		// body params
-		$tempBody = null;
-		if (isset($request)) {
-			$tempBody = $request;
-		}
-
-		// for model (json/xml)
-		$httpBody = '';
-		if (isset($tempBody)) {
-			$httpBody = $tempBody; // $tempBody is the method argument, if present
-		} elseif (!empty($formParams)) {
-			$httpBody = $formParams; // for HTTP post (form)
-		}
-		// make the API Call
-		try {
-			$response = $this->apiClient->callApi(
-				$resourcePath,
-				'POST',
-				$queryParams,
-				$httpBody,
-				$headerParams,
-				'string',
-				'/human-user/export'
-            );
-			return new ApiResponse($response->getStatusCode(), $response->getHeaders(), $this->apiClient->getSerializer()->deserialize($response->getData(), 'string', $response->getHeaders()));
-		} catch (ApiException $e) {
-			switch ($e->getCode()) {
-                case 200:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        'string',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                break;
-                case 442:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\ClientError',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                break;
-                case 542:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\ServerError',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                break;
-			}
-			throw $e;
-		}
-	}
-
-	/**
-	 * Operation read
-	 *
-	 * Read
-	 *
-	 * @param int $id The id of the human user which should be returned. (required)
-	 * @throws \Secupay\Sdk\ApiException
-	 * @throws \Secupay\Sdk\VersioningException
-	 * @throws \Secupay\Sdk\Http\ConnectionException
-	 * @return \Secupay\Sdk\Model\HumanUser
-	 */
-	public function read($id) {
-		return $this->readWithHttpInfo($id)->getData();
-	}
-
-	/**
-	 * Operation readWithHttpInfo
-	 *
-	 * Read
-     
-     *
-	 * @param int $id The id of the human user which should be returned. (required)
-	 * @throws \Secupay\Sdk\ApiException
-	 * @throws \Secupay\Sdk\VersioningException
-	 * @throws \Secupay\Sdk\Http\ConnectionException
-	 * @return ApiResponse
-	 */
-	public function readWithHttpInfo($id) {
 		// verify the required parameter 'id' is set
 		if (is_null($id)) {
-			throw new \InvalidArgumentException('Missing the required parameter $id when calling read');
+			throw new \InvalidArgumentException('Missing the required parameter $id when calling updateIban');
 		}
 		// header params
 		$headerParams = [];
-		$headerAccept = $this->apiClient->selectHeaderAccept(['application/json;charset=utf-8']);
+		$headerAccept = $this->apiClient->selectHeaderAccept([]);
 		if (!is_null($headerAccept)) {
 			$headerParams[HttpRequest::HEADER_KEY_ACCEPT] = $headerAccept;
 		}
-		$headerParams[HttpRequest::HEADER_KEY_CONTENT_TYPE] = $this->apiClient->selectHeaderContentType(['*/*']);
+		$headerParams[HttpRequest::HEADER_KEY_CONTENT_TYPE] = $this->apiClient->selectHeaderContentType([]);
 
 		// query params
 		$queryParams = [];
+		if (!is_null($space_id)) {
+			$queryParams['spaceId'] = $this->apiClient->getSerializer()->toQueryValue($space_id);
+		}
 		if (!is_null($id)) {
 			$queryParams['id'] = $this->apiClient->getSerializer()->toQueryValue($id);
 		}
+		if (!is_null($recipient_iban)) {
+			$queryParams['recipientIban'] = $this->apiClient->getSerializer()->toQueryValue($recipient_iban);
+		}
+		if (!is_null($sender_iban)) {
+			$queryParams['senderIban'] = $this->apiClient->getSerializer()->toQueryValue($sender_iban);
+		}
 
 		// path params
-		$resourcePath = '/human-user/read';
+		$resourcePath = '/invoice-reimbursement-service/update-iban';
 		// default format to json
 		$resourcePath = str_replace('{format}', 'json', $resourcePath);
 
@@ -551,236 +611,16 @@ class HumanUserService {
 		try {
 			$response = $this->apiClient->callApi(
 				$resourcePath,
-				'GET',
-				$queryParams,
-				$httpBody,
-				$headerParams,
-				'\Secupay\Sdk\Model\HumanUser',
-				'/human-user/read'
-            );
-			return new ApiResponse($response->getStatusCode(), $response->getHeaders(), $this->apiClient->getSerializer()->deserialize($response->getData(), '\Secupay\Sdk\Model\HumanUser', $response->getHeaders()));
-		} catch (ApiException $e) {
-			switch ($e->getCode()) {
-                case 200:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\HumanUser',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                break;
-                case 442:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\ClientError',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                break;
-                case 542:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\ServerError',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                break;
-			}
-			throw $e;
-		}
-	}
-
-	/**
-	 * Operation search
-	 *
-	 * Search
-	 *
-	 * @param \Secupay\Sdk\Model\EntityQuery $query The query restricts the human users which are returned by the search. (required)
-	 * @throws \Secupay\Sdk\ApiException
-	 * @throws \Secupay\Sdk\VersioningException
-	 * @throws \Secupay\Sdk\Http\ConnectionException
-	 * @return \Secupay\Sdk\Model\HumanUser[]
-	 */
-	public function search($query) {
-		return $this->searchWithHttpInfo($query)->getData();
-	}
-
-	/**
-	 * Operation searchWithHttpInfo
-	 *
-	 * Search
-     
-     *
-	 * @param \Secupay\Sdk\Model\EntityQuery $query The query restricts the human users which are returned by the search. (required)
-	 * @throws \Secupay\Sdk\ApiException
-	 * @throws \Secupay\Sdk\VersioningException
-	 * @throws \Secupay\Sdk\Http\ConnectionException
-	 * @return ApiResponse
-	 */
-	public function searchWithHttpInfo($query) {
-		// verify the required parameter 'query' is set
-		if (is_null($query)) {
-			throw new \InvalidArgumentException('Missing the required parameter $query when calling search');
-		}
-		// header params
-		$headerParams = [];
-		$headerAccept = $this->apiClient->selectHeaderAccept(['application/json;charset=utf-8']);
-		if (!is_null($headerAccept)) {
-			$headerParams[HttpRequest::HEADER_KEY_ACCEPT] = $headerAccept;
-		}
-		$headerParams[HttpRequest::HEADER_KEY_CONTENT_TYPE] = $this->apiClient->selectHeaderContentType(['application/json;charset=utf-8']);
-
-		// query params
-		$queryParams = [];
-
-		// path params
-		$resourcePath = '/human-user/search';
-		// default format to json
-		$resourcePath = str_replace('{format}', 'json', $resourcePath);
-
-		// form params
-		$formParams = [];
-		// body params
-		$tempBody = null;
-		if (isset($query)) {
-			$tempBody = $query;
-		}
-
-		// for model (json/xml)
-		$httpBody = '';
-		if (isset($tempBody)) {
-			$httpBody = $tempBody; // $tempBody is the method argument, if present
-		} elseif (!empty($formParams)) {
-			$httpBody = $formParams; // for HTTP post (form)
-		}
-		// make the API Call
-		try {
-			$response = $this->apiClient->callApi(
-				$resourcePath,
 				'POST',
 				$queryParams,
 				$httpBody,
 				$headerParams,
-				'\Secupay\Sdk\Model\HumanUser[]',
-				'/human-user/search'
+				null,
+				'/invoice-reimbursement-service/update-iban'
             );
-			return new ApiResponse($response->getStatusCode(), $response->getHeaders(), $this->apiClient->getSerializer()->deserialize($response->getData(), '\Secupay\Sdk\Model\HumanUser[]', $response->getHeaders()));
+			return new ApiResponse($response->getStatusCode(), $response->getHeaders());
 		} catch (ApiException $e) {
 			switch ($e->getCode()) {
-                case 200:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\HumanUser[]',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                break;
-                case 442:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\ClientError',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                break;
-                case 542:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\ServerError',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                break;
-			}
-			throw $e;
-		}
-	}
-
-	/**
-	 * Operation update
-	 *
-	 * Update
-	 *
-	 * @param \Secupay\Sdk\Model\HumanUserUpdate $entity The object with all the properties which should be updated. The id and the version are required properties. (required)
-	 * @throws \Secupay\Sdk\ApiException
-	 * @throws \Secupay\Sdk\VersioningException
-	 * @throws \Secupay\Sdk\Http\ConnectionException
-	 * @return \Secupay\Sdk\Model\HumanUser
-	 */
-	public function update($entity) {
-		return $this->updateWithHttpInfo($entity)->getData();
-	}
-
-	/**
-	 * Operation updateWithHttpInfo
-	 *
-	 * Update
-     
-     *
-	 * @param \Secupay\Sdk\Model\HumanUserUpdate $entity The object with all the properties which should be updated. The id and the version are required properties. (required)
-	 * @throws \Secupay\Sdk\ApiException
-	 * @throws \Secupay\Sdk\VersioningException
-	 * @throws \Secupay\Sdk\Http\ConnectionException
-	 * @return ApiResponse
-	 */
-	public function updateWithHttpInfo($entity) {
-		// verify the required parameter 'entity' is set
-		if (is_null($entity)) {
-			throw new \InvalidArgumentException('Missing the required parameter $entity when calling update');
-		}
-		// header params
-		$headerParams = [];
-		$headerAccept = $this->apiClient->selectHeaderAccept(['application/json;charset=utf-8']);
-		if (!is_null($headerAccept)) {
-			$headerParams[HttpRequest::HEADER_KEY_ACCEPT] = $headerAccept;
-		}
-		$headerParams[HttpRequest::HEADER_KEY_CONTENT_TYPE] = $this->apiClient->selectHeaderContentType(['application/json;charset=utf-8']);
-
-		// query params
-		$queryParams = [];
-
-		// path params
-		$resourcePath = '/human-user/update';
-		// default format to json
-		$resourcePath = str_replace('{format}', 'json', $resourcePath);
-
-		// form params
-		$formParams = [];
-		// body params
-		$tempBody = null;
-		if (isset($entity)) {
-			$tempBody = $entity;
-		}
-
-		// for model (json/xml)
-		$httpBody = '';
-		if (isset($tempBody)) {
-			$httpBody = $tempBody; // $tempBody is the method argument, if present
-		} elseif (!empty($formParams)) {
-			$httpBody = $formParams; // for HTTP post (form)
-		}
-		// make the API Call
-		try {
-			$response = $this->apiClient->callApi(
-				$resourcePath,
-				'POST',
-				$queryParams,
-				$httpBody,
-				$headerParams,
-				'\Secupay\Sdk\Model\HumanUser',
-				'/human-user/update'
-            );
-			return new ApiResponse($response->getStatusCode(), $response->getHeaders(), $this->apiClient->getSerializer()->deserialize($response->getData(), '\Secupay\Sdk\Model\HumanUser', $response->getHeaders()));
-		} catch (ApiException $e) {
-			switch ($e->getCode()) {
-                case 200:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\HumanUser',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                break;
                 case 409:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),

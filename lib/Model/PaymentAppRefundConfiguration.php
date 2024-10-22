@@ -24,7 +24,7 @@ use \ArrayAccess;
 use \Secupay\Sdk\ObjectSerializer;
 
 /**
- * ShopifySubscriptionUpdateRequest model
+ * PaymentAppRefundConfiguration model
  *
  * @category    Class
  * @description 
@@ -32,7 +32,7 @@ use \Secupay\Sdk\ObjectSerializer;
  * @author      Secupay AG.
  * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache License v2
  */
-class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
+class PaymentAppRefundConfiguration implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -41,7 +41,7 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'ShopifySubscriptionUpdateRequest';
+    protected static $swaggerModelName = 'PaymentAppRefundConfiguration';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -49,11 +49,9 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerTypes = [
-        'billing_configuration' => '\Secupay\Sdk\Model\BillingConfiguration',
-        'id' => 'int',
-        'items' => '\Secupay\Sdk\Model\Item[]',
-        'store_order_confirmation_email_enabled' => 'bool',
-        'subscriber_suspension_allowed' => 'bool'
+        'multiple_refunds_supported' => 'bool',
+        'refund_endpoint' => 'string',
+        'refund_timeout_in_minutes' => 'int'
     ];
 
     /**
@@ -62,11 +60,9 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerFormats = [
-        'billing_configuration' => null,
-        'id' => 'int64',
-        'items' => null,
-        'store_order_confirmation_email_enabled' => null,
-        'subscriber_suspension_allowed' => null
+        'multiple_refunds_supported' => null,
+        'refund_endpoint' => null,
+        'refund_timeout_in_minutes' => 'int32'
     ];
 
     /**
@@ -76,11 +72,9 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'billing_configuration' => 'billingConfiguration',
-        'id' => 'id',
-        'items' => 'items',
-        'store_order_confirmation_email_enabled' => 'storeOrderConfirmationEmailEnabled',
-        'subscriber_suspension_allowed' => 'subscriberSuspensionAllowed'
+        'multiple_refunds_supported' => 'multipleRefundsSupported',
+        'refund_endpoint' => 'refundEndpoint',
+        'refund_timeout_in_minutes' => 'refundTimeoutInMinutes'
     ];
 
     /**
@@ -89,11 +83,9 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'billing_configuration' => 'setBillingConfiguration',
-        'id' => 'setId',
-        'items' => 'setItems',
-        'store_order_confirmation_email_enabled' => 'setStoreOrderConfirmationEmailEnabled',
-        'subscriber_suspension_allowed' => 'setSubscriberSuspensionAllowed'
+        'multiple_refunds_supported' => 'setMultipleRefundsSupported',
+        'refund_endpoint' => 'setRefundEndpoint',
+        'refund_timeout_in_minutes' => 'setRefundTimeoutInMinutes'
     ];
 
     /**
@@ -102,11 +94,9 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'billing_configuration' => 'getBillingConfiguration',
-        'id' => 'getId',
-        'items' => 'getItems',
-        'store_order_confirmation_email_enabled' => 'getStoreOrderConfirmationEmailEnabled',
-        'subscriber_suspension_allowed' => 'getSubscriberSuspensionAllowed'
+        'multiple_refunds_supported' => 'getMultipleRefundsSupported',
+        'refund_endpoint' => 'getRefundEndpoint',
+        'refund_timeout_in_minutes' => 'getRefundTimeoutInMinutes'
     ];
 
     
@@ -127,15 +117,11 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
     public function __construct(array $data = null)
     {
         
-        $this->container['billing_configuration'] = isset($data['billing_configuration']) ? $data['billing_configuration'] : null;
+        $this->container['multiple_refunds_supported'] = isset($data['multiple_refunds_supported']) ? $data['multiple_refunds_supported'] : null;
         
-        $this->container['id'] = isset($data['id']) ? $data['id'] : null;
+        $this->container['refund_endpoint'] = isset($data['refund_endpoint']) ? $data['refund_endpoint'] : null;
         
-        $this->container['items'] = isset($data['items']) ? $data['items'] : null;
-        
-        $this->container['store_order_confirmation_email_enabled'] = isset($data['store_order_confirmation_email_enabled']) ? $data['store_order_confirmation_email_enabled'] : null;
-        
-        $this->container['subscriber_suspension_allowed'] = isset($data['subscriber_suspension_allowed']) ? $data['subscriber_suspension_allowed'] : null;
+        $this->container['refund_timeout_in_minutes'] = isset($data['refund_timeout_in_minutes']) ? $data['refund_timeout_in_minutes'] : null;
         
     }
 
@@ -229,125 +215,75 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
     
 
     /**
-     * Gets billing_configuration
+     * Gets multiple_refunds_supported
      *
-     * @return \Secupay\Sdk\Model\BillingConfiguration
+     * @return bool
      */
-    public function getBillingConfiguration()
+    public function getMultipleRefundsSupported()
     {
-        return $this->container['billing_configuration'];
+        return $this->container['multiple_refunds_supported'];
     }
 
     /**
-     * Sets billing_configuration
+     * Sets multiple_refunds_supported
      *
-     * @param \Secupay\Sdk\Model\BillingConfiguration $billing_configuration 
+     * @param bool $multiple_refunds_supported This flag indicates whether the connector supports multiple refunds for a single transaction or not.
      *
      * @return $this
      */
-    public function setBillingConfiguration($billing_configuration)
+    public function setMultipleRefundsSupported($multiple_refunds_supported)
     {
-        $this->container['billing_configuration'] = $billing_configuration;
+        $this->container['multiple_refunds_supported'] = $multiple_refunds_supported;
 
         return $this;
     }
     
 
     /**
-     * Gets id
+     * Gets refund_endpoint
+     *
+     * @return string
+     */
+    public function getRefundEndpoint()
+    {
+        return $this->container['refund_endpoint'];
+    }
+
+    /**
+     * Sets refund_endpoint
+     *
+     * @param string $refund_endpoint The refund endpoint is invoked to request the payment service provider to execute a refund.
+     *
+     * @return $this
+     */
+    public function setRefundEndpoint($refund_endpoint)
+    {
+        $this->container['refund_endpoint'] = $refund_endpoint;
+
+        return $this;
+    }
+    
+
+    /**
+     * Gets refund_timeout_in_minutes
      *
      * @return int
      */
-    public function getId()
+    public function getRefundTimeoutInMinutes()
     {
-        return $this->container['id'];
+        return $this->container['refund_timeout_in_minutes'];
     }
 
     /**
-     * Sets id
+     * Sets refund_timeout_in_minutes
      *
-     * @param int $id 
+     * @param int $refund_timeout_in_minutes When the refund is triggered we expect a feedback about the state of it. This timeout defines after how long we consider the refund as failed without receiving a final state update.
      *
      * @return $this
      */
-    public function setId($id)
+    public function setRefundTimeoutInMinutes($refund_timeout_in_minutes)
     {
-        $this->container['id'] = $id;
-
-        return $this;
-    }
-    
-
-    /**
-     * Gets items
-     *
-     * @return \Secupay\Sdk\Model\Item[]
-     */
-    public function getItems()
-    {
-        return $this->container['items'];
-    }
-
-    /**
-     * Sets items
-     *
-     * @param \Secupay\Sdk\Model\Item[] $items 
-     *
-     * @return $this
-     */
-    public function setItems($items)
-    {
-        $this->container['items'] = $items;
-
-        return $this;
-    }
-    
-
-    /**
-     * Gets store_order_confirmation_email_enabled
-     *
-     * @return bool
-     */
-    public function getStoreOrderConfirmationEmailEnabled()
-    {
-        return $this->container['store_order_confirmation_email_enabled'];
-    }
-
-    /**
-     * Sets store_order_confirmation_email_enabled
-     *
-     * @param bool $store_order_confirmation_email_enabled 
-     *
-     * @return $this
-     */
-    public function setStoreOrderConfirmationEmailEnabled($store_order_confirmation_email_enabled)
-    {
-        $this->container['store_order_confirmation_email_enabled'] = $store_order_confirmation_email_enabled;
-
-        return $this;
-    }
-    
-
-    /**
-     * Gets subscriber_suspension_allowed
-     *
-     * @return bool
-     */
-    public function getSubscriberSuspensionAllowed()
-    {
-        return $this->container['subscriber_suspension_allowed'];
-    }
-
-    /**
-     * Sets subscriber_suspension_allowed
-     *
-     * @param bool $subscriber_suspension_allowed 
-     *
-     * @return $this
-     */
-    public function setSubscriberSuspensionAllowed($subscriber_suspension_allowed)
-    {
-        $this->container['subscriber_suspension_allowed'] = $subscriber_suspension_allowed;
+        $this->container['refund_timeout_in_minutes'] = $refund_timeout_in_minutes;
 
         return $this;
     }

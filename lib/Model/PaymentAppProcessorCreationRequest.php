@@ -24,7 +24,7 @@ use \ArrayAccess;
 use \Secupay\Sdk\ObjectSerializer;
 
 /**
- * ShopifySubscriptionUpdateRequest model
+ * PaymentAppProcessorCreationRequest model
  *
  * @category    Class
  * @description 
@@ -32,7 +32,7 @@ use \Secupay\Sdk\ObjectSerializer;
  * @author      Secupay AG.
  * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache License v2
  */
-class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
+class PaymentAppProcessorCreationRequest implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -41,7 +41,7 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'ShopifySubscriptionUpdateRequest';
+    protected static $swaggerModelName = 'PaymentAppProcessorCreationRequest';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -49,11 +49,11 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerTypes = [
-        'billing_configuration' => '\Secupay\Sdk\Model\BillingConfiguration',
-        'id' => 'int',
-        'items' => '\Secupay\Sdk\Model\Item[]',
-        'store_order_confirmation_email_enabled' => 'bool',
-        'subscriber_suspension_allowed' => 'bool'
+        'documentation_url' => 'string',
+        'external_id' => 'string',
+        'name' => 'string',
+        'production_mode_url' => 'string',
+        'svg_icon' => 'string'
     ];
 
     /**
@@ -62,11 +62,11 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerFormats = [
-        'billing_configuration' => null,
-        'id' => 'int64',
-        'items' => null,
-        'store_order_confirmation_email_enabled' => null,
-        'subscriber_suspension_allowed' => null
+        'documentation_url' => null,
+        'external_id' => null,
+        'name' => null,
+        'production_mode_url' => null,
+        'svg_icon' => null
     ];
 
     /**
@@ -76,11 +76,11 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'billing_configuration' => 'billingConfiguration',
-        'id' => 'id',
-        'items' => 'items',
-        'store_order_confirmation_email_enabled' => 'storeOrderConfirmationEmailEnabled',
-        'subscriber_suspension_allowed' => 'subscriberSuspensionAllowed'
+        'documentation_url' => 'documentationUrl',
+        'external_id' => 'externalId',
+        'name' => 'name',
+        'production_mode_url' => 'productionModeUrl',
+        'svg_icon' => 'svgIcon'
     ];
 
     /**
@@ -89,11 +89,11 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'billing_configuration' => 'setBillingConfiguration',
-        'id' => 'setId',
-        'items' => 'setItems',
-        'store_order_confirmation_email_enabled' => 'setStoreOrderConfirmationEmailEnabled',
-        'subscriber_suspension_allowed' => 'setSubscriberSuspensionAllowed'
+        'documentation_url' => 'setDocumentationUrl',
+        'external_id' => 'setExternalId',
+        'name' => 'setName',
+        'production_mode_url' => 'setProductionModeUrl',
+        'svg_icon' => 'setSvgIcon'
     ];
 
     /**
@@ -102,11 +102,11 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'billing_configuration' => 'getBillingConfiguration',
-        'id' => 'getId',
-        'items' => 'getItems',
-        'store_order_confirmation_email_enabled' => 'getStoreOrderConfirmationEmailEnabled',
-        'subscriber_suspension_allowed' => 'getSubscriberSuspensionAllowed'
+        'documentation_url' => 'getDocumentationUrl',
+        'external_id' => 'getExternalId',
+        'name' => 'getName',
+        'production_mode_url' => 'getProductionModeUrl',
+        'svg_icon' => 'getSvgIcon'
     ];
 
     
@@ -127,15 +127,15 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
     public function __construct(array $data = null)
     {
         
-        $this->container['billing_configuration'] = isset($data['billing_configuration']) ? $data['billing_configuration'] : null;
+        $this->container['documentation_url'] = isset($data['documentation_url']) ? $data['documentation_url'] : null;
         
-        $this->container['id'] = isset($data['id']) ? $data['id'] : null;
+        $this->container['external_id'] = isset($data['external_id']) ? $data['external_id'] : null;
         
-        $this->container['items'] = isset($data['items']) ? $data['items'] : null;
+        $this->container['name'] = isset($data['name']) ? $data['name'] : null;
         
-        $this->container['store_order_confirmation_email_enabled'] = isset($data['store_order_confirmation_email_enabled']) ? $data['store_order_confirmation_email_enabled'] : null;
+        $this->container['production_mode_url'] = isset($data['production_mode_url']) ? $data['production_mode_url'] : null;
         
-        $this->container['subscriber_suspension_allowed'] = isset($data['subscriber_suspension_allowed']) ? $data['subscriber_suspension_allowed'] : null;
+        $this->container['svg_icon'] = isset($data['svg_icon']) ? $data['svg_icon'] : null;
         
     }
 
@@ -147,6 +147,34 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
     public function listInvalidProperties()
     {
         $invalidProperties = [];
+
+        if ($this->container['documentation_url'] === null) {
+            $invalidProperties[] = "'documentation_url' can't be null";
+        }
+        if ($this->container['external_id'] === null) {
+            $invalidProperties[] = "'external_id' can't be null";
+        }
+        if ((mb_strlen($this->container['external_id']) > 40)) {
+            $invalidProperties[] = "invalid value for 'external_id', the character length must be smaller than or equal to 40.";
+        }
+
+        if ((mb_strlen($this->container['external_id']) < 1)) {
+            $invalidProperties[] = "invalid value for 'external_id', the character length must be bigger than or equal to 1.";
+        }
+
+        if ($this->container['name'] === null) {
+            $invalidProperties[] = "'name' can't be null";
+        }
+        if ((mb_strlen($this->container['name']) > 100)) {
+            $invalidProperties[] = "invalid value for 'name', the character length must be smaller than or equal to 100.";
+        }
+
+        if ($this->container['svg_icon'] === null) {
+            $invalidProperties[] = "'svg_icon' can't be null";
+        }
+        if ((mb_strlen($this->container['svg_icon']) > 10000)) {
+            $invalidProperties[] = "invalid value for 'svg_icon', the character length must be smaller than or equal to 10000.";
+        }
 
         return $invalidProperties;
     }
@@ -229,125 +257,140 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
     
 
     /**
-     * Gets billing_configuration
+     * Gets documentation_url
      *
-     * @return \Secupay\Sdk\Model\BillingConfiguration
+     * @return string
      */
-    public function getBillingConfiguration()
+    public function getDocumentationUrl()
     {
-        return $this->container['billing_configuration'];
+        return $this->container['documentation_url'];
     }
 
     /**
-     * Sets billing_configuration
+     * Sets documentation_url
      *
-     * @param \Secupay\Sdk\Model\BillingConfiguration $billing_configuration 
+     * @param string $documentation_url The documentation URL has to point to a description of how to configure and use the processor.
      *
      * @return $this
      */
-    public function setBillingConfiguration($billing_configuration)
+    public function setDocumentationUrl($documentation_url)
     {
-        $this->container['billing_configuration'] = $billing_configuration;
+        $this->container['documentation_url'] = $documentation_url;
 
         return $this;
     }
     
 
     /**
-     * Gets id
+     * Gets external_id
      *
-     * @return int
+     * @return string
      */
-    public function getId()
+    public function getExternalId()
     {
-        return $this->container['id'];
+        return $this->container['external_id'];
     }
 
     /**
-     * Sets id
+     * Sets external_id
      *
-     * @param int $id 
+     * @param string $external_id The external ID identifies the processor within the external system. It has to be unique per space and for any subsequent update the same ID must be sent.
      *
      * @return $this
      */
-    public function setId($id)
+    public function setExternalId($external_id)
     {
-        $this->container['id'] = $id;
+        if ((mb_strlen($external_id) > 40)) {
+            throw new \InvalidArgumentException('invalid length for $external_id when calling PaymentAppProcessorCreationRequest., must be smaller than or equal to 40.');
+        }
+        if ((mb_strlen($external_id) < 1)) {
+            throw new \InvalidArgumentException('invalid length for $external_id when calling PaymentAppProcessorCreationRequest., must be bigger than or equal to 1.');
+        }
+
+        $this->container['external_id'] = $external_id;
 
         return $this;
     }
     
 
     /**
-     * Gets items
+     * Gets name
      *
-     * @return \Secupay\Sdk\Model\Item[]
+     * @return string
      */
-    public function getItems()
+    public function getName()
     {
-        return $this->container['items'];
+        return $this->container['name'];
     }
 
     /**
-     * Sets items
+     * Sets name
      *
-     * @param \Secupay\Sdk\Model\Item[] $items 
+     * @param string $name The name of the processor will be displayed within the user interfaces that the merchant is interacting with.
      *
      * @return $this
      */
-    public function setItems($items)
+    public function setName($name)
     {
-        $this->container['items'] = $items;
+        if ((mb_strlen($name) > 100)) {
+            throw new \InvalidArgumentException('invalid length for $name when calling PaymentAppProcessorCreationRequest., must be smaller than or equal to 100.');
+        }
+
+        $this->container['name'] = $name;
 
         return $this;
     }
     
 
     /**
-     * Gets store_order_confirmation_email_enabled
+     * Gets production_mode_url
      *
-     * @return bool
+     * @return string
      */
-    public function getStoreOrderConfirmationEmailEnabled()
+    public function getProductionModeUrl()
     {
-        return $this->container['store_order_confirmation_email_enabled'];
+        return $this->container['production_mode_url'];
     }
 
     /**
-     * Sets store_order_confirmation_email_enabled
+     * Sets production_mode_url
      *
-     * @param bool $store_order_confirmation_email_enabled 
+     * @param string $production_mode_url The production mode URL has to point to a site on which the merchant can set up the production mode for the processor.
      *
      * @return $this
      */
-    public function setStoreOrderConfirmationEmailEnabled($store_order_confirmation_email_enabled)
+    public function setProductionModeUrl($production_mode_url)
     {
-        $this->container['store_order_confirmation_email_enabled'] = $store_order_confirmation_email_enabled;
+        $this->container['production_mode_url'] = $production_mode_url;
 
         return $this;
     }
     
 
     /**
-     * Gets subscriber_suspension_allowed
+     * Gets svg_icon
      *
-     * @return bool
+     * @return string
      */
-    public function getSubscriberSuspensionAllowed()
+    public function getSvgIcon()
     {
-        return $this->container['subscriber_suspension_allowed'];
+        return $this->container['svg_icon'];
     }
 
     /**
-     * Sets subscriber_suspension_allowed
+     * Sets svg_icon
      *
-     * @param bool $subscriber_suspension_allowed 
+     * @param string $svg_icon The SVG icon will be displayed to the user to represent this processor.
      *
      * @return $this
      */
-    public function setSubscriberSuspensionAllowed($subscriber_suspension_allowed)
+    public function setSvgIcon($svg_icon)
     {
-        $this->container['subscriber_suspension_allowed'] = $subscriber_suspension_allowed;
+        if ((mb_strlen($svg_icon) > 10000)) {
+            throw new \InvalidArgumentException('invalid length for $svg_icon when calling PaymentAppProcessorCreationRequest., must be smaller than or equal to 10000.');
+        }
+
+        $this->container['svg_icon'] = $svg_icon;
 
         return $this;
     }

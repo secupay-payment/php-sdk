@@ -24,15 +24,15 @@ use \ArrayAccess;
 use \Secupay\Sdk\ObjectSerializer;
 
 /**
- * ShopifySubscriptionModelItem model
+ * PaymentAppRefundUpdateRequest model
  *
  * @category    Class
- * @description 
+ * @description The refund update request allows to change the state of a refund. The refund must be linked with a processor that was created by the payment Web App that invokes the operation.
  * @package     Secupay\Sdk
  * @author      Secupay AG.
  * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache License v2
  */
-class ShopifySubscriptionModelItem implements ModelInterface, ArrayAccess
+class PaymentAppRefundUpdateRequest implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -41,7 +41,7 @@ class ShopifySubscriptionModelItem implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'ShopifySubscriptionModel.Item';
+    protected static $swaggerModelName = 'PaymentAppRefundUpdateRequest';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -49,11 +49,10 @@ class ShopifySubscriptionModelItem implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerTypes = [
-        'price_including_tax' => 'float',
-        'product_id' => 'int',
-        'quantity' => 'float',
-        'recalculate_price' => 'bool',
-        'tax_lines' => '\Secupay\Sdk\Model\ShopifySubscriptionModelTaxLine[]'
+        'failure_reason_id' => 'int',
+        'reference' => 'string',
+        'refund_id' => 'int',
+        'target_state' => '\Secupay\Sdk\Model\PaymentAppRefundTargetState'
     ];
 
     /**
@@ -62,11 +61,10 @@ class ShopifySubscriptionModelItem implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerFormats = [
-        'price_including_tax' => null,
-        'product_id' => 'int64',
-        'quantity' => null,
-        'recalculate_price' => null,
-        'tax_lines' => null
+        'failure_reason_id' => 'int64',
+        'reference' => null,
+        'refund_id' => 'int64',
+        'target_state' => null
     ];
 
     /**
@@ -76,11 +74,10 @@ class ShopifySubscriptionModelItem implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'price_including_tax' => 'priceIncludingTax',
-        'product_id' => 'productId',
-        'quantity' => 'quantity',
-        'recalculate_price' => 'recalculatePrice',
-        'tax_lines' => 'taxLines'
+        'failure_reason_id' => 'failureReasonId',
+        'reference' => 'reference',
+        'refund_id' => 'refundId',
+        'target_state' => 'targetState'
     ];
 
     /**
@@ -89,11 +86,10 @@ class ShopifySubscriptionModelItem implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'price_including_tax' => 'setPriceIncludingTax',
-        'product_id' => 'setProductId',
-        'quantity' => 'setQuantity',
-        'recalculate_price' => 'setRecalculatePrice',
-        'tax_lines' => 'setTaxLines'
+        'failure_reason_id' => 'setFailureReasonId',
+        'reference' => 'setReference',
+        'refund_id' => 'setRefundId',
+        'target_state' => 'setTargetState'
     ];
 
     /**
@@ -102,11 +98,10 @@ class ShopifySubscriptionModelItem implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'price_including_tax' => 'getPriceIncludingTax',
-        'product_id' => 'getProductId',
-        'quantity' => 'getQuantity',
-        'recalculate_price' => 'getRecalculatePrice',
-        'tax_lines' => 'getTaxLines'
+        'failure_reason_id' => 'getFailureReasonId',
+        'reference' => 'getReference',
+        'refund_id' => 'getRefundId',
+        'target_state' => 'getTargetState'
     ];
 
     
@@ -127,15 +122,13 @@ class ShopifySubscriptionModelItem implements ModelInterface, ArrayAccess
     public function __construct(array $data = null)
     {
         
-        $this->container['price_including_tax'] = isset($data['price_including_tax']) ? $data['price_including_tax'] : null;
+        $this->container['failure_reason_id'] = isset($data['failure_reason_id']) ? $data['failure_reason_id'] : null;
         
-        $this->container['product_id'] = isset($data['product_id']) ? $data['product_id'] : null;
+        $this->container['reference'] = isset($data['reference']) ? $data['reference'] : null;
         
-        $this->container['quantity'] = isset($data['quantity']) ? $data['quantity'] : null;
+        $this->container['refund_id'] = isset($data['refund_id']) ? $data['refund_id'] : null;
         
-        $this->container['recalculate_price'] = isset($data['recalculate_price']) ? $data['recalculate_price'] : null;
-        
-        $this->container['tax_lines'] = isset($data['tax_lines']) ? $data['tax_lines'] : null;
+        $this->container['target_state'] = isset($data['target_state']) ? $data['target_state'] : null;
         
     }
 
@@ -147,6 +140,10 @@ class ShopifySubscriptionModelItem implements ModelInterface, ArrayAccess
     public function listInvalidProperties()
     {
         $invalidProperties = [];
+
+        if (!is_null($this->container['reference']) && (mb_strlen($this->container['reference']) > 100)) {
+            $invalidProperties[] = "invalid value for 'reference', the character length must be smaller than or equal to 100.";
+        }
 
         return $invalidProperties;
     }
@@ -229,125 +226,104 @@ class ShopifySubscriptionModelItem implements ModelInterface, ArrayAccess
     
 
     /**
-     * Gets price_including_tax
-     *
-     * @return float
-     */
-    public function getPriceIncludingTax()
-    {
-        return $this->container['price_including_tax'];
-    }
-
-    /**
-     * Sets price_including_tax
-     *
-     * @param float $price_including_tax 
-     *
-     * @return $this
-     */
-    public function setPriceIncludingTax($price_including_tax)
-    {
-        $this->container['price_including_tax'] = $price_including_tax;
-
-        return $this;
-    }
-    
-
-    /**
-     * Gets product_id
+     * Gets failure_reason_id
      *
      * @return int
      */
-    public function getProductId()
+    public function getFailureReasonId()
     {
-        return $this->container['product_id'];
+        return $this->container['failure_reason_id'];
     }
 
     /**
-     * Sets product_id
+     * Sets failure_reason_id
      *
-     * @param int $product_id 
+     * @param int $failure_reason_id The failure reason indicates why the refund failed. It is required when the target state is FAILED.
      *
      * @return $this
      */
-    public function setProductId($product_id)
+    public function setFailureReasonId($failure_reason_id)
     {
-        $this->container['product_id'] = $product_id;
+        $this->container['failure_reason_id'] = $failure_reason_id;
 
         return $this;
     }
     
 
     /**
-     * Gets quantity
+     * Gets reference
      *
-     * @return float
+     * @return string
      */
-    public function getQuantity()
+    public function getReference()
     {
-        return $this->container['quantity'];
+        return $this->container['reference'];
     }
 
     /**
-     * Sets quantity
+     * Sets reference
      *
-     * @param float $quantity 
+     * @param string $reference The reference identifies the refund within the systems of the external service provider. It is required when the target state is SUCCESSFUL.
      *
      * @return $this
      */
-    public function setQuantity($quantity)
+    public function setReference($reference)
     {
-        $this->container['quantity'] = $quantity;
+        if (!is_null($reference) && (mb_strlen($reference) > 100)) {
+            throw new \InvalidArgumentException('invalid length for $reference when calling PaymentAppRefundUpdateRequest., must be smaller than or equal to 100.');
+        }
+
+        $this->container['reference'] = $reference;
 
         return $this;
     }
     
 
     /**
-     * Gets recalculate_price
+     * Gets refund_id
      *
-     * @return bool
+     * @return int
      */
-    public function getRecalculatePrice()
+    public function getRefundId()
     {
-        return $this->container['recalculate_price'];
+        return $this->container['refund_id'];
     }
 
     /**
-     * Sets recalculate_price
+     * Sets refund_id
      *
-     * @param bool $recalculate_price 
+     * @param int $refund_id This is the ID of the refund that should be updated.
      *
      * @return $this
      */
-    public function setRecalculatePrice($recalculate_price)
+    public function setRefundId($refund_id)
     {
-        $this->container['recalculate_price'] = $recalculate_price;
+        $this->container['refund_id'] = $refund_id;
 
         return $this;
     }
     
 
     /**
-     * Gets tax_lines
+     * Gets target_state
      *
-     * @return \Secupay\Sdk\Model\ShopifySubscriptionModelTaxLine[]
+     * @return \Secupay\Sdk\Model\PaymentAppRefundTargetState
      */
-    public function getTaxLines()
+    public function getTargetState()
     {
-        return $this->container['tax_lines'];
+        return $this->container['target_state'];
     }
 
     /**
-     * Sets tax_lines
+     * Sets target_state
      *
-     * @param \Secupay\Sdk\Model\ShopifySubscriptionModelTaxLine[] $tax_lines 
+     * @param \Secupay\Sdk\Model\PaymentAppRefundTargetState $target_state The target state defines the state into which the refund should be switched into. Once the refund changed the state it will not be possible to change it again.
      *
      * @return $this
      */
-    public function setTaxLines($tax_lines)
+    public function setTargetState($target_state)
     {
-        $this->container['tax_lines'] = $tax_lines;
+        $this->container['target_state'] = $target_state;
 
         return $this;
     }

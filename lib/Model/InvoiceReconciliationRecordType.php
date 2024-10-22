@@ -24,7 +24,7 @@ use \ArrayAccess;
 use \Secupay\Sdk\ObjectSerializer;
 
 /**
- * ShopifySubscriptionUpdateRequest model
+ * InvoiceReconciliationRecordType model
  *
  * @category    Class
  * @description 
@@ -32,7 +32,7 @@ use \Secupay\Sdk\ObjectSerializer;
  * @author      Secupay AG.
  * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache License v2
  */
-class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
+class InvoiceReconciliationRecordType implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -41,7 +41,7 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'ShopifySubscriptionUpdateRequest';
+    protected static $swaggerModelName = 'InvoiceReconciliationRecordType';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -49,11 +49,9 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerTypes = [
-        'billing_configuration' => '\Secupay\Sdk\Model\BillingConfiguration',
+        'description' => 'map[string,string]',
         'id' => 'int',
-        'items' => '\Secupay\Sdk\Model\Item[]',
-        'store_order_confirmation_email_enabled' => 'bool',
-        'subscriber_suspension_allowed' => 'bool'
+        'name' => 'map[string,string]'
     ];
 
     /**
@@ -62,11 +60,9 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerFormats = [
-        'billing_configuration' => null,
+        'description' => null,
         'id' => 'int64',
-        'items' => null,
-        'store_order_confirmation_email_enabled' => null,
-        'subscriber_suspension_allowed' => null
+        'name' => null
     ];
 
     /**
@@ -76,11 +72,9 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'billing_configuration' => 'billingConfiguration',
+        'description' => 'description',
         'id' => 'id',
-        'items' => 'items',
-        'store_order_confirmation_email_enabled' => 'storeOrderConfirmationEmailEnabled',
-        'subscriber_suspension_allowed' => 'subscriberSuspensionAllowed'
+        'name' => 'name'
     ];
 
     /**
@@ -89,11 +83,9 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'billing_configuration' => 'setBillingConfiguration',
+        'description' => 'setDescription',
         'id' => 'setId',
-        'items' => 'setItems',
-        'store_order_confirmation_email_enabled' => 'setStoreOrderConfirmationEmailEnabled',
-        'subscriber_suspension_allowed' => 'setSubscriberSuspensionAllowed'
+        'name' => 'setName'
     ];
 
     /**
@@ -102,11 +94,9 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'billing_configuration' => 'getBillingConfiguration',
+        'description' => 'getDescription',
         'id' => 'getId',
-        'items' => 'getItems',
-        'store_order_confirmation_email_enabled' => 'getStoreOrderConfirmationEmailEnabled',
-        'subscriber_suspension_allowed' => 'getSubscriberSuspensionAllowed'
+        'name' => 'getName'
     ];
 
     
@@ -127,15 +117,11 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
     public function __construct(array $data = null)
     {
         
-        $this->container['billing_configuration'] = isset($data['billing_configuration']) ? $data['billing_configuration'] : null;
+        $this->container['description'] = isset($data['description']) ? $data['description'] : null;
         
         $this->container['id'] = isset($data['id']) ? $data['id'] : null;
         
-        $this->container['items'] = isset($data['items']) ? $data['items'] : null;
-        
-        $this->container['store_order_confirmation_email_enabled'] = isset($data['store_order_confirmation_email_enabled']) ? $data['store_order_confirmation_email_enabled'] : null;
-        
-        $this->container['subscriber_suspension_allowed'] = isset($data['subscriber_suspension_allowed']) ? $data['subscriber_suspension_allowed'] : null;
+        $this->container['name'] = isset($data['name']) ? $data['name'] : null;
         
     }
 
@@ -229,25 +215,25 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
     
 
     /**
-     * Gets billing_configuration
+     * Gets description
      *
-     * @return \Secupay\Sdk\Model\BillingConfiguration
+     * @return map[string,string]
      */
-    public function getBillingConfiguration()
+    public function getDescription()
     {
-        return $this->container['billing_configuration'];
+        return $this->container['description'];
     }
 
     /**
-     * Sets billing_configuration
+     * Sets description
      *
-     * @param \Secupay\Sdk\Model\BillingConfiguration $billing_configuration 
+     * @param map[string,string] $description The localized description of the object.
      *
      * @return $this
      */
-    public function setBillingConfiguration($billing_configuration)
+    public function setDescription($description)
     {
-        $this->container['billing_configuration'] = $billing_configuration;
+        $this->container['description'] = $description;
 
         return $this;
     }
@@ -266,7 +252,7 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
     /**
      * Sets id
      *
-     * @param int $id 
+     * @param int $id A unique identifier for the object.
      *
      * @return $this
      */
@@ -279,75 +265,25 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
     
 
     /**
-     * Gets items
+     * Gets name
      *
-     * @return \Secupay\Sdk\Model\Item[]
+     * @return map[string,string]
      */
-    public function getItems()
+    public function getName()
     {
-        return $this->container['items'];
+        return $this->container['name'];
     }
 
     /**
-     * Sets items
+     * Sets name
      *
-     * @param \Secupay\Sdk\Model\Item[] $items 
+     * @param map[string,string] $name The localized name of the object.
      *
      * @return $this
      */
-    public function setItems($items)
+    public function setName($name)
     {
-        $this->container['items'] = $items;
-
-        return $this;
-    }
-    
-
-    /**
-     * Gets store_order_confirmation_email_enabled
-     *
-     * @return bool
-     */
-    public function getStoreOrderConfirmationEmailEnabled()
-    {
-        return $this->container['store_order_confirmation_email_enabled'];
-    }
-
-    /**
-     * Sets store_order_confirmation_email_enabled
-     *
-     * @param bool $store_order_confirmation_email_enabled 
-     *
-     * @return $this
-     */
-    public function setStoreOrderConfirmationEmailEnabled($store_order_confirmation_email_enabled)
-    {
-        $this->container['store_order_confirmation_email_enabled'] = $store_order_confirmation_email_enabled;
-
-        return $this;
-    }
-    
-
-    /**
-     * Gets subscriber_suspension_allowed
-     *
-     * @return bool
-     */
-    public function getSubscriberSuspensionAllowed()
-    {
-        return $this->container['subscriber_suspension_allowed'];
-    }
-
-    /**
-     * Sets subscriber_suspension_allowed
-     *
-     * @param bool $subscriber_suspension_allowed 
-     *
-     * @return $this
-     */
-    public function setSubscriberSuspensionAllowed($subscriber_suspension_allowed)
-    {
-        $this->container['subscriber_suspension_allowed'] = $subscriber_suspension_allowed;
+        $this->container['name'] = $name;
 
         return $this;
     }

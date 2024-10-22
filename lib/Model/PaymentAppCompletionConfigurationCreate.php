@@ -24,7 +24,7 @@ use \ArrayAccess;
 use \Secupay\Sdk\ObjectSerializer;
 
 /**
- * ShopifySubscriptionUpdateRequest model
+ * PaymentAppCompletionConfigurationCreate model
  *
  * @category    Class
  * @description 
@@ -32,7 +32,7 @@ use \Secupay\Sdk\ObjectSerializer;
  * @author      Secupay AG.
  * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache License v2
  */
-class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
+class PaymentAppCompletionConfigurationCreate implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -41,7 +41,7 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'ShopifySubscriptionUpdateRequest';
+    protected static $swaggerModelName = 'PaymentAppCompletionConfiguration.Create';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -49,11 +49,11 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerTypes = [
-        'billing_configuration' => '\Secupay\Sdk\Model\BillingConfiguration',
-        'id' => 'int',
-        'items' => '\Secupay\Sdk\Model\Item[]',
-        'store_order_confirmation_email_enabled' => 'bool',
-        'subscriber_suspension_allowed' => 'bool'
+        'completion_endpoint' => 'string',
+        'completion_timeout_in_minutes' => 'int',
+        'maximal_completion_delay_in_days' => 'int',
+        'multiple_completions_supported' => 'bool',
+        'void_endpoint' => 'string'
     ];
 
     /**
@@ -62,11 +62,11 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerFormats = [
-        'billing_configuration' => null,
-        'id' => 'int64',
-        'items' => null,
-        'store_order_confirmation_email_enabled' => null,
-        'subscriber_suspension_allowed' => null
+        'completion_endpoint' => null,
+        'completion_timeout_in_minutes' => 'int32',
+        'maximal_completion_delay_in_days' => 'int32',
+        'multiple_completions_supported' => null,
+        'void_endpoint' => null
     ];
 
     /**
@@ -76,11 +76,11 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'billing_configuration' => 'billingConfiguration',
-        'id' => 'id',
-        'items' => 'items',
-        'store_order_confirmation_email_enabled' => 'storeOrderConfirmationEmailEnabled',
-        'subscriber_suspension_allowed' => 'subscriberSuspensionAllowed'
+        'completion_endpoint' => 'completionEndpoint',
+        'completion_timeout_in_minutes' => 'completionTimeoutInMinutes',
+        'maximal_completion_delay_in_days' => 'maximalCompletionDelayInDays',
+        'multiple_completions_supported' => 'multipleCompletionsSupported',
+        'void_endpoint' => 'voidEndpoint'
     ];
 
     /**
@@ -89,11 +89,11 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'billing_configuration' => 'setBillingConfiguration',
-        'id' => 'setId',
-        'items' => 'setItems',
-        'store_order_confirmation_email_enabled' => 'setStoreOrderConfirmationEmailEnabled',
-        'subscriber_suspension_allowed' => 'setSubscriberSuspensionAllowed'
+        'completion_endpoint' => 'setCompletionEndpoint',
+        'completion_timeout_in_minutes' => 'setCompletionTimeoutInMinutes',
+        'maximal_completion_delay_in_days' => 'setMaximalCompletionDelayInDays',
+        'multiple_completions_supported' => 'setMultipleCompletionsSupported',
+        'void_endpoint' => 'setVoidEndpoint'
     ];
 
     /**
@@ -102,11 +102,11 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'billing_configuration' => 'getBillingConfiguration',
-        'id' => 'getId',
-        'items' => 'getItems',
-        'store_order_confirmation_email_enabled' => 'getStoreOrderConfirmationEmailEnabled',
-        'subscriber_suspension_allowed' => 'getSubscriberSuspensionAllowed'
+        'completion_endpoint' => 'getCompletionEndpoint',
+        'completion_timeout_in_minutes' => 'getCompletionTimeoutInMinutes',
+        'maximal_completion_delay_in_days' => 'getMaximalCompletionDelayInDays',
+        'multiple_completions_supported' => 'getMultipleCompletionsSupported',
+        'void_endpoint' => 'getVoidEndpoint'
     ];
 
     
@@ -127,15 +127,15 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
     public function __construct(array $data = null)
     {
         
-        $this->container['billing_configuration'] = isset($data['billing_configuration']) ? $data['billing_configuration'] : null;
+        $this->container['completion_endpoint'] = isset($data['completion_endpoint']) ? $data['completion_endpoint'] : null;
         
-        $this->container['id'] = isset($data['id']) ? $data['id'] : null;
+        $this->container['completion_timeout_in_minutes'] = isset($data['completion_timeout_in_minutes']) ? $data['completion_timeout_in_minutes'] : null;
         
-        $this->container['items'] = isset($data['items']) ? $data['items'] : null;
+        $this->container['maximal_completion_delay_in_days'] = isset($data['maximal_completion_delay_in_days']) ? $data['maximal_completion_delay_in_days'] : null;
         
-        $this->container['store_order_confirmation_email_enabled'] = isset($data['store_order_confirmation_email_enabled']) ? $data['store_order_confirmation_email_enabled'] : null;
+        $this->container['multiple_completions_supported'] = isset($data['multiple_completions_supported']) ? $data['multiple_completions_supported'] : null;
         
-        $this->container['subscriber_suspension_allowed'] = isset($data['subscriber_suspension_allowed']) ? $data['subscriber_suspension_allowed'] : null;
+        $this->container['void_endpoint'] = isset($data['void_endpoint']) ? $data['void_endpoint'] : null;
         
     }
 
@@ -229,125 +229,125 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
     
 
     /**
-     * Gets billing_configuration
+     * Gets completion_endpoint
      *
-     * @return \Secupay\Sdk\Model\BillingConfiguration
+     * @return string
      */
-    public function getBillingConfiguration()
+    public function getCompletionEndpoint()
     {
-        return $this->container['billing_configuration'];
+        return $this->container['completion_endpoint'];
     }
 
     /**
-     * Sets billing_configuration
+     * Sets completion_endpoint
      *
-     * @param \Secupay\Sdk\Model\BillingConfiguration $billing_configuration 
+     * @param string $completion_endpoint The completion endpoint is invoked to request the payment service provider to execute a completion.
      *
      * @return $this
      */
-    public function setBillingConfiguration($billing_configuration)
+    public function setCompletionEndpoint($completion_endpoint)
     {
-        $this->container['billing_configuration'] = $billing_configuration;
+        $this->container['completion_endpoint'] = $completion_endpoint;
 
         return $this;
     }
     
 
     /**
-     * Gets id
+     * Gets completion_timeout_in_minutes
      *
      * @return int
      */
-    public function getId()
+    public function getCompletionTimeoutInMinutes()
     {
-        return $this->container['id'];
+        return $this->container['completion_timeout_in_minutes'];
     }
 
     /**
-     * Sets id
+     * Sets completion_timeout_in_minutes
      *
-     * @param int $id 
+     * @param int $completion_timeout_in_minutes When the completion or the void is triggered we expect a feedback about the state of it. This timeout defines after how long we consider the void resp. completion as failed without receiving a final state update.
      *
      * @return $this
      */
-    public function setId($id)
+    public function setCompletionTimeoutInMinutes($completion_timeout_in_minutes)
     {
-        $this->container['id'] = $id;
+        $this->container['completion_timeout_in_minutes'] = $completion_timeout_in_minutes;
 
         return $this;
     }
     
 
     /**
-     * Gets items
+     * Gets maximal_completion_delay_in_days
      *
-     * @return \Secupay\Sdk\Model\Item[]
+     * @return int
      */
-    public function getItems()
+    public function getMaximalCompletionDelayInDays()
     {
-        return $this->container['items'];
+        return $this->container['maximal_completion_delay_in_days'];
     }
 
     /**
-     * Sets items
+     * Sets maximal_completion_delay_in_days
      *
-     * @param \Secupay\Sdk\Model\Item[] $items 
+     * @param int $maximal_completion_delay_in_days The completion resp. the void can be triggered a while after the authorization of the transaction has been executed. This delay defines how many days after the authorization the void resp. completion must be triggered at the latest.
      *
      * @return $this
      */
-    public function setItems($items)
+    public function setMaximalCompletionDelayInDays($maximal_completion_delay_in_days)
     {
-        $this->container['items'] = $items;
+        $this->container['maximal_completion_delay_in_days'] = $maximal_completion_delay_in_days;
 
         return $this;
     }
     
 
     /**
-     * Gets store_order_confirmation_email_enabled
+     * Gets multiple_completions_supported
      *
      * @return bool
      */
-    public function getStoreOrderConfirmationEmailEnabled()
+    public function getMultipleCompletionsSupported()
     {
-        return $this->container['store_order_confirmation_email_enabled'];
+        return $this->container['multiple_completions_supported'];
     }
 
     /**
-     * Sets store_order_confirmation_email_enabled
+     * Sets multiple_completions_supported
      *
-     * @param bool $store_order_confirmation_email_enabled 
+     * @param bool $multiple_completions_supported This flag indicates whether the connector supports multiple completions for a single transaction or not.
      *
      * @return $this
      */
-    public function setStoreOrderConfirmationEmailEnabled($store_order_confirmation_email_enabled)
+    public function setMultipleCompletionsSupported($multiple_completions_supported)
     {
-        $this->container['store_order_confirmation_email_enabled'] = $store_order_confirmation_email_enabled;
+        $this->container['multiple_completions_supported'] = $multiple_completions_supported;
 
         return $this;
     }
     
 
     /**
-     * Gets subscriber_suspension_allowed
+     * Gets void_endpoint
      *
-     * @return bool
+     * @return string
      */
-    public function getSubscriberSuspensionAllowed()
+    public function getVoidEndpoint()
     {
-        return $this->container['subscriber_suspension_allowed'];
+        return $this->container['void_endpoint'];
     }
 
     /**
-     * Sets subscriber_suspension_allowed
+     * Sets void_endpoint
      *
-     * @param bool $subscriber_suspension_allowed 
+     * @param string $void_endpoint The void endpoint is invoked to request the payment service provider to execute a void.
      *
      * @return $this
      */
-    public function setSubscriberSuspensionAllowed($subscriber_suspension_allowed)
+    public function setVoidEndpoint($void_endpoint)
     {
-        $this->container['subscriber_suspension_allowed'] = $subscriber_suspension_allowed;
+        $this->container['void_endpoint'] = $void_endpoint;
 
         return $this;
     }

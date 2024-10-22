@@ -24,7 +24,7 @@ use \ArrayAccess;
 use \Secupay\Sdk\ObjectSerializer;
 
 /**
- * ShopifySubscriptionUpdateRequest model
+ * PaymentInitiationAdviceFile model
  *
  * @category    Class
  * @description 
@@ -32,7 +32,7 @@ use \Secupay\Sdk\ObjectSerializer;
  * @author      Secupay AG.
  * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache License v2
  */
-class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
+class PaymentInitiationAdviceFile implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -41,7 +41,7 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'ShopifySubscriptionUpdateRequest';
+    protected static $swaggerModelName = 'PaymentInitiationAdviceFile';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -49,11 +49,16 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerTypes = [
-        'billing_configuration' => '\Secupay\Sdk\Model\BillingConfiguration',
+        'created_on' => '\DateTime',
+        'failure_message' => 'string',
+        'file_generated_on' => '\DateTime',
+        'forwarded_on' => '\DateTime',
         'id' => 'int',
-        'items' => '\Secupay\Sdk\Model\Item[]',
-        'store_order_confirmation_email_enabled' => 'bool',
-        'subscriber_suspension_allowed' => 'bool'
+        'linked_space_id' => 'int',
+        'name' => 'string',
+        'processed_on' => '\DateTime',
+        'processor' => '\Secupay\Sdk\Model\PaymentProcessor',
+        'state' => '\Secupay\Sdk\Model\PaymentInitiationAdviceFileState'
     ];
 
     /**
@@ -62,11 +67,16 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerFormats = [
-        'billing_configuration' => null,
+        'created_on' => 'date-time',
+        'failure_message' => null,
+        'file_generated_on' => 'date-time',
+        'forwarded_on' => 'date-time',
         'id' => 'int64',
-        'items' => null,
-        'store_order_confirmation_email_enabled' => null,
-        'subscriber_suspension_allowed' => null
+        'linked_space_id' => 'int64',
+        'name' => null,
+        'processed_on' => 'date-time',
+        'processor' => null,
+        'state' => null
     ];
 
     /**
@@ -76,11 +86,16 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'billing_configuration' => 'billingConfiguration',
+        'created_on' => 'createdOn',
+        'failure_message' => 'failureMessage',
+        'file_generated_on' => 'fileGeneratedOn',
+        'forwarded_on' => 'forwardedOn',
         'id' => 'id',
-        'items' => 'items',
-        'store_order_confirmation_email_enabled' => 'storeOrderConfirmationEmailEnabled',
-        'subscriber_suspension_allowed' => 'subscriberSuspensionAllowed'
+        'linked_space_id' => 'linkedSpaceId',
+        'name' => 'name',
+        'processed_on' => 'processedOn',
+        'processor' => 'processor',
+        'state' => 'state'
     ];
 
     /**
@@ -89,11 +104,16 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'billing_configuration' => 'setBillingConfiguration',
+        'created_on' => 'setCreatedOn',
+        'failure_message' => 'setFailureMessage',
+        'file_generated_on' => 'setFileGeneratedOn',
+        'forwarded_on' => 'setForwardedOn',
         'id' => 'setId',
-        'items' => 'setItems',
-        'store_order_confirmation_email_enabled' => 'setStoreOrderConfirmationEmailEnabled',
-        'subscriber_suspension_allowed' => 'setSubscriberSuspensionAllowed'
+        'linked_space_id' => 'setLinkedSpaceId',
+        'name' => 'setName',
+        'processed_on' => 'setProcessedOn',
+        'processor' => 'setProcessor',
+        'state' => 'setState'
     ];
 
     /**
@@ -102,11 +122,16 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'billing_configuration' => 'getBillingConfiguration',
+        'created_on' => 'getCreatedOn',
+        'failure_message' => 'getFailureMessage',
+        'file_generated_on' => 'getFileGeneratedOn',
+        'forwarded_on' => 'getForwardedOn',
         'id' => 'getId',
-        'items' => 'getItems',
-        'store_order_confirmation_email_enabled' => 'getStoreOrderConfirmationEmailEnabled',
-        'subscriber_suspension_allowed' => 'getSubscriberSuspensionAllowed'
+        'linked_space_id' => 'getLinkedSpaceId',
+        'name' => 'getName',
+        'processed_on' => 'getProcessedOn',
+        'processor' => 'getProcessor',
+        'state' => 'getState'
     ];
 
     
@@ -127,15 +152,25 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
     public function __construct(array $data = null)
     {
         
-        $this->container['billing_configuration'] = isset($data['billing_configuration']) ? $data['billing_configuration'] : null;
+        $this->container['created_on'] = isset($data['created_on']) ? $data['created_on'] : null;
+        
+        $this->container['failure_message'] = isset($data['failure_message']) ? $data['failure_message'] : null;
+        
+        $this->container['file_generated_on'] = isset($data['file_generated_on']) ? $data['file_generated_on'] : null;
+        
+        $this->container['forwarded_on'] = isset($data['forwarded_on']) ? $data['forwarded_on'] : null;
         
         $this->container['id'] = isset($data['id']) ? $data['id'] : null;
         
-        $this->container['items'] = isset($data['items']) ? $data['items'] : null;
+        $this->container['linked_space_id'] = isset($data['linked_space_id']) ? $data['linked_space_id'] : null;
         
-        $this->container['store_order_confirmation_email_enabled'] = isset($data['store_order_confirmation_email_enabled']) ? $data['store_order_confirmation_email_enabled'] : null;
+        $this->container['name'] = isset($data['name']) ? $data['name'] : null;
         
-        $this->container['subscriber_suspension_allowed'] = isset($data['subscriber_suspension_allowed']) ? $data['subscriber_suspension_allowed'] : null;
+        $this->container['processed_on'] = isset($data['processed_on']) ? $data['processed_on'] : null;
+        
+        $this->container['processor'] = isset($data['processor']) ? $data['processor'] : null;
+        
+        $this->container['state'] = isset($data['state']) ? $data['state'] : null;
         
     }
 
@@ -229,25 +264,100 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
     
 
     /**
-     * Gets billing_configuration
+     * Gets created_on
      *
-     * @return \Secupay\Sdk\Model\BillingConfiguration
+     * @return \DateTime
      */
-    public function getBillingConfiguration()
+    public function getCreatedOn()
     {
-        return $this->container['billing_configuration'];
+        return $this->container['created_on'];
     }
 
     /**
-     * Sets billing_configuration
+     * Sets created_on
      *
-     * @param \Secupay\Sdk\Model\BillingConfiguration $billing_configuration 
+     * @param \DateTime $created_on The created on date indicates the date on which the entity was stored into the database.
      *
      * @return $this
      */
-    public function setBillingConfiguration($billing_configuration)
+    public function setCreatedOn($created_on)
     {
-        $this->container['billing_configuration'] = $billing_configuration;
+        $this->container['created_on'] = $created_on;
+
+        return $this;
+    }
+    
+
+    /**
+     * Gets failure_message
+     *
+     * @return string
+     */
+    public function getFailureMessage()
+    {
+        return $this->container['failure_message'];
+    }
+
+    /**
+     * Sets failure_message
+     *
+     * @param string $failure_message 
+     *
+     * @return $this
+     */
+    public function setFailureMessage($failure_message)
+    {
+        $this->container['failure_message'] = $failure_message;
+
+        return $this;
+    }
+    
+
+    /**
+     * Gets file_generated_on
+     *
+     * @return \DateTime
+     */
+    public function getFileGeneratedOn()
+    {
+        return $this->container['file_generated_on'];
+    }
+
+    /**
+     * Sets file_generated_on
+     *
+     * @param \DateTime $file_generated_on 
+     *
+     * @return $this
+     */
+    public function setFileGeneratedOn($file_generated_on)
+    {
+        $this->container['file_generated_on'] = $file_generated_on;
+
+        return $this;
+    }
+    
+
+    /**
+     * Gets forwarded_on
+     *
+     * @return \DateTime
+     */
+    public function getForwardedOn()
+    {
+        return $this->container['forwarded_on'];
+    }
+
+    /**
+     * Sets forwarded_on
+     *
+     * @param \DateTime $forwarded_on The shipping date indicates the date on which the pain file was transferred to an external processing system.
+     *
+     * @return $this
+     */
+    public function setForwardedOn($forwarded_on)
+    {
+        $this->container['forwarded_on'] = $forwarded_on;
 
         return $this;
     }
@@ -266,7 +376,7 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
     /**
      * Sets id
      *
-     * @param int $id 
+     * @param int $id A unique identifier for the object.
      *
      * @return $this
      */
@@ -279,75 +389,125 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
     
 
     /**
-     * Gets items
+     * Gets linked_space_id
      *
-     * @return \Secupay\Sdk\Model\Item[]
+     * @return int
      */
-    public function getItems()
+    public function getLinkedSpaceId()
     {
-        return $this->container['items'];
+        return $this->container['linked_space_id'];
     }
 
     /**
-     * Sets items
+     * Sets linked_space_id
      *
-     * @param \Secupay\Sdk\Model\Item[] $items 
+     * @param int $linked_space_id The ID of the space this object belongs to.
      *
      * @return $this
      */
-    public function setItems($items)
+    public function setLinkedSpaceId($linked_space_id)
     {
-        $this->container['items'] = $items;
+        $this->container['linked_space_id'] = $linked_space_id;
 
         return $this;
     }
     
 
     /**
-     * Gets store_order_confirmation_email_enabled
+     * Gets name
      *
-     * @return bool
+     * @return string
      */
-    public function getStoreOrderConfirmationEmailEnabled()
+    public function getName()
     {
-        return $this->container['store_order_confirmation_email_enabled'];
+        return $this->container['name'];
     }
 
     /**
-     * Sets store_order_confirmation_email_enabled
+     * Sets name
      *
-     * @param bool $store_order_confirmation_email_enabled 
+     * @param string $name 
      *
      * @return $this
      */
-    public function setStoreOrderConfirmationEmailEnabled($store_order_confirmation_email_enabled)
+    public function setName($name)
     {
-        $this->container['store_order_confirmation_email_enabled'] = $store_order_confirmation_email_enabled;
+        $this->container['name'] = $name;
 
         return $this;
     }
     
 
     /**
-     * Gets subscriber_suspension_allowed
+     * Gets processed_on
      *
-     * @return bool
+     * @return \DateTime
      */
-    public function getSubscriberSuspensionAllowed()
+    public function getProcessedOn()
     {
-        return $this->container['subscriber_suspension_allowed'];
+        return $this->container['processed_on'];
     }
 
     /**
-     * Sets subscriber_suspension_allowed
+     * Sets processed_on
      *
-     * @param bool $subscriber_suspension_allowed 
+     * @param \DateTime $processed_on 
      *
      * @return $this
      */
-    public function setSubscriberSuspensionAllowed($subscriber_suspension_allowed)
+    public function setProcessedOn($processed_on)
     {
-        $this->container['subscriber_suspension_allowed'] = $subscriber_suspension_allowed;
+        $this->container['processed_on'] = $processed_on;
+
+        return $this;
+    }
+    
+
+    /**
+     * Gets processor
+     *
+     * @return \Secupay\Sdk\Model\PaymentProcessor
+     */
+    public function getProcessor()
+    {
+        return $this->container['processor'];
+    }
+
+    /**
+     * Sets processor
+     *
+     * @param \Secupay\Sdk\Model\PaymentProcessor $processor 
+     *
+     * @return $this
+     */
+    public function setProcessor($processor)
+    {
+        $this->container['processor'] = $processor;
+
+        return $this;
+    }
+    
+
+    /**
+     * Gets state
+     *
+     * @return \Secupay\Sdk\Model\PaymentInitiationAdviceFileState
+     */
+    public function getState()
+    {
+        return $this->container['state'];
+    }
+
+    /**
+     * Sets state
+     *
+     * @param \Secupay\Sdk\Model\PaymentInitiationAdviceFileState $state The object's current state.
+     *
+     * @return $this
+     */
+    public function setState($state)
+    {
+        $this->container['state'] = $state;
 
         return $this;
     }

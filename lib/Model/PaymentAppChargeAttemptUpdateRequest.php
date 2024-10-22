@@ -24,15 +24,15 @@ use \ArrayAccess;
 use \Secupay\Sdk\ObjectSerializer;
 
 /**
- * ShopifySubscriptionUpdateRequest model
+ * PaymentAppChargeAttemptUpdateRequest model
  *
  * @category    Class
- * @description 
+ * @description The charge attempt update request allows to change the state of a charge attempt. The charge attempt must be linked with a processor that was created by the payment Web App that invokes the operation.
  * @package     Secupay\Sdk
  * @author      Secupay AG.
  * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache License v2
  */
-class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
+class PaymentAppChargeAttemptUpdateRequest implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -41,7 +41,7 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'ShopifySubscriptionUpdateRequest';
+    protected static $swaggerModelName = 'PaymentAppChargeAttemptUpdateRequest';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -49,11 +49,11 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerTypes = [
-        'billing_configuration' => '\Secupay\Sdk\Model\BillingConfiguration',
-        'id' => 'int',
-        'items' => '\Secupay\Sdk\Model\Item[]',
-        'store_order_confirmation_email_enabled' => 'bool',
-        'subscriber_suspension_allowed' => 'bool'
+        'charge_attempt_id' => 'int',
+        'end_user_failure_message' => 'string',
+        'failure_reason_id' => 'int',
+        'reference' => 'string',
+        'target_state' => '\Secupay\Sdk\Model\PaymentAppChargeAttemptTargetState'
     ];
 
     /**
@@ -62,11 +62,11 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerFormats = [
-        'billing_configuration' => null,
-        'id' => 'int64',
-        'items' => null,
-        'store_order_confirmation_email_enabled' => null,
-        'subscriber_suspension_allowed' => null
+        'charge_attempt_id' => 'int64',
+        'end_user_failure_message' => null,
+        'failure_reason_id' => 'int64',
+        'reference' => null,
+        'target_state' => null
     ];
 
     /**
@@ -76,11 +76,11 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'billing_configuration' => 'billingConfiguration',
-        'id' => 'id',
-        'items' => 'items',
-        'store_order_confirmation_email_enabled' => 'storeOrderConfirmationEmailEnabled',
-        'subscriber_suspension_allowed' => 'subscriberSuspensionAllowed'
+        'charge_attempt_id' => 'chargeAttemptId',
+        'end_user_failure_message' => 'endUserFailureMessage',
+        'failure_reason_id' => 'failureReasonId',
+        'reference' => 'reference',
+        'target_state' => 'targetState'
     ];
 
     /**
@@ -89,11 +89,11 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'billing_configuration' => 'setBillingConfiguration',
-        'id' => 'setId',
-        'items' => 'setItems',
-        'store_order_confirmation_email_enabled' => 'setStoreOrderConfirmationEmailEnabled',
-        'subscriber_suspension_allowed' => 'setSubscriberSuspensionAllowed'
+        'charge_attempt_id' => 'setChargeAttemptId',
+        'end_user_failure_message' => 'setEndUserFailureMessage',
+        'failure_reason_id' => 'setFailureReasonId',
+        'reference' => 'setReference',
+        'target_state' => 'setTargetState'
     ];
 
     /**
@@ -102,11 +102,11 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'billing_configuration' => 'getBillingConfiguration',
-        'id' => 'getId',
-        'items' => 'getItems',
-        'store_order_confirmation_email_enabled' => 'getStoreOrderConfirmationEmailEnabled',
-        'subscriber_suspension_allowed' => 'getSubscriberSuspensionAllowed'
+        'charge_attempt_id' => 'getChargeAttemptId',
+        'end_user_failure_message' => 'getEndUserFailureMessage',
+        'failure_reason_id' => 'getFailureReasonId',
+        'reference' => 'getReference',
+        'target_state' => 'getTargetState'
     ];
 
     
@@ -127,15 +127,15 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
     public function __construct(array $data = null)
     {
         
-        $this->container['billing_configuration'] = isset($data['billing_configuration']) ? $data['billing_configuration'] : null;
+        $this->container['charge_attempt_id'] = isset($data['charge_attempt_id']) ? $data['charge_attempt_id'] : null;
         
-        $this->container['id'] = isset($data['id']) ? $data['id'] : null;
+        $this->container['end_user_failure_message'] = isset($data['end_user_failure_message']) ? $data['end_user_failure_message'] : null;
         
-        $this->container['items'] = isset($data['items']) ? $data['items'] : null;
+        $this->container['failure_reason_id'] = isset($data['failure_reason_id']) ? $data['failure_reason_id'] : null;
         
-        $this->container['store_order_confirmation_email_enabled'] = isset($data['store_order_confirmation_email_enabled']) ? $data['store_order_confirmation_email_enabled'] : null;
+        $this->container['reference'] = isset($data['reference']) ? $data['reference'] : null;
         
-        $this->container['subscriber_suspension_allowed'] = isset($data['subscriber_suspension_allowed']) ? $data['subscriber_suspension_allowed'] : null;
+        $this->container['target_state'] = isset($data['target_state']) ? $data['target_state'] : null;
         
     }
 
@@ -147,6 +147,14 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
     public function listInvalidProperties()
     {
         $invalidProperties = [];
+
+        if (!is_null($this->container['end_user_failure_message']) && (mb_strlen($this->container['end_user_failure_message']) > 2000)) {
+            $invalidProperties[] = "invalid value for 'end_user_failure_message', the character length must be smaller than or equal to 2000.";
+        }
+
+        if (!is_null($this->container['reference']) && (mb_strlen($this->container['reference']) > 100)) {
+            $invalidProperties[] = "invalid value for 'reference', the character length must be smaller than or equal to 100.";
+        }
 
         return $invalidProperties;
     }
@@ -229,125 +237,133 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
     
 
     /**
-     * Gets billing_configuration
-     *
-     * @return \Secupay\Sdk\Model\BillingConfiguration
-     */
-    public function getBillingConfiguration()
-    {
-        return $this->container['billing_configuration'];
-    }
-
-    /**
-     * Sets billing_configuration
-     *
-     * @param \Secupay\Sdk\Model\BillingConfiguration $billing_configuration 
-     *
-     * @return $this
-     */
-    public function setBillingConfiguration($billing_configuration)
-    {
-        $this->container['billing_configuration'] = $billing_configuration;
-
-        return $this;
-    }
-    
-
-    /**
-     * Gets id
+     * Gets charge_attempt_id
      *
      * @return int
      */
-    public function getId()
+    public function getChargeAttemptId()
     {
-        return $this->container['id'];
+        return $this->container['charge_attempt_id'];
     }
 
     /**
-     * Sets id
+     * Sets charge_attempt_id
      *
-     * @param int $id 
+     * @param int $charge_attempt_id This is the ID of the charge attempt that should be updated.
      *
      * @return $this
      */
-    public function setId($id)
+    public function setChargeAttemptId($charge_attempt_id)
     {
-        $this->container['id'] = $id;
+        $this->container['charge_attempt_id'] = $charge_attempt_id;
 
         return $this;
     }
     
 
     /**
-     * Gets items
+     * Gets end_user_failure_message
      *
-     * @return \Secupay\Sdk\Model\Item[]
+     * @return string
      */
-    public function getItems()
+    public function getEndUserFailureMessage()
     {
-        return $this->container['items'];
+        return $this->container['end_user_failure_message'];
     }
 
     /**
-     * Sets items
+     * Sets end_user_failure_message
      *
-     * @param \Secupay\Sdk\Model\Item[] $items 
+     * @param string $end_user_failure_message The end user failure message indicates to the end user (buyer) why the payment failed. The message has to be in the language of the end user. The language is provided within the payment page invocation URL.
      *
      * @return $this
      */
-    public function setItems($items)
+    public function setEndUserFailureMessage($end_user_failure_message)
     {
-        $this->container['items'] = $items;
+        if (!is_null($end_user_failure_message) && (mb_strlen($end_user_failure_message) > 2000)) {
+            throw new \InvalidArgumentException('invalid length for $end_user_failure_message when calling PaymentAppChargeAttemptUpdateRequest., must be smaller than or equal to 2000.');
+        }
+
+        $this->container['end_user_failure_message'] = $end_user_failure_message;
 
         return $this;
     }
     
 
     /**
-     * Gets store_order_confirmation_email_enabled
+     * Gets failure_reason_id
      *
-     * @return bool
+     * @return int
      */
-    public function getStoreOrderConfirmationEmailEnabled()
+    public function getFailureReasonId()
     {
-        return $this->container['store_order_confirmation_email_enabled'];
+        return $this->container['failure_reason_id'];
     }
 
     /**
-     * Sets store_order_confirmation_email_enabled
+     * Sets failure_reason_id
      *
-     * @param bool $store_order_confirmation_email_enabled 
+     * @param int $failure_reason_id The failure reason indicates why the charge attempt failed. It is required when the target state is FAILED.
      *
      * @return $this
      */
-    public function setStoreOrderConfirmationEmailEnabled($store_order_confirmation_email_enabled)
+    public function setFailureReasonId($failure_reason_id)
     {
-        $this->container['store_order_confirmation_email_enabled'] = $store_order_confirmation_email_enabled;
+        $this->container['failure_reason_id'] = $failure_reason_id;
 
         return $this;
     }
     
 
     /**
-     * Gets subscriber_suspension_allowed
+     * Gets reference
      *
-     * @return bool
+     * @return string
      */
-    public function getSubscriberSuspensionAllowed()
+    public function getReference()
     {
-        return $this->container['subscriber_suspension_allowed'];
+        return $this->container['reference'];
     }
 
     /**
-     * Sets subscriber_suspension_allowed
+     * Sets reference
      *
-     * @param bool $subscriber_suspension_allowed 
+     * @param string $reference The reference identifies the charge attempt within the systems of the external service provider. It is required when the target state is SUCCESSFUL.
      *
      * @return $this
      */
-    public function setSubscriberSuspensionAllowed($subscriber_suspension_allowed)
+    public function setReference($reference)
     {
-        $this->container['subscriber_suspension_allowed'] = $subscriber_suspension_allowed;
+        if (!is_null($reference) && (mb_strlen($reference) > 100)) {
+            throw new \InvalidArgumentException('invalid length for $reference when calling PaymentAppChargeAttemptUpdateRequest., must be smaller than or equal to 100.');
+        }
+
+        $this->container['reference'] = $reference;
+
+        return $this;
+    }
+    
+
+    /**
+     * Gets target_state
+     *
+     * @return \Secupay\Sdk\Model\PaymentAppChargeAttemptTargetState
+     */
+    public function getTargetState()
+    {
+        return $this->container['target_state'];
+    }
+
+    /**
+     * Sets target_state
+     *
+     * @param \Secupay\Sdk\Model\PaymentAppChargeAttemptTargetState $target_state The target state defines the state into which the charge attempt should be switched into. Once the charge attempt changed the state it will not be possible to change it again.
+     *
+     * @return $this
+     */
+    public function setTargetState($target_state)
+    {
+        $this->container['target_state'] = $target_state;
 
         return $this;
     }

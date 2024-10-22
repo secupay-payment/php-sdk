@@ -24,7 +24,7 @@ use \ArrayAccess;
 use \Secupay\Sdk\ObjectSerializer;
 
 /**
- * ShopifySubscriptionModelTaxLine model
+ * CompletionLineItem model
  *
  * @category    Class
  * @description 
@@ -32,7 +32,7 @@ use \Secupay\Sdk\ObjectSerializer;
  * @author      Secupay AG.
  * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache License v2
  */
-class ShopifySubscriptionModelTaxLine implements ModelInterface, ArrayAccess
+class CompletionLineItem implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -41,7 +41,7 @@ class ShopifySubscriptionModelTaxLine implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'ShopifySubscriptionModel.TaxLine';
+    protected static $swaggerModelName = 'CompletionLineItem';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -49,8 +49,9 @@ class ShopifySubscriptionModelTaxLine implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerTypes = [
-        'rate' => 'float',
-        'title' => 'string'
+        'amount' => 'float',
+        'quantity' => 'float',
+        'unique_id' => 'string'
     ];
 
     /**
@@ -59,8 +60,9 @@ class ShopifySubscriptionModelTaxLine implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerFormats = [
-        'rate' => null,
-        'title' => null
+        'amount' => null,
+        'quantity' => null,
+        'unique_id' => null
     ];
 
     /**
@@ -70,8 +72,9 @@ class ShopifySubscriptionModelTaxLine implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'rate' => 'rate',
-        'title' => 'title'
+        'amount' => 'amount',
+        'quantity' => 'quantity',
+        'unique_id' => 'uniqueId'
     ];
 
     /**
@@ -80,8 +83,9 @@ class ShopifySubscriptionModelTaxLine implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'rate' => 'setRate',
-        'title' => 'setTitle'
+        'amount' => 'setAmount',
+        'quantity' => 'setQuantity',
+        'unique_id' => 'setUniqueId'
     ];
 
     /**
@@ -90,8 +94,9 @@ class ShopifySubscriptionModelTaxLine implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'rate' => 'getRate',
-        'title' => 'getTitle'
+        'amount' => 'getAmount',
+        'quantity' => 'getQuantity',
+        'unique_id' => 'getUniqueId'
     ];
 
     
@@ -112,9 +117,11 @@ class ShopifySubscriptionModelTaxLine implements ModelInterface, ArrayAccess
     public function __construct(array $data = null)
     {
         
-        $this->container['rate'] = isset($data['rate']) ? $data['rate'] : null;
+        $this->container['amount'] = isset($data['amount']) ? $data['amount'] : null;
         
-        $this->container['title'] = isset($data['title']) ? $data['title'] : null;
+        $this->container['quantity'] = isset($data['quantity']) ? $data['quantity'] : null;
+        
+        $this->container['unique_id'] = isset($data['unique_id']) ? $data['unique_id'] : null;
         
     }
 
@@ -126,6 +133,10 @@ class ShopifySubscriptionModelTaxLine implements ModelInterface, ArrayAccess
     public function listInvalidProperties()
     {
         $invalidProperties = [];
+
+        if (!is_null($this->container['unique_id']) && (mb_strlen($this->container['unique_id']) > 200)) {
+            $invalidProperties[] = "invalid value for 'unique_id', the character length must be smaller than or equal to 200.";
+        }
 
         return $invalidProperties;
     }
@@ -208,50 +219,79 @@ class ShopifySubscriptionModelTaxLine implements ModelInterface, ArrayAccess
     
 
     /**
-     * Gets rate
+     * Gets amount
      *
      * @return float
      */
-    public function getRate()
+    public function getAmount()
     {
-        return $this->container['rate'];
+        return $this->container['amount'];
     }
 
     /**
-     * Sets rate
+     * Sets amount
      *
-     * @param float $rate 
+     * @param float $amount The total amount of the line item including any tax.
      *
      * @return $this
      */
-    public function setRate($rate)
+    public function setAmount($amount)
     {
-        $this->container['rate'] = $rate;
+        $this->container['amount'] = $amount;
 
         return $this;
     }
     
 
     /**
-     * Gets title
+     * Gets quantity
      *
-     * @return string
+     * @return float
      */
-    public function getTitle()
+    public function getQuantity()
     {
-        return $this->container['title'];
+        return $this->container['quantity'];
     }
 
     /**
-     * Sets title
+     * Sets quantity
      *
-     * @param string $title 
+     * @param float $quantity The quantity of the line item which should be completed.
      *
      * @return $this
      */
-    public function setTitle($title)
+    public function setQuantity($quantity)
     {
-        $this->container['title'] = $title;
+        $this->container['quantity'] = $quantity;
+
+        return $this;
+    }
+    
+
+    /**
+     * Gets unique_id
+     *
+     * @return string
+     */
+    public function getUniqueId()
+    {
+        return $this->container['unique_id'];
+    }
+
+    /**
+     * Sets unique_id
+     *
+     * @param string $unique_id The unique id identifies the line item on which the capture is applied on.
+     *
+     * @return $this
+     */
+    public function setUniqueId($unique_id)
+    {
+        if (!is_null($unique_id) && (mb_strlen($unique_id) > 200)) {
+            throw new \InvalidArgumentException('invalid length for $unique_id when calling CompletionLineItem., must be smaller than or equal to 200.');
+        }
+
+        $this->container['unique_id'] = $unique_id;
 
         return $this;
     }

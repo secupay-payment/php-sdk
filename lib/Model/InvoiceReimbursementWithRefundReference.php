@@ -19,12 +19,10 @@
 
 
 namespace Secupay\Sdk\Model;
-
-use \ArrayAccess;
 use \Secupay\Sdk\ObjectSerializer;
 
 /**
- * ShopifySubscriptionUpdateRequest model
+ * InvoiceReimbursementWithRefundReference model
  *
  * @category    Class
  * @description 
@@ -32,7 +30,7 @@ use \Secupay\Sdk\ObjectSerializer;
  * @author      Secupay AG.
  * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache License v2
  */
-class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
+class InvoiceReimbursementWithRefundReference extends InvoiceReimbursement 
 {
     const DISCRIMINATOR = null;
 
@@ -41,7 +39,7 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'ShopifySubscriptionUpdateRequest';
+    protected static $swaggerModelName = 'InvoiceReimbursementWithRefundReference';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -49,11 +47,7 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerTypes = [
-        'billing_configuration' => '\Secupay\Sdk\Model\BillingConfiguration',
-        'id' => 'int',
-        'items' => '\Secupay\Sdk\Model\Item[]',
-        'store_order_confirmation_email_enabled' => 'bool',
-        'subscriber_suspension_allowed' => 'bool'
+        'refund_merchant_reference' => 'string'
     ];
 
     /**
@@ -62,11 +56,7 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerFormats = [
-        'billing_configuration' => null,
-        'id' => 'int64',
-        'items' => null,
-        'store_order_confirmation_email_enabled' => null,
-        'subscriber_suspension_allowed' => null
+        'refund_merchant_reference' => null
     ];
 
     /**
@@ -76,11 +66,7 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'billing_configuration' => 'billingConfiguration',
-        'id' => 'id',
-        'items' => 'items',
-        'store_order_confirmation_email_enabled' => 'storeOrderConfirmationEmailEnabled',
-        'subscriber_suspension_allowed' => 'subscriberSuspensionAllowed'
+        'refund_merchant_reference' => 'refundMerchantReference'
     ];
 
     /**
@@ -89,11 +75,7 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'billing_configuration' => 'setBillingConfiguration',
-        'id' => 'setId',
-        'items' => 'setItems',
-        'store_order_confirmation_email_enabled' => 'setStoreOrderConfirmationEmailEnabled',
-        'subscriber_suspension_allowed' => 'setSubscriberSuspensionAllowed'
+        'refund_merchant_reference' => 'setRefundMerchantReference'
     ];
 
     /**
@@ -102,21 +84,11 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'billing_configuration' => 'getBillingConfiguration',
-        'id' => 'getId',
-        'items' => 'getItems',
-        'store_order_confirmation_email_enabled' => 'getStoreOrderConfirmationEmailEnabled',
-        'subscriber_suspension_allowed' => 'getSubscriberSuspensionAllowed'
+        'refund_merchant_reference' => 'getRefundMerchantReference'
     ];
 
     
 
-    /**
-     * Associative array for storing property values
-     *
-     * @var mixed[]
-     */
-    protected $container = [];
 
     /**
      * Constructor
@@ -126,16 +98,10 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      */
     public function __construct(array $data = null)
     {
+        parent::__construct($data);
+
         
-        $this->container['billing_configuration'] = isset($data['billing_configuration']) ? $data['billing_configuration'] : null;
-        
-        $this->container['id'] = isset($data['id']) ? $data['id'] : null;
-        
-        $this->container['items'] = isset($data['items']) ? $data['items'] : null;
-        
-        $this->container['store_order_confirmation_email_enabled'] = isset($data['store_order_confirmation_email_enabled']) ? $data['store_order_confirmation_email_enabled'] : null;
-        
-        $this->container['subscriber_suspension_allowed'] = isset($data['subscriber_suspension_allowed']) ? $data['subscriber_suspension_allowed'] : null;
+        $this->container['refund_merchant_reference'] = isset($data['refund_merchant_reference']) ? $data['refund_merchant_reference'] : null;
         
     }
 
@@ -146,7 +112,7 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      */
     public function listInvalidProperties()
     {
-        $invalidProperties = [];
+        $invalidProperties = parent::listInvalidProperties();
 
         return $invalidProperties;
     }
@@ -158,7 +124,7 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      */
     public static function swaggerTypes()
     {
-        return self::$swaggerTypes;
+        return self::$swaggerTypes + parent::swaggerTypes();
     }
 
     /**
@@ -168,7 +134,7 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      */
     public static function swaggerFormats()
     {
-        return self::$swaggerFormats;
+        return self::$swaggerFormats + parent::swaggerFormats();
     }
 
 
@@ -180,7 +146,7 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      */
     public static function attributeMap()
     {
-        return self::$attributeMap;
+        return parent::attributeMap() + self::$attributeMap;
     }
 
     /**
@@ -190,7 +156,7 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      */
     public static function setters()
     {
-        return self::$setters;
+        return parent::setters() + self::$setters;
     }
 
     /**
@@ -200,7 +166,7 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      */
     public static function getters()
     {
-        return self::$getters;
+        return parent::getters() + self::$getters;
     }
 
     /**
@@ -229,125 +195,25 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
     
 
     /**
-     * Gets billing_configuration
+     * Gets refund_merchant_reference
      *
-     * @return \Secupay\Sdk\Model\BillingConfiguration
+     * @return string
      */
-    public function getBillingConfiguration()
+    public function getRefundMerchantReference()
     {
-        return $this->container['billing_configuration'];
+        return $this->container['refund_merchant_reference'];
     }
 
     /**
-     * Sets billing_configuration
+     * Sets refund_merchant_reference
      *
-     * @param \Secupay\Sdk\Model\BillingConfiguration $billing_configuration 
+     * @param string $refund_merchant_reference 
      *
      * @return $this
      */
-    public function setBillingConfiguration($billing_configuration)
+    public function setRefundMerchantReference($refund_merchant_reference)
     {
-        $this->container['billing_configuration'] = $billing_configuration;
-
-        return $this;
-    }
-    
-
-    /**
-     * Gets id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->container['id'];
-    }
-
-    /**
-     * Sets id
-     *
-     * @param int $id 
-     *
-     * @return $this
-     */
-    public function setId($id)
-    {
-        $this->container['id'] = $id;
-
-        return $this;
-    }
-    
-
-    /**
-     * Gets items
-     *
-     * @return \Secupay\Sdk\Model\Item[]
-     */
-    public function getItems()
-    {
-        return $this->container['items'];
-    }
-
-    /**
-     * Sets items
-     *
-     * @param \Secupay\Sdk\Model\Item[] $items 
-     *
-     * @return $this
-     */
-    public function setItems($items)
-    {
-        $this->container['items'] = $items;
-
-        return $this;
-    }
-    
-
-    /**
-     * Gets store_order_confirmation_email_enabled
-     *
-     * @return bool
-     */
-    public function getStoreOrderConfirmationEmailEnabled()
-    {
-        return $this->container['store_order_confirmation_email_enabled'];
-    }
-
-    /**
-     * Sets store_order_confirmation_email_enabled
-     *
-     * @param bool $store_order_confirmation_email_enabled 
-     *
-     * @return $this
-     */
-    public function setStoreOrderConfirmationEmailEnabled($store_order_confirmation_email_enabled)
-    {
-        $this->container['store_order_confirmation_email_enabled'] = $store_order_confirmation_email_enabled;
-
-        return $this;
-    }
-    
-
-    /**
-     * Gets subscriber_suspension_allowed
-     *
-     * @return bool
-     */
-    public function getSubscriberSuspensionAllowed()
-    {
-        return $this->container['subscriber_suspension_allowed'];
-    }
-
-    /**
-     * Sets subscriber_suspension_allowed
-     *
-     * @param bool $subscriber_suspension_allowed 
-     *
-     * @return $this
-     */
-    public function setSubscriberSuspensionAllowed($subscriber_suspension_allowed)
-    {
-        $this->container['subscriber_suspension_allowed'] = $subscriber_suspension_allowed;
+        $this->container['refund_merchant_reference'] = $refund_merchant_reference;
 
         return $this;
     }

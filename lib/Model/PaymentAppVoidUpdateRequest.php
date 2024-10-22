@@ -24,15 +24,15 @@ use \ArrayAccess;
 use \Secupay\Sdk\ObjectSerializer;
 
 /**
- * ShopifySubscriptionUpdateRequest model
+ * PaymentAppVoidUpdateRequest model
  *
  * @category    Class
- * @description 
+ * @description The void update request allows to change the state of a void. The void must be linked with a processor that was created by the payment Web App that invokes the operation.
  * @package     Secupay\Sdk
  * @author      Secupay AG.
  * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache License v2
  */
-class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
+class PaymentAppVoidUpdateRequest implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -41,7 +41,7 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'ShopifySubscriptionUpdateRequest';
+    protected static $swaggerModelName = 'PaymentAppVoidUpdateRequest';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -49,11 +49,10 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerTypes = [
-        'billing_configuration' => '\Secupay\Sdk\Model\BillingConfiguration',
-        'id' => 'int',
-        'items' => '\Secupay\Sdk\Model\Item[]',
-        'store_order_confirmation_email_enabled' => 'bool',
-        'subscriber_suspension_allowed' => 'bool'
+        'failure_reason_id' => 'int',
+        'reference' => 'string',
+        'target_state' => '\Secupay\Sdk\Model\PaymentAppVoidTargetState',
+        'void_id' => 'int'
     ];
 
     /**
@@ -62,11 +61,10 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerFormats = [
-        'billing_configuration' => null,
-        'id' => 'int64',
-        'items' => null,
-        'store_order_confirmation_email_enabled' => null,
-        'subscriber_suspension_allowed' => null
+        'failure_reason_id' => 'int64',
+        'reference' => null,
+        'target_state' => null,
+        'void_id' => 'int64'
     ];
 
     /**
@@ -76,11 +74,10 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'billing_configuration' => 'billingConfiguration',
-        'id' => 'id',
-        'items' => 'items',
-        'store_order_confirmation_email_enabled' => 'storeOrderConfirmationEmailEnabled',
-        'subscriber_suspension_allowed' => 'subscriberSuspensionAllowed'
+        'failure_reason_id' => 'failureReasonId',
+        'reference' => 'reference',
+        'target_state' => 'targetState',
+        'void_id' => 'voidId'
     ];
 
     /**
@@ -89,11 +86,10 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'billing_configuration' => 'setBillingConfiguration',
-        'id' => 'setId',
-        'items' => 'setItems',
-        'store_order_confirmation_email_enabled' => 'setStoreOrderConfirmationEmailEnabled',
-        'subscriber_suspension_allowed' => 'setSubscriberSuspensionAllowed'
+        'failure_reason_id' => 'setFailureReasonId',
+        'reference' => 'setReference',
+        'target_state' => 'setTargetState',
+        'void_id' => 'setVoidId'
     ];
 
     /**
@@ -102,11 +98,10 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'billing_configuration' => 'getBillingConfiguration',
-        'id' => 'getId',
-        'items' => 'getItems',
-        'store_order_confirmation_email_enabled' => 'getStoreOrderConfirmationEmailEnabled',
-        'subscriber_suspension_allowed' => 'getSubscriberSuspensionAllowed'
+        'failure_reason_id' => 'getFailureReasonId',
+        'reference' => 'getReference',
+        'target_state' => 'getTargetState',
+        'void_id' => 'getVoidId'
     ];
 
     
@@ -127,15 +122,13 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
     public function __construct(array $data = null)
     {
         
-        $this->container['billing_configuration'] = isset($data['billing_configuration']) ? $data['billing_configuration'] : null;
+        $this->container['failure_reason_id'] = isset($data['failure_reason_id']) ? $data['failure_reason_id'] : null;
         
-        $this->container['id'] = isset($data['id']) ? $data['id'] : null;
+        $this->container['reference'] = isset($data['reference']) ? $data['reference'] : null;
         
-        $this->container['items'] = isset($data['items']) ? $data['items'] : null;
+        $this->container['target_state'] = isset($data['target_state']) ? $data['target_state'] : null;
         
-        $this->container['store_order_confirmation_email_enabled'] = isset($data['store_order_confirmation_email_enabled']) ? $data['store_order_confirmation_email_enabled'] : null;
-        
-        $this->container['subscriber_suspension_allowed'] = isset($data['subscriber_suspension_allowed']) ? $data['subscriber_suspension_allowed'] : null;
+        $this->container['void_id'] = isset($data['void_id']) ? $data['void_id'] : null;
         
     }
 
@@ -147,6 +140,10 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
     public function listInvalidProperties()
     {
         $invalidProperties = [];
+
+        if (!is_null($this->container['reference']) && (mb_strlen($this->container['reference']) > 100)) {
+            $invalidProperties[] = "invalid value for 'reference', the character length must be smaller than or equal to 100.";
+        }
 
         return $invalidProperties;
     }
@@ -229,125 +226,104 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
     
 
     /**
-     * Gets billing_configuration
-     *
-     * @return \Secupay\Sdk\Model\BillingConfiguration
-     */
-    public function getBillingConfiguration()
-    {
-        return $this->container['billing_configuration'];
-    }
-
-    /**
-     * Sets billing_configuration
-     *
-     * @param \Secupay\Sdk\Model\BillingConfiguration $billing_configuration 
-     *
-     * @return $this
-     */
-    public function setBillingConfiguration($billing_configuration)
-    {
-        $this->container['billing_configuration'] = $billing_configuration;
-
-        return $this;
-    }
-    
-
-    /**
-     * Gets id
+     * Gets failure_reason_id
      *
      * @return int
      */
-    public function getId()
+    public function getFailureReasonId()
     {
-        return $this->container['id'];
+        return $this->container['failure_reason_id'];
     }
 
     /**
-     * Sets id
+     * Sets failure_reason_id
      *
-     * @param int $id 
+     * @param int $failure_reason_id The failure reason indicates why the void failed. It is required when the target state is FAILED.
      *
      * @return $this
      */
-    public function setId($id)
+    public function setFailureReasonId($failure_reason_id)
     {
-        $this->container['id'] = $id;
+        $this->container['failure_reason_id'] = $failure_reason_id;
 
         return $this;
     }
     
 
     /**
-     * Gets items
+     * Gets reference
      *
-     * @return \Secupay\Sdk\Model\Item[]
+     * @return string
      */
-    public function getItems()
+    public function getReference()
     {
-        return $this->container['items'];
+        return $this->container['reference'];
     }
 
     /**
-     * Sets items
+     * Sets reference
      *
-     * @param \Secupay\Sdk\Model\Item[] $items 
+     * @param string $reference The reference identifies the void within the systems of the external service provider. It is required when the target state is SUCCESSFUL.
      *
      * @return $this
      */
-    public function setItems($items)
+    public function setReference($reference)
     {
-        $this->container['items'] = $items;
+        if (!is_null($reference) && (mb_strlen($reference) > 100)) {
+            throw new \InvalidArgumentException('invalid length for $reference when calling PaymentAppVoidUpdateRequest., must be smaller than or equal to 100.');
+        }
+
+        $this->container['reference'] = $reference;
 
         return $this;
     }
     
 
     /**
-     * Gets store_order_confirmation_email_enabled
+     * Gets target_state
      *
-     * @return bool
+     * @return \Secupay\Sdk\Model\PaymentAppVoidTargetState
      */
-    public function getStoreOrderConfirmationEmailEnabled()
+    public function getTargetState()
     {
-        return $this->container['store_order_confirmation_email_enabled'];
+        return $this->container['target_state'];
     }
 
     /**
-     * Sets store_order_confirmation_email_enabled
+     * Sets target_state
      *
-     * @param bool $store_order_confirmation_email_enabled 
+     * @param \Secupay\Sdk\Model\PaymentAppVoidTargetState $target_state The target state defines the state into which the void should be switched into. Once the void changed the state it will not be possible to change it again.
      *
      * @return $this
      */
-    public function setStoreOrderConfirmationEmailEnabled($store_order_confirmation_email_enabled)
+    public function setTargetState($target_state)
     {
-        $this->container['store_order_confirmation_email_enabled'] = $store_order_confirmation_email_enabled;
+        $this->container['target_state'] = $target_state;
 
         return $this;
     }
     
 
     /**
-     * Gets subscriber_suspension_allowed
+     * Gets void_id
      *
-     * @return bool
+     * @return int
      */
-    public function getSubscriberSuspensionAllowed()
+    public function getVoidId()
     {
-        return $this->container['subscriber_suspension_allowed'];
+        return $this->container['void_id'];
     }
 
     /**
-     * Sets subscriber_suspension_allowed
+     * Sets void_id
      *
-     * @param bool $subscriber_suspension_allowed 
+     * @param int $void_id This is the ID of the void that should be updated.
      *
      * @return $this
      */
-    public function setSubscriberSuspensionAllowed($subscriber_suspension_allowed)
+    public function setVoidId($void_id)
     {
-        $this->container['subscriber_suspension_allowed'] = $subscriber_suspension_allowed;
+        $this->container['void_id'] = $void_id;
 
         return $this;
     }

@@ -50,12 +50,12 @@ class ShopifySubscriptionCreationRequest implements ModelInterface, ArrayAccess
       */
     protected static $swaggerTypes = [
         'billing_address' => '\Secupay\Sdk\Model\ShopifySubscriptionAddressCreate',
-        'billing_configuration' => '\Secupay\Sdk\Model\ShopifySubscriptionModelBillingConfiguration',
+        'billing_configuration' => '\Secupay\Sdk\Model\BillingConfiguration',
         'currency' => 'string',
         'external_id' => 'string',
         'initial_execution_date' => '\DateTime',
         'integration' => 'int',
-        'items' => '\Secupay\Sdk\Model\ShopifySubscriptionModelItem[]',
+        'items' => '\Secupay\Sdk\Model\Item[]',
         'language' => 'string',
         'shipping_address' => '\Secupay\Sdk\Model\ShopifySubscriptionAddressCreate',
         'shipping_method_name' => 'string',
@@ -343,7 +343,7 @@ class ShopifySubscriptionCreationRequest implements ModelInterface, ArrayAccess
     /**
      * Gets billing_configuration
      *
-     * @return \Secupay\Sdk\Model\ShopifySubscriptionModelBillingConfiguration
+     * @return \Secupay\Sdk\Model\BillingConfiguration
      */
     public function getBillingConfiguration()
     {
@@ -353,7 +353,7 @@ class ShopifySubscriptionCreationRequest implements ModelInterface, ArrayAccess
     /**
      * Sets billing_configuration
      *
-     * @param \Secupay\Sdk\Model\ShopifySubscriptionModelBillingConfiguration $billing_configuration 
+     * @param \Secupay\Sdk\Model\BillingConfiguration $billing_configuration 
      *
      * @return $this
      */
@@ -468,7 +468,7 @@ class ShopifySubscriptionCreationRequest implements ModelInterface, ArrayAccess
     /**
      * Gets items
      *
-     * @return \Secupay\Sdk\Model\ShopifySubscriptionModelItem[]
+     * @return \Secupay\Sdk\Model\Item[]
      */
     public function getItems()
     {
@@ -478,7 +478,7 @@ class ShopifySubscriptionCreationRequest implements ModelInterface, ArrayAccess
     /**
      * Sets items
      *
-     * @param \Secupay\Sdk\Model\ShopifySubscriptionModelItem[] $items 
+     * @param \Secupay\Sdk\Model\Item[] $items 
      *
      * @return $this
      */

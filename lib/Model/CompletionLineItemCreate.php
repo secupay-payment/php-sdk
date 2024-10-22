@@ -24,7 +24,7 @@ use \ArrayAccess;
 use \Secupay\Sdk\ObjectSerializer;
 
 /**
- * ShopifySubscriptionUpdateRequest model
+ * CompletionLineItemCreate model
  *
  * @category    Class
  * @description 
@@ -32,7 +32,7 @@ use \Secupay\Sdk\ObjectSerializer;
  * @author      Secupay AG.
  * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache License v2
  */
-class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
+class CompletionLineItemCreate implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -41,7 +41,7 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'ShopifySubscriptionUpdateRequest';
+    protected static $swaggerModelName = 'CompletionLineItem.Create';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -49,11 +49,9 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerTypes = [
-        'billing_configuration' => '\Secupay\Sdk\Model\BillingConfiguration',
-        'id' => 'int',
-        'items' => '\Secupay\Sdk\Model\Item[]',
-        'store_order_confirmation_email_enabled' => 'bool',
-        'subscriber_suspension_allowed' => 'bool'
+        'amount' => 'float',
+        'quantity' => 'float',
+        'unique_id' => 'string'
     ];
 
     /**
@@ -62,11 +60,9 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerFormats = [
-        'billing_configuration' => null,
-        'id' => 'int64',
-        'items' => null,
-        'store_order_confirmation_email_enabled' => null,
-        'subscriber_suspension_allowed' => null
+        'amount' => null,
+        'quantity' => null,
+        'unique_id' => null
     ];
 
     /**
@@ -76,11 +72,9 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'billing_configuration' => 'billingConfiguration',
-        'id' => 'id',
-        'items' => 'items',
-        'store_order_confirmation_email_enabled' => 'storeOrderConfirmationEmailEnabled',
-        'subscriber_suspension_allowed' => 'subscriberSuspensionAllowed'
+        'amount' => 'amount',
+        'quantity' => 'quantity',
+        'unique_id' => 'uniqueId'
     ];
 
     /**
@@ -89,11 +83,9 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'billing_configuration' => 'setBillingConfiguration',
-        'id' => 'setId',
-        'items' => 'setItems',
-        'store_order_confirmation_email_enabled' => 'setStoreOrderConfirmationEmailEnabled',
-        'subscriber_suspension_allowed' => 'setSubscriberSuspensionAllowed'
+        'amount' => 'setAmount',
+        'quantity' => 'setQuantity',
+        'unique_id' => 'setUniqueId'
     ];
 
     /**
@@ -102,11 +94,9 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'billing_configuration' => 'getBillingConfiguration',
-        'id' => 'getId',
-        'items' => 'getItems',
-        'store_order_confirmation_email_enabled' => 'getStoreOrderConfirmationEmailEnabled',
-        'subscriber_suspension_allowed' => 'getSubscriberSuspensionAllowed'
+        'amount' => 'getAmount',
+        'quantity' => 'getQuantity',
+        'unique_id' => 'getUniqueId'
     ];
 
     
@@ -127,15 +117,11 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
     public function __construct(array $data = null)
     {
         
-        $this->container['billing_configuration'] = isset($data['billing_configuration']) ? $data['billing_configuration'] : null;
+        $this->container['amount'] = isset($data['amount']) ? $data['amount'] : null;
         
-        $this->container['id'] = isset($data['id']) ? $data['id'] : null;
+        $this->container['quantity'] = isset($data['quantity']) ? $data['quantity'] : null;
         
-        $this->container['items'] = isset($data['items']) ? $data['items'] : null;
-        
-        $this->container['store_order_confirmation_email_enabled'] = isset($data['store_order_confirmation_email_enabled']) ? $data['store_order_confirmation_email_enabled'] : null;
-        
-        $this->container['subscriber_suspension_allowed'] = isset($data['subscriber_suspension_allowed']) ? $data['subscriber_suspension_allowed'] : null;
+        $this->container['unique_id'] = isset($data['unique_id']) ? $data['unique_id'] : null;
         
     }
 
@@ -147,6 +133,19 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
     public function listInvalidProperties()
     {
         $invalidProperties = [];
+
+        if ($this->container['amount'] === null) {
+            $invalidProperties[] = "'amount' can't be null";
+        }
+        if ($this->container['quantity'] === null) {
+            $invalidProperties[] = "'quantity' can't be null";
+        }
+        if ($this->container['unique_id'] === null) {
+            $invalidProperties[] = "'unique_id' can't be null";
+        }
+        if ((mb_strlen($this->container['unique_id']) > 200)) {
+            $invalidProperties[] = "invalid value for 'unique_id', the character length must be smaller than or equal to 200.";
+        }
 
         return $invalidProperties;
     }
@@ -229,125 +228,79 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
     
 
     /**
-     * Gets billing_configuration
+     * Gets amount
      *
-     * @return \Secupay\Sdk\Model\BillingConfiguration
+     * @return float
      */
-    public function getBillingConfiguration()
+    public function getAmount()
     {
-        return $this->container['billing_configuration'];
+        return $this->container['amount'];
     }
 
     /**
-     * Sets billing_configuration
+     * Sets amount
      *
-     * @param \Secupay\Sdk\Model\BillingConfiguration $billing_configuration 
+     * @param float $amount The total amount of the line item including any tax.
      *
      * @return $this
      */
-    public function setBillingConfiguration($billing_configuration)
+    public function setAmount($amount)
     {
-        $this->container['billing_configuration'] = $billing_configuration;
+        $this->container['amount'] = $amount;
 
         return $this;
     }
     
 
     /**
-     * Gets id
+     * Gets quantity
      *
-     * @return int
+     * @return float
      */
-    public function getId()
+    public function getQuantity()
     {
-        return $this->container['id'];
+        return $this->container['quantity'];
     }
 
     /**
-     * Sets id
+     * Sets quantity
      *
-     * @param int $id 
+     * @param float $quantity The quantity of the line item which should be completed.
      *
      * @return $this
      */
-    public function setId($id)
+    public function setQuantity($quantity)
     {
-        $this->container['id'] = $id;
+        $this->container['quantity'] = $quantity;
 
         return $this;
     }
     
 
     /**
-     * Gets items
+     * Gets unique_id
      *
-     * @return \Secupay\Sdk\Model\Item[]
+     * @return string
      */
-    public function getItems()
+    public function getUniqueId()
     {
-        return $this->container['items'];
+        return $this->container['unique_id'];
     }
 
     /**
-     * Sets items
+     * Sets unique_id
      *
-     * @param \Secupay\Sdk\Model\Item[] $items 
+     * @param string $unique_id The unique id identifies the line item on which the capture is applied on.
      *
      * @return $this
      */
-    public function setItems($items)
+    public function setUniqueId($unique_id)
     {
-        $this->container['items'] = $items;
+        if ((mb_strlen($unique_id) > 200)) {
+            throw new \InvalidArgumentException('invalid length for $unique_id when calling CompletionLineItemCreate., must be smaller than or equal to 200.');
+        }
 
-        return $this;
-    }
-    
-
-    /**
-     * Gets store_order_confirmation_email_enabled
-     *
-     * @return bool
-     */
-    public function getStoreOrderConfirmationEmailEnabled()
-    {
-        return $this->container['store_order_confirmation_email_enabled'];
-    }
-
-    /**
-     * Sets store_order_confirmation_email_enabled
-     *
-     * @param bool $store_order_confirmation_email_enabled 
-     *
-     * @return $this
-     */
-    public function setStoreOrderConfirmationEmailEnabled($store_order_confirmation_email_enabled)
-    {
-        $this->container['store_order_confirmation_email_enabled'] = $store_order_confirmation_email_enabled;
-
-        return $this;
-    }
-    
-
-    /**
-     * Gets subscriber_suspension_allowed
-     *
-     * @return bool
-     */
-    public function getSubscriberSuspensionAllowed()
-    {
-        return $this->container['subscriber_suspension_allowed'];
-    }
-
-    /**
-     * Sets subscriber_suspension_allowed
-     *
-     * @param bool $subscriber_suspension_allowed 
-     *
-     * @return $this
-     */
-    public function setSubscriberSuspensionAllowed($subscriber_suspension_allowed)
-    {
-        $this->container['subscriber_suspension_allowed'] = $subscriber_suspension_allowed;
+        $this->container['unique_id'] = $unique_id;
 
         return $this;
     }

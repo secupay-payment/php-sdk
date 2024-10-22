@@ -24,7 +24,7 @@ use \ArrayAccess;
 use \Secupay\Sdk\ObjectSerializer;
 
 /**
- * ShopifySubscriptionUpdateRequest model
+ * Item model
  *
  * @category    Class
  * @description 
@@ -32,7 +32,7 @@ use \Secupay\Sdk\ObjectSerializer;
  * @author      Secupay AG.
  * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache License v2
  */
-class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
+class Item implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -41,7 +41,7 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'ShopifySubscriptionUpdateRequest';
+    protected static $swaggerModelName = 'Item';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -49,11 +49,11 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerTypes = [
-        'billing_configuration' => '\Secupay\Sdk\Model\BillingConfiguration',
-        'id' => 'int',
-        'items' => '\Secupay\Sdk\Model\Item[]',
-        'store_order_confirmation_email_enabled' => 'bool',
-        'subscriber_suspension_allowed' => 'bool'
+        'price_including_tax' => 'float',
+        'product_id' => 'int',
+        'quantity' => 'float',
+        'recalculate_price' => 'bool',
+        'tax_lines' => '\Secupay\Sdk\Model\TaxLine[]'
     ];
 
     /**
@@ -62,11 +62,11 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerFormats = [
-        'billing_configuration' => null,
-        'id' => 'int64',
-        'items' => null,
-        'store_order_confirmation_email_enabled' => null,
-        'subscriber_suspension_allowed' => null
+        'price_including_tax' => null,
+        'product_id' => 'int64',
+        'quantity' => null,
+        'recalculate_price' => null,
+        'tax_lines' => null
     ];
 
     /**
@@ -76,11 +76,11 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'billing_configuration' => 'billingConfiguration',
-        'id' => 'id',
-        'items' => 'items',
-        'store_order_confirmation_email_enabled' => 'storeOrderConfirmationEmailEnabled',
-        'subscriber_suspension_allowed' => 'subscriberSuspensionAllowed'
+        'price_including_tax' => 'priceIncludingTax',
+        'product_id' => 'productId',
+        'quantity' => 'quantity',
+        'recalculate_price' => 'recalculatePrice',
+        'tax_lines' => 'taxLines'
     ];
 
     /**
@@ -89,11 +89,11 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'billing_configuration' => 'setBillingConfiguration',
-        'id' => 'setId',
-        'items' => 'setItems',
-        'store_order_confirmation_email_enabled' => 'setStoreOrderConfirmationEmailEnabled',
-        'subscriber_suspension_allowed' => 'setSubscriberSuspensionAllowed'
+        'price_including_tax' => 'setPriceIncludingTax',
+        'product_id' => 'setProductId',
+        'quantity' => 'setQuantity',
+        'recalculate_price' => 'setRecalculatePrice',
+        'tax_lines' => 'setTaxLines'
     ];
 
     /**
@@ -102,11 +102,11 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'billing_configuration' => 'getBillingConfiguration',
-        'id' => 'getId',
-        'items' => 'getItems',
-        'store_order_confirmation_email_enabled' => 'getStoreOrderConfirmationEmailEnabled',
-        'subscriber_suspension_allowed' => 'getSubscriberSuspensionAllowed'
+        'price_including_tax' => 'getPriceIncludingTax',
+        'product_id' => 'getProductId',
+        'quantity' => 'getQuantity',
+        'recalculate_price' => 'getRecalculatePrice',
+        'tax_lines' => 'getTaxLines'
     ];
 
     
@@ -127,15 +127,15 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
     public function __construct(array $data = null)
     {
         
-        $this->container['billing_configuration'] = isset($data['billing_configuration']) ? $data['billing_configuration'] : null;
+        $this->container['price_including_tax'] = isset($data['price_including_tax']) ? $data['price_including_tax'] : null;
         
-        $this->container['id'] = isset($data['id']) ? $data['id'] : null;
+        $this->container['product_id'] = isset($data['product_id']) ? $data['product_id'] : null;
         
-        $this->container['items'] = isset($data['items']) ? $data['items'] : null;
+        $this->container['quantity'] = isset($data['quantity']) ? $data['quantity'] : null;
         
-        $this->container['store_order_confirmation_email_enabled'] = isset($data['store_order_confirmation_email_enabled']) ? $data['store_order_confirmation_email_enabled'] : null;
+        $this->container['recalculate_price'] = isset($data['recalculate_price']) ? $data['recalculate_price'] : null;
         
-        $this->container['subscriber_suspension_allowed'] = isset($data['subscriber_suspension_allowed']) ? $data['subscriber_suspension_allowed'] : null;
+        $this->container['tax_lines'] = isset($data['tax_lines']) ? $data['tax_lines'] : null;
         
     }
 
@@ -229,125 +229,125 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
     
 
     /**
-     * Gets billing_configuration
+     * Gets price_including_tax
      *
-     * @return \Secupay\Sdk\Model\BillingConfiguration
+     * @return float
      */
-    public function getBillingConfiguration()
+    public function getPriceIncludingTax()
     {
-        return $this->container['billing_configuration'];
+        return $this->container['price_including_tax'];
     }
 
     /**
-     * Sets billing_configuration
+     * Sets price_including_tax
      *
-     * @param \Secupay\Sdk\Model\BillingConfiguration $billing_configuration 
+     * @param float $price_including_tax 
      *
      * @return $this
      */
-    public function setBillingConfiguration($billing_configuration)
+    public function setPriceIncludingTax($price_including_tax)
     {
-        $this->container['billing_configuration'] = $billing_configuration;
+        $this->container['price_including_tax'] = $price_including_tax;
 
         return $this;
     }
     
 
     /**
-     * Gets id
+     * Gets product_id
      *
      * @return int
      */
-    public function getId()
+    public function getProductId()
     {
-        return $this->container['id'];
+        return $this->container['product_id'];
     }
 
     /**
-     * Sets id
+     * Sets product_id
      *
-     * @param int $id 
+     * @param int $product_id 
      *
      * @return $this
      */
-    public function setId($id)
+    public function setProductId($product_id)
     {
-        $this->container['id'] = $id;
+        $this->container['product_id'] = $product_id;
 
         return $this;
     }
     
 
     /**
-     * Gets items
+     * Gets quantity
      *
-     * @return \Secupay\Sdk\Model\Item[]
+     * @return float
      */
-    public function getItems()
+    public function getQuantity()
     {
-        return $this->container['items'];
+        return $this->container['quantity'];
     }
 
     /**
-     * Sets items
+     * Sets quantity
      *
-     * @param \Secupay\Sdk\Model\Item[] $items 
+     * @param float $quantity 
      *
      * @return $this
      */
-    public function setItems($items)
+    public function setQuantity($quantity)
     {
-        $this->container['items'] = $items;
+        $this->container['quantity'] = $quantity;
 
         return $this;
     }
     
 
     /**
-     * Gets store_order_confirmation_email_enabled
+     * Gets recalculate_price
      *
      * @return bool
      */
-    public function getStoreOrderConfirmationEmailEnabled()
+    public function getRecalculatePrice()
     {
-        return $this->container['store_order_confirmation_email_enabled'];
+        return $this->container['recalculate_price'];
     }
 
     /**
-     * Sets store_order_confirmation_email_enabled
+     * Sets recalculate_price
      *
-     * @param bool $store_order_confirmation_email_enabled 
+     * @param bool $recalculate_price 
      *
      * @return $this
      */
-    public function setStoreOrderConfirmationEmailEnabled($store_order_confirmation_email_enabled)
+    public function setRecalculatePrice($recalculate_price)
     {
-        $this->container['store_order_confirmation_email_enabled'] = $store_order_confirmation_email_enabled;
+        $this->container['recalculate_price'] = $recalculate_price;
 
         return $this;
     }
     
 
     /**
-     * Gets subscriber_suspension_allowed
+     * Gets tax_lines
      *
-     * @return bool
+     * @return \Secupay\Sdk\Model\TaxLine[]
      */
-    public function getSubscriberSuspensionAllowed()
+    public function getTaxLines()
     {
-        return $this->container['subscriber_suspension_allowed'];
+        return $this->container['tax_lines'];
     }
 
     /**
-     * Sets subscriber_suspension_allowed
+     * Sets tax_lines
      *
-     * @param bool $subscriber_suspension_allowed 
+     * @param \Secupay\Sdk\Model\TaxLine[] $tax_lines 
      *
      * @return $this
      */
-    public function setSubscriberSuspensionAllowed($subscriber_suspension_allowed)
+    public function setTaxLines($tax_lines)
     {
-        $this->container['subscriber_suspension_allowed'] = $subscriber_suspension_allowed;
+        $this->container['tax_lines'] = $tax_lines;
 
         return $this;
     }

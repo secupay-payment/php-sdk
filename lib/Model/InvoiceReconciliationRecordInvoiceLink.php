@@ -24,7 +24,7 @@ use \ArrayAccess;
 use \Secupay\Sdk\ObjectSerializer;
 
 /**
- * ShopifySubscriptionUpdateRequest model
+ * InvoiceReconciliationRecordInvoiceLink model
  *
  * @category    Class
  * @description 
@@ -32,7 +32,7 @@ use \Secupay\Sdk\ObjectSerializer;
  * @author      Secupay AG.
  * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache License v2
  */
-class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
+class InvoiceReconciliationRecordInvoiceLink implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -41,7 +41,7 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'ShopifySubscriptionUpdateRequest';
+    protected static $swaggerModelName = 'InvoiceReconciliationRecordInvoiceLink';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -49,11 +49,12 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerTypes = [
-        'billing_configuration' => '\Secupay\Sdk\Model\BillingConfiguration',
+        'amount' => 'float',
+        'created_on' => '\DateTime',
         'id' => 'int',
-        'items' => '\Secupay\Sdk\Model\Item[]',
-        'store_order_confirmation_email_enabled' => 'bool',
-        'subscriber_suspension_allowed' => 'bool'
+        'invoice' => '\Secupay\Sdk\Model\TransactionInvoice',
+        'linked_space_id' => 'int',
+        'record' => '\Secupay\Sdk\Model\InvoiceReconciliationRecord'
     ];
 
     /**
@@ -62,11 +63,12 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerFormats = [
-        'billing_configuration' => null,
+        'amount' => null,
+        'created_on' => 'date-time',
         'id' => 'int64',
-        'items' => null,
-        'store_order_confirmation_email_enabled' => null,
-        'subscriber_suspension_allowed' => null
+        'invoice' => null,
+        'linked_space_id' => 'int64',
+        'record' => null
     ];
 
     /**
@@ -76,11 +78,12 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'billing_configuration' => 'billingConfiguration',
+        'amount' => 'amount',
+        'created_on' => 'createdOn',
         'id' => 'id',
-        'items' => 'items',
-        'store_order_confirmation_email_enabled' => 'storeOrderConfirmationEmailEnabled',
-        'subscriber_suspension_allowed' => 'subscriberSuspensionAllowed'
+        'invoice' => 'invoice',
+        'linked_space_id' => 'linkedSpaceId',
+        'record' => 'record'
     ];
 
     /**
@@ -89,11 +92,12 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'billing_configuration' => 'setBillingConfiguration',
+        'amount' => 'setAmount',
+        'created_on' => 'setCreatedOn',
         'id' => 'setId',
-        'items' => 'setItems',
-        'store_order_confirmation_email_enabled' => 'setStoreOrderConfirmationEmailEnabled',
-        'subscriber_suspension_allowed' => 'setSubscriberSuspensionAllowed'
+        'invoice' => 'setInvoice',
+        'linked_space_id' => 'setLinkedSpaceId',
+        'record' => 'setRecord'
     ];
 
     /**
@@ -102,11 +106,12 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'billing_configuration' => 'getBillingConfiguration',
+        'amount' => 'getAmount',
+        'created_on' => 'getCreatedOn',
         'id' => 'getId',
-        'items' => 'getItems',
-        'store_order_confirmation_email_enabled' => 'getStoreOrderConfirmationEmailEnabled',
-        'subscriber_suspension_allowed' => 'getSubscriberSuspensionAllowed'
+        'invoice' => 'getInvoice',
+        'linked_space_id' => 'getLinkedSpaceId',
+        'record' => 'getRecord'
     ];
 
     
@@ -127,15 +132,17 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
     public function __construct(array $data = null)
     {
         
-        $this->container['billing_configuration'] = isset($data['billing_configuration']) ? $data['billing_configuration'] : null;
+        $this->container['amount'] = isset($data['amount']) ? $data['amount'] : null;
+        
+        $this->container['created_on'] = isset($data['created_on']) ? $data['created_on'] : null;
         
         $this->container['id'] = isset($data['id']) ? $data['id'] : null;
         
-        $this->container['items'] = isset($data['items']) ? $data['items'] : null;
+        $this->container['invoice'] = isset($data['invoice']) ? $data['invoice'] : null;
         
-        $this->container['store_order_confirmation_email_enabled'] = isset($data['store_order_confirmation_email_enabled']) ? $data['store_order_confirmation_email_enabled'] : null;
+        $this->container['linked_space_id'] = isset($data['linked_space_id']) ? $data['linked_space_id'] : null;
         
-        $this->container['subscriber_suspension_allowed'] = isset($data['subscriber_suspension_allowed']) ? $data['subscriber_suspension_allowed'] : null;
+        $this->container['record'] = isset($data['record']) ? $data['record'] : null;
         
     }
 
@@ -229,25 +236,50 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
     
 
     /**
-     * Gets billing_configuration
+     * Gets amount
      *
-     * @return \Secupay\Sdk\Model\BillingConfiguration
+     * @return float
      */
-    public function getBillingConfiguration()
+    public function getAmount()
     {
-        return $this->container['billing_configuration'];
+        return $this->container['amount'];
     }
 
     /**
-     * Sets billing_configuration
+     * Sets amount
      *
-     * @param \Secupay\Sdk\Model\BillingConfiguration $billing_configuration 
+     * @param float $amount 
      *
      * @return $this
      */
-    public function setBillingConfiguration($billing_configuration)
+    public function setAmount($amount)
     {
-        $this->container['billing_configuration'] = $billing_configuration;
+        $this->container['amount'] = $amount;
+
+        return $this;
+    }
+    
+
+    /**
+     * Gets created_on
+     *
+     * @return \DateTime
+     */
+    public function getCreatedOn()
+    {
+        return $this->container['created_on'];
+    }
+
+    /**
+     * Sets created_on
+     *
+     * @param \DateTime $created_on The date and time when the object was created.
+     *
+     * @return $this
+     */
+    public function setCreatedOn($created_on)
+    {
+        $this->container['created_on'] = $created_on;
 
         return $this;
     }
@@ -266,7 +298,7 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
     /**
      * Sets id
      *
-     * @param int $id 
+     * @param int $id A unique identifier for the object.
      *
      * @return $this
      */
@@ -279,75 +311,75 @@ class ShopifySubscriptionUpdateRequest implements ModelInterface, ArrayAccess
     
 
     /**
-     * Gets items
+     * Gets invoice
      *
-     * @return \Secupay\Sdk\Model\Item[]
+     * @return \Secupay\Sdk\Model\TransactionInvoice
      */
-    public function getItems()
+    public function getInvoice()
     {
-        return $this->container['items'];
+        return $this->container['invoice'];
     }
 
     /**
-     * Sets items
+     * Sets invoice
      *
-     * @param \Secupay\Sdk\Model\Item[] $items 
+     * @param \Secupay\Sdk\Model\TransactionInvoice $invoice 
      *
      * @return $this
      */
-    public function setItems($items)
+    public function setInvoice($invoice)
     {
-        $this->container['items'] = $items;
+        $this->container['invoice'] = $invoice;
 
         return $this;
     }
     
 
     /**
-     * Gets store_order_confirmation_email_enabled
+     * Gets linked_space_id
      *
-     * @return bool
+     * @return int
      */
-    public function getStoreOrderConfirmationEmailEnabled()
+    public function getLinkedSpaceId()
     {
-        return $this->container['store_order_confirmation_email_enabled'];
+        return $this->container['linked_space_id'];
     }
 
     /**
-     * Sets store_order_confirmation_email_enabled
+     * Sets linked_space_id
      *
-     * @param bool $store_order_confirmation_email_enabled 
+     * @param int $linked_space_id The ID of the space this object belongs to.
      *
      * @return $this
      */
-    public function setStoreOrderConfirmationEmailEnabled($store_order_confirmation_email_enabled)
+    public function setLinkedSpaceId($linked_space_id)
     {
-        $this->container['store_order_confirmation_email_enabled'] = $store_order_confirmation_email_enabled;
+        $this->container['linked_space_id'] = $linked_space_id;
 
         return $this;
     }
     
 
     /**
-     * Gets subscriber_suspension_allowed
+     * Gets record
      *
-     * @return bool
+     * @return \Secupay\Sdk\Model\InvoiceReconciliationRecord
      */
-    public function getSubscriberSuspensionAllowed()
+    public function getRecord()
     {
-        return $this->container['subscriber_suspension_allowed'];
+        return $this->container['record'];
     }
 
     /**
-     * Sets subscriber_suspension_allowed
+     * Sets record
      *
-     * @param bool $subscriber_suspension_allowed 
+     * @param \Secupay\Sdk\Model\InvoiceReconciliationRecord $record 
      *
      * @return $this
      */
-    public function setSubscriberSuspensionAllowed($subscriber_suspension_allowed)
+    public function setRecord($record)
     {
-        $this->container['subscriber_suspension_allowed'] = $subscriber_suspension_allowed;
+        $this->container['record'] = $record;
 
         return $this;
     }
