@@ -48,7 +48,7 @@ final class ApiClient {
 	 * @var array
 	 */
 	private $defaultHeaders = [
-        'x-meta-sdk-version' => "4.7.0",
+        'x-meta-sdk-version' => "4.8.0",
         'x-meta-sdk-language' => 'php',
         'x-meta-sdk-provider' => "Secupay",
     ];
@@ -58,7 +58,7 @@ final class ApiClient {
 	 *
 	 * @var string
 	 */
-	private $userAgent = 'PHP-Client/4.7.0/php';
+	private $userAgent = 'PHP-Client/4.8.0/php';
 
 	/**
 	 * The path to the certificate authority file.
@@ -1075,18 +1075,6 @@ final class ApiClient {
             $this->shopifySubscriptionVersionService = new \Secupay\Sdk\Service\ShopifySubscriptionVersionService($this);
         }
         return $this->shopifySubscriptionVersionService;
-    }
-    
-    protected $shopifyTransactionService;
-
-    /**
-     * @return \Secupay\Sdk\Service\ShopifyTransactionService
-     */
-    public function getShopifyTransactionService() {
-        if(is_null($this->shopifyTransactionService)){
-            $this->shopifyTransactionService = new \Secupay\Sdk\Service\ShopifyTransactionService($this);
-        }
-        return $this->shopifyTransactionService;
     }
     
     protected $spaceService;
