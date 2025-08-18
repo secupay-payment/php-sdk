@@ -259,7 +259,7 @@ class TokenVersionType implements ModelInterface, ArrayAccess
     /**
      * Sets feature
      *
-     * @param \Secupay\Sdk\Model\Feature $feature 
+     * @param \Secupay\Sdk\Model\Feature $feature The feature that the token version type belongs to.
      *
      * @return $this
      */
