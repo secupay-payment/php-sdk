@@ -1,8 +1,12 @@
 <?php
 /**
- * Secupay SDK
+ * Secupay AG Php SDK
  *
- * This library allows to interact with the Secupay payment service.
+ * This library allows to interact with the Secupay AG payment service.
+ *
+ * Copyright owner: Wallee AG
+ * Website: https://secupay.com/en
+ * Developer email: ecosystem-team@wallee.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +21,6 @@
  * limitations under the License.
  */
 
-
 namespace Secupay\Sdk\Model;
 use \Secupay\Sdk\ObjectSerializer;
 
@@ -25,21 +28,26 @@ use \Secupay\Sdk\ObjectSerializer;
  * DeliveryIndicationState model
  *
  * @category    Class
- * @description 
  * @package     Secupay\Sdk
  * @author      Secupay AG.
- * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache License v2
+ * @license     Apache-2.0
+ * The Apache License, Version 2.0
+ * See the full license at https://www.apache.org/licenses/LICENSE-2.0.txt
+ * @version     5.0.0
  */
 class DeliveryIndicationState
 {
     /**
      * Possible values of this enum
      */
-    const PENDING = 'PENDING';
-    const NOT_SUITABLE = 'NOT_SUITABLE';
-    const MANUAL_CHECK_REQUIRED = 'MANUAL_CHECK_REQUIRED';
-    const SUITABLE = 'SUITABLE';
-    
+    public const PENDING = 'PENDING';
+
+    public const NOT_SUITABLE = 'NOT_SUITABLE';
+
+    public const MANUAL_CHECK_REQUIRED = 'MANUAL_CHECK_REQUIRED';
+
+    public const SUITABLE = 'SUITABLE';
+
     /**
      * Gets allowable values of the enum
      * @return string[]
@@ -50,7 +58,7 @@ class DeliveryIndicationState
             self::PENDING,
             self::NOT_SUITABLE,
             self::MANUAL_CHECK_REQUIRED,
-            self::SUITABLE,
+            self::SUITABLE
         ];
     }
 }
