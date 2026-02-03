@@ -6,7 +6,14 @@ The Secupay PHP SDK is used to interact with Secupay's REST API.
 
 ## Requirements
 
-PHP 8.1 or later.
+PHP 8.2 or later.
+
+## Compatibility
+
+| PHP SDK version | PHP version   | Supported until |
+|-----------------|---------------|-----------------|
+| 5.x             | 8.2 or later  | Further notice  |
+| 4.x             | 5.6 – 7.3     | Fall 2026 |
 
 ## Installation
 
@@ -178,6 +185,11 @@ Web Api client: [*link*](https://shopportal.secupay.com//api/client)<br>
   &nbsp;&nbsp;* <code>postApplicationUsersUserIdSpaceRoles</code>
   &nbsp;&nbsp;&nbsp;&nbsp;<strong>POST</strong> /application-users/{userId}/space-roles
   &nbsp;&nbsp;&nbsp;&nbsp;Assign a role to an application user for a space
+  <br><br>
+- <strong>BogusExpressCheckoutService</strong><br>
+  &nbsp;&nbsp;* <code>postBogusExpressCheckoutOnApprove</code>
+  &nbsp;&nbsp;&nbsp;&nbsp;<strong>POST</strong> /bogus-express-checkout/on-approve
+  &nbsp;&nbsp;&nbsp;&nbsp;Approve express checkout wallet payment
   <br><br>
 - <strong>ChargeAttemptsService</strong><br>
   &nbsp;&nbsp;* <code>getPaymentChargeAttempts</code>
@@ -543,6 +555,16 @@ Web Api client: [*link*](https://shopportal.secupay.com//api/client)<br>
   &nbsp;&nbsp;* <code>getPaymentDunningFlowsSearch</code>
   &nbsp;&nbsp;&nbsp;&nbsp;<strong>GET</strong> /payment/dunning-flows/search
   &nbsp;&nbsp;&nbsp;&nbsp;Search dunning flows
+  <br><br>
+- <strong>ExpressCheckoutService</strong><br>
+  &nbsp;&nbsp;* <code>patchExpressCheckoutShippingAddressChange</code>
+  &nbsp;&nbsp;&nbsp;&nbsp;<strong>PATCH</strong> /express-checkout/shipping/address-change
+  &nbsp;&nbsp;&nbsp;&nbsp;Change shipping address
+  <br><br>
+- <strong>ExpressCheckoutService</strong><br>
+  &nbsp;&nbsp;* <code>patchExpressCheckoutShippingMethodChange</code>
+  &nbsp;&nbsp;&nbsp;&nbsp;<strong>PATCH</strong> /express-checkout/shipping/method-change
+  &nbsp;&nbsp;&nbsp;&nbsp;Change shipping method
   <br><br>
 - <strong>ExpressCheckoutService</strong><br>
   &nbsp;&nbsp;* <code>postExpressCheckoutCreateSession</code>
@@ -1727,6 +1749,8 @@ Additional Api models documentation: [*link*](https://shopportal.secupay.com/en-
 * <strong>AuthenticatedCardData</strong>
 * <strong>AuthenticatedCardDataCreate</strong>
 * <strong>AuthenticatedCardRequest</strong>
+* <strong>BogusExpressCheckoutApprovalRequest</strong>
+* <strong>BogusExpressCheckoutPaymentData</strong>
 * <strong>CardAuthenticationResponse</strong>
 * <strong>CardAuthenticationVersion</strong>
 * <strong>CardCryptogram</strong>
@@ -1818,10 +1842,15 @@ Additional Api models documentation: [*link*](https://shopportal.secupay.com/en-
 * <strong>DunningFlowSearchResponse</strong>
 * <strong>DunningFlowType</strong>
 * <strong>Environment</strong>
+* <strong>ExpressCheckoutApprovalResponse</strong>
 * <strong>ExpressCheckoutCreateResponse</strong>
 * <strong>ExpressCheckoutSession</strong>
 * <strong>ExpressCheckoutSessionCreate</strong>
 * <strong>ExpressCheckoutSessionState</strong>
+* <strong>ExpressCheckoutShippingAddressChangeRequest</strong>
+* <strong>ExpressCheckoutShippingAddressChangeResponse</strong>
+* <strong>ExpressCheckoutShippingMethodChangeRequest</strong>
+* <strong>ExpressCheckoutShippingMethodChangeResponse</strong>
 * <strong>ExpressCheckoutShippingOption</strong>
 * <strong>ExpressCheckoutWalletType</strong>
 * <strong>FailureCategory</strong>
@@ -2080,52 +2109,96 @@ When working with webhooks, the `SecupaySdkException` may throw error codes to h
 
 ### Error Code Categories
 
-| **Range** | **Category** | **Description** |
-|-----------|--------------|-----------------|
-| **404** | Not Found | Indicates that the requested resource could not be found or the endpoint returned an empty response |
-| **1000–1999** | Client-Side Errors | Errors typically caused by invalid input |
-| **2000–2999** | Server-Side Errors | Errors typically caused by incorrect data provided by the server |
-
-### Error Code Reference
-
-| **Code** | **Error Name** | **Description** | **Category** |
-|----------|----------------|-----------------|--------------|
-| 404 | `UNKNOWN_WEBHOOK_ENCRYPTION_PUBLIC_KEY` | Unknown webhook signature public key | Not Found |
-| 1000 | `WEBHOOK_ENCRYPTION_GENERAL_ERROR` | General webhook encryption error | Client-Side |
-| 1001 | `INVALID_WEBHOOK_ENCRYPTION_PUBLIC_KEY` | Invalid webhook signature public key | Client-Side |
-| 1002 | `INVALID_WEBHOOK_ENCRYPTION_HEADER_FORMAT` | Invalid webhook signature header | Client-Side |
-| 1003 | `UNSUPPORTED_WEBHOOK_ENCRYPTION_ALGORYTHM` | Unsupported webhook signature algorithm | Client-Side |
-| 1004 | `UNKNOWN_WEBHOOK_ENCRYPTION_PROVIDER` | Unknown webhook encryption provider | Client-Side |
-| 1005 | `WEBHOOK_ENCRYPTION_VERIFIER_INIT_ERROR` | Encryption verifier initialization error | Client-Side |
-| 1006 | `WEBHOOK_ENCRYPTION_VERIFIER_CONTENT_UPDATE_ERROR` | Error during content update in encryption verifier | Client-Side |
-| 1007 | `WEBHOOK_ENCRYPTION_SIGNATURE_VERIFICATION_FAILED` | Encryption signature verification failed | Client-Side |
-| 1008 | `INVALID_WEBHOOK_ENCRYPTION_CONTENT_SIGNATURE` | Invalid webhook content signature | Client-Side |
-| 2000 | `MISSING_WEBHOOK_ENCRYPTION_ALGORYTHM` | Missing webhook signature algorithm value | Server-Side |
+| **Exception**              | **Description**                                                                       |
+|----------------------------|---------------------------------------------------------------------------------------|
+| **ApiExceptionErrorCodes** | Lists the possible HTTP error codes an `ApiException` can generate                    |
+| **SdkExceptionErrorCodes** | Lists the possible error codes a `SecupaySdkException` can generate |
 
 ### Usage Example
 ```php
 try {
-    // Webhook SDK operation
-} catch (SecupaySdkException $e) {
-    switch ($e->getCode()) {
-        case 1001: // INVALID_WEBHOOK_ENCRYPTION_PUBLIC_KEY
-            // Handle invalid public key
-            break;
-        case 1007: // WEBHOOK_ENCRYPTION_SIGNATURE_VERIFICATION_FAILED
-            // Handle signature verification failure
-            break;
-        default:
-            // Handle other errors
-            break;
+    // Operation which can throw ApiException
+} catch (ApiException $ex) {
+    if (ApiExceptionErrorCodes::CONFLICT->matches($ex)) {
+        // Retry
+    } else {
+        // Other handling
     }
 }
 ```
+
+## Testing & Code Quality
+
+This SDK is generated automatically. The following steps describe how to build the SDK locally and verify its quality using static analysis, coding standards, and tests.
+
+### Build the PHP SDK
+
+First, build the PHP SDK from the root of the `io.wallee.sdk` repository:
+
+```sh
+./gradlew clean php:generate --machineNameOption=Wallee
+```
+After the build completes, the generated PHP SDK will be available at:
+`
+io.wallee.sdk/platform/php/build/Wallee/php-sdk
+`
+> Note:
+> Please use **PHP 8.4** when working with the generated SDK.
+
+### Install Development Dependencies
+
+To run code style checks, compatibility checks, and static analysis, install the required development dependencies:
+```
+composer require --dev squizlabs/php_codesniffer:^3.13 --with-all-dependencies
+composer require --dev phpcompatibility/php-compatibility
+composer require --dev dealerdirect/phpcodesniffer-composer-installer
+composer require --dev phpstan/phpstan
+```
+Verify that the PHPCompatibility standard is correctly installed:
+```
+vendor/bin/phpcs -i
+```
+You should see **PHPCompatibility** listed in the installed standards.
+
+### Code Style & Compatibility Checks
+⚠️ **Important:**
+Run the following tools **only inside the `/lib` directory.**
+Running them from the project root would scan the entire repository (~6000 files), which is not intended.
+
+Navigate to the `lib` directory:
+```
+cd lib
+```
+#### Run PHP CodeSniffer (PHPCompatibility)
+```
+../vendor/bin/phpcs -ps . \
+--standard=PHPCompatibility \
+--runtime-set testVersion 8.2 \
+-d memory_limit=512M
+```
+This ensures the SDK is compatible with the targeted PHP version.
+___
+#### Static Analysis (PHPStan)
+```
+../vendor/bin/phpstan analyse . --memory-limit=1G
+```
+___
+#### Run Tests
+Run the full test suite:
+```
+vendor/bin/phpunit --testdox
+```
+Run a single test file if needed:
+```
+vendor/bin/phpunit --testdox test/QueryingTest.php
+```
+
 
 ## Author
 - Wallee Ecosystem Team<br><br>
 
 *Automatically generated by the [OpenAPI Generator](https://openapi-generator.tech)*
-<br>Generator version: 7.6.0
+<br>Generator version: 7.13.0
 
 ## License
 

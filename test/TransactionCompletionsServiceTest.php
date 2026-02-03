@@ -1,6 +1,6 @@
 <?php
 /**
- * Secupay AG Php SDK
+ * Secupay AG PHP SDK
  *
  * This library allows to interact with the Secupay AG payment service.
  *
