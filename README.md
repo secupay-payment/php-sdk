@@ -186,11 +186,6 @@ Web Api client: [*link*](https://shopportal.secupay.com//api/client)<br>
   &nbsp;&nbsp;&nbsp;&nbsp;<strong>POST</strong> /application-users/{userId}/space-roles
   &nbsp;&nbsp;&nbsp;&nbsp;Assign a role to an application user for a space
   <br><br>
-- <strong>BogusExpressCheckoutService</strong><br>
-  &nbsp;&nbsp;* <code>postBogusExpressCheckoutOnApprove</code>
-  &nbsp;&nbsp;&nbsp;&nbsp;<strong>POST</strong> /bogus-express-checkout/on-approve
-  &nbsp;&nbsp;&nbsp;&nbsp;Approve express checkout wallet payment
-  <br><br>
 - <strong>ChargeAttemptsService</strong><br>
   &nbsp;&nbsp;* <code>getPaymentChargeAttempts</code>
   &nbsp;&nbsp;&nbsp;&nbsp;<strong>GET</strong> /payment/charge-attempts
@@ -556,21 +551,6 @@ Web Api client: [*link*](https://shopportal.secupay.com//api/client)<br>
   &nbsp;&nbsp;&nbsp;&nbsp;<strong>GET</strong> /payment/dunning-flows/search
   &nbsp;&nbsp;&nbsp;&nbsp;Search dunning flows
   <br><br>
-- <strong>ExpressCheckoutService</strong><br>
-  &nbsp;&nbsp;* <code>patchExpressCheckoutShippingAddressChange</code>
-  &nbsp;&nbsp;&nbsp;&nbsp;<strong>PATCH</strong> /express-checkout/shipping/address-change
-  &nbsp;&nbsp;&nbsp;&nbsp;Change shipping address
-  <br><br>
-- <strong>ExpressCheckoutService</strong><br>
-  &nbsp;&nbsp;* <code>patchExpressCheckoutShippingMethodChange</code>
-  &nbsp;&nbsp;&nbsp;&nbsp;<strong>PATCH</strong> /express-checkout/shipping/method-change
-  &nbsp;&nbsp;&nbsp;&nbsp;Change shipping method
-  <br><br>
-- <strong>ExpressCheckoutService</strong><br>
-  &nbsp;&nbsp;* <code>postExpressCheckoutCreateSession</code>
-  &nbsp;&nbsp;&nbsp;&nbsp;<strong>POST</strong> /express-checkout/create-session
-  &nbsp;&nbsp;&nbsp;&nbsp;Create a new Express Checkout Session
-  <br><br>
 - <strong>HumanUsersService</strong><br>
   &nbsp;&nbsp;* <code>deleteHumanUsersId</code>
   &nbsp;&nbsp;&nbsp;&nbsp;<strong>DELETE</strong> /human-users/{id}
@@ -855,6 +835,11 @@ Web Api client: [*link*](https://shopportal.secupay.com//api/client)<br>
   &nbsp;&nbsp;* <code>postPaymentProcessorConfigurations</code>
   &nbsp;&nbsp;&nbsp;&nbsp;<strong>POST</strong> /payment/processor-configurations
   &nbsp;&nbsp;&nbsp;&nbsp;Create a payment processor configuration
+  <br><br>
+- <strong>PaymentProcessorConfigurationsService</strong><br>
+  &nbsp;&nbsp;* <code>postPaymentProcessorConfigurationsIdLinkContract</code>
+  &nbsp;&nbsp;&nbsp;&nbsp;<strong>POST</strong> /payment/processor-configurations/{id}/link-contract
+  &nbsp;&nbsp;&nbsp;&nbsp;Link a contract with a payment processor configuration
   <br><br>
 - <strong>PaymentProcessorsService</strong><br>
   &nbsp;&nbsp;* <code>getPaymentProcessors</code>
@@ -1362,6 +1347,11 @@ Web Api client: [*link*](https://shopportal.secupay.com//api/client)<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Derecognize a transaction invoice
   <br><br>
 - <strong>TransactionInvoicesService</strong><br>
+  &nbsp;&nbsp;* <code>postPaymentTransactionsInvoicesIdInstantPaymentUrl</code>
+  &nbsp;&nbsp;&nbsp;&nbsp;<strong>POST</strong> /payment/transactions/invoices/{id}/instant-payment-url
+  &nbsp;&nbsp;&nbsp;&nbsp;Create an instant invoice payment URL
+  <br><br>
+- <strong>TransactionInvoicesService</strong><br>
   &nbsp;&nbsp;* <code>postPaymentTransactionsInvoicesIdMarkPaid</code>
   &nbsp;&nbsp;&nbsp;&nbsp;<strong>POST</strong> /payment/transactions/invoices/{id}/mark-paid
   &nbsp;&nbsp;&nbsp;&nbsp;Mark a transaction invoice as paid
@@ -1749,8 +1739,6 @@ Additional Api models documentation: [*link*](https://shopportal.secupay.com/en-
 * <strong>AuthenticatedCardData</strong>
 * <strong>AuthenticatedCardDataCreate</strong>
 * <strong>AuthenticatedCardRequest</strong>
-* <strong>BogusExpressCheckoutApprovalRequest</strong>
-* <strong>BogusExpressCheckoutPaymentData</strong>
 * <strong>CardAuthenticationResponse</strong>
 * <strong>CardAuthenticationVersion</strong>
 * <strong>CardCryptogram</strong>
@@ -1842,17 +1830,6 @@ Additional Api models documentation: [*link*](https://shopportal.secupay.com/en-
 * <strong>DunningFlowSearchResponse</strong>
 * <strong>DunningFlowType</strong>
 * <strong>Environment</strong>
-* <strong>ExpressCheckoutApprovalResponse</strong>
-* <strong>ExpressCheckoutCreateResponse</strong>
-* <strong>ExpressCheckoutSession</strong>
-* <strong>ExpressCheckoutSessionCreate</strong>
-* <strong>ExpressCheckoutSessionState</strong>
-* <strong>ExpressCheckoutShippingAddressChangeRequest</strong>
-* <strong>ExpressCheckoutShippingAddressChangeResponse</strong>
-* <strong>ExpressCheckoutShippingMethodChangeRequest</strong>
-* <strong>ExpressCheckoutShippingMethodChangeResponse</strong>
-* <strong>ExpressCheckoutShippingOption</strong>
-* <strong>ExpressCheckoutWalletType</strong>
 * <strong>FailureCategory</strong>
 * <strong>FailureReason</strong>
 * <strong>Feature</strong>
@@ -2022,6 +1999,7 @@ Additional Api models documentation: [*link*](https://shopportal.secupay.com/en-
 * <strong>SpaceSearchResponse</strong>
 * <strong>SpaceUpdate</strong>
 * <strong>SpaceView</strong>
+* <strong>StateListResponse</strong>
 * <strong>StaticValue</strong>
 * <strong>StaticValueListResponse</strong>
 * <strong>StaticValueSearchResponse</strong>

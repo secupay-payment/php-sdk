@@ -27,7 +27,7 @@ use \ArrayAccess;
 use \Secupay\Sdk\ObjectSerializer;
 
 /**
- * BogusExpressCheckoutApprovalRequest model
+ * StateListResponse model
  *
  * @category Class
  * @package     Secupay\Sdk
@@ -35,10 +35,10 @@ use \Secupay\Sdk\ObjectSerializer;
  * @license     Apache-2.0
  * The Apache License, Version 2.0
  * See the full license at https://www.apache.org/licenses/LICENSE-2.0.txt
- * @version     5.2.0
+ * @version     5.2.2
  * @implements \ArrayAccess<string, mixed>
  */
-class BogusExpressCheckoutApprovalRequest implements ModelInterface, ArrayAccess, \JsonSerializable
+class StateListResponse implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -47,7 +47,7 @@ class BogusExpressCheckoutApprovalRequest implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $openAPIModelName = 'BogusExpressCheckoutApprovalRequest';
+    protected static $openAPIModelName = 'State_List_Response';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -55,7 +55,9 @@ class BogusExpressCheckoutApprovalRequest implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $openAPITypes = [
-        'payment_data' => '\Secupay\Sdk\Model\BogusExpressCheckoutPaymentData'
+        'data' => '\Secupay\Sdk\Model\RestCountryState[]',
+        'has_more' => 'bool',
+        'limit' => 'int'
     ];
 
     /**
@@ -66,7 +68,9 @@ class BogusExpressCheckoutApprovalRequest implements ModelInterface, ArrayAccess
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'payment_data' => null
+        'data' => null,
+        'has_more' => null,
+        'limit' => 'int32'
     ];
 
     /**
@@ -75,7 +79,9 @@ class BogusExpressCheckoutApprovalRequest implements ModelInterface, ArrayAccess
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'payment_data' => false
+        'data' => false,
+        'has_more' => false,
+        'limit' => false
     ];
 
     /**
@@ -164,7 +170,9 @@ class BogusExpressCheckoutApprovalRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'payment_data' => 'paymentData'
+        'data' => 'data',
+        'has_more' => 'hasMore',
+        'limit' => 'limit'
     ];
 
     /**
@@ -173,7 +181,9 @@ class BogusExpressCheckoutApprovalRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'payment_data' => 'setPaymentData'
+        'data' => 'setData',
+        'has_more' => 'setHasMore',
+        'limit' => 'setLimit'
     ];
 
     /**
@@ -182,7 +192,9 @@ class BogusExpressCheckoutApprovalRequest implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'payment_data' => 'getPaymentData'
+        'data' => 'getData',
+        'has_more' => 'getHasMore',
+        'limit' => 'getLimit'
     ];
 
     /**
@@ -242,7 +254,9 @@ class BogusExpressCheckoutApprovalRequest implements ModelInterface, ArrayAccess
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('payment_data', $data ?? [], null);
+        $this->setIfExists('data', $data ?? [], null);
+        $this->setIfExists('has_more', $data ?? [], null);
+        $this->setIfExists('limit', $data ?? [], null);
     }
 
     /**
@@ -288,28 +302,82 @@ class BogusExpressCheckoutApprovalRequest implements ModelInterface, ArrayAccess
 
 
     /**
-     * Gets payment_data
+     * Gets data
      *
-     * @return \Secupay\Sdk\Model\BogusExpressCheckoutPaymentData|null
+     * @return \Secupay\Sdk\Model\RestCountryState[]|null
      */
-    public function getPaymentData()
+    public function getData()
     {
-        return $this->container['payment_data'];
+        return $this->container['data'];
     }
 
     /**
-     * Sets payment_data
+     * Sets data
      *
-     * @param \Secupay\Sdk\Model\BogusExpressCheckoutPaymentData|null $payment_data payment_data
+     * @param \Secupay\Sdk\Model\RestCountryState[]|null $data An array containing the actual response objects.
      *
      * @return self
      */
-    public function setPaymentData($payment_data)
+    public function setData($data)
     {
-        if (is_null($payment_data)) {
-            throw new \InvalidArgumentException('non-nullable payment_data cannot be null');
+        if (is_null($data)) {
+            throw new \InvalidArgumentException('non-nullable data cannot be null');
         }
-        $this->container['payment_data'] = $payment_data;
+        $this->container['data'] = $data;
+
+        return $this;
+    }
+
+    /**
+     * Gets has_more
+     *
+     * @return bool|null
+     */
+    public function getHasMore()
+    {
+        return $this->container['has_more'];
+    }
+
+    /**
+     * Sets has_more
+     *
+     * @param bool|null $has_more Whether there are more objects available after this set. If false, there are no more objects to retrieve.
+     *
+     * @return self
+     */
+    public function setHasMore($has_more)
+    {
+        if (is_null($has_more)) {
+            throw new \InvalidArgumentException('non-nullable has_more cannot be null');
+        }
+        $this->container['has_more'] = $has_more;
+
+        return $this;
+    }
+
+    /**
+     * Gets limit
+     *
+     * @return int|null
+     */
+    public function getLimit()
+    {
+        return $this->container['limit'];
+    }
+
+    /**
+     * Sets limit
+     *
+     * @param int|null $limit The applied limit on the number of objects returned.
+     *
+     * @return self
+     */
+    public function setLimit($limit)
+    {
+        if (is_null($limit)) {
+            throw new \InvalidArgumentException('non-nullable limit cannot be null');
+        }
+        $this->container['limit'] = $limit;
 
         return $this;
     }
