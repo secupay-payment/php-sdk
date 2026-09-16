@@ -1,6 +1,6 @@
 {
 	"name": "secupay/sdk",
-	"version": "4.9.1",
+	"version": "4.9.2",
 	"description": "Secupay SDK for PHP",
 	"keywords": [
 		"secupay",
