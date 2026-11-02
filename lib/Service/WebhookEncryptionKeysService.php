@@ -23,7 +23,6 @@
 
 namespace Secupay\Sdk\Service;
 
-use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
@@ -36,6 +35,7 @@ use Secupay\Sdk\ApiException;
 use Secupay\Sdk\Configuration;
 use Secupay\Sdk\FormDataProcessor;
 use Secupay\Sdk\HeaderSelector;
+use Secupay\Sdk\CaBundleFallbackClientFactory;
 use Secupay\Sdk\ObjectSerializer;
 use Secupay\Sdk\Auth\HttpBearerAuth;
 use Secupay\Sdk\Utils\EncryptionUtil;
@@ -51,7 +51,7 @@ use Secupay\Sdk\SdkExceptionErrorCodes;
  * @license  Apache-2.0
  * The Apache License, Version 2.0
  * See the full license at https://www.apache.org/licenses/LICENSE-2.0.txt
- * @version  5.2.2
+ * @version  5.2.3
  */
 class WebhookEncryptionKeysService
 {
@@ -103,7 +103,7 @@ class WebhookEncryptionKeysService
         ?ClientInterface $client = null,
         ?HeaderSelector  $selector = null,
     ) {
-        $this->client = $client ?: new Client();
+        $this->client = $client ?: CaBundleFallbackClientFactory::create();
         $this->config = $config ?: Configuration::getDefaultConfiguration();
         $this->headerSelector = $selector ?: new HeaderSelector();
         $this->hostIndex = $hostIndex;

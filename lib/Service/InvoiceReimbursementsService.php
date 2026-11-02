@@ -23,7 +23,6 @@
 
 namespace Secupay\Sdk\Service;
 
-use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
@@ -36,11 +35,12 @@ use Secupay\Sdk\ApiException;
 use Secupay\Sdk\Configuration;
 use Secupay\Sdk\FormDataProcessor;
 use Secupay\Sdk\HeaderSelector;
+use Secupay\Sdk\CaBundleFallbackClientFactory;
 use Secupay\Sdk\ObjectSerializer;
 use Secupay\Sdk\Auth\HttpBearerAuth;
 
 /**
- * SingleSignOnUsersRolesService service
+ * InvoiceReimbursementsService service
  *
  * @category Class
  * @package  Secupay\Sdk
@@ -48,9 +48,9 @@ use Secupay\Sdk\Auth\HttpBearerAuth;
  * @license  Apache-2.0
  * The Apache License, Version 2.0
  * See the full license at https://www.apache.org/licenses/LICENSE-2.0.txt
- * @version  5.2.2
+ * @version  5.2.3
  */
-class SingleSignOnUsersRolesService
+class InvoiceReimbursementsService
 {
     /**
      * @var ClientInterface
@@ -79,22 +79,19 @@ class SingleSignOnUsersRolesService
 
     /** @var string[] $contentTypes **/
     public const contentTypes = [
-        'deleteSingleSignOnUsersUserIdAccountRoles' => [
+        'getPaymentInvoiceReimbursements' => [
             'application/json',
         ],
-        'deleteSingleSignOnUsersUserIdSpaceRoles' => [
+        'getPaymentInvoiceReimbursementsId' => [
             'application/json',
         ],
-        'getSingleSignOnUsersUserIdAccountRoles' => [
+        'getPaymentInvoiceReimbursementsSearch' => [
             'application/json',
         ],
-        'getSingleSignOnUsersUserIdSpaceRoles' => [
+        'postPaymentInvoiceReimbursementsIdConnector' => [
             'application/json',
         ],
-        'postSingleSignOnUsersUserIdAccountRoles' => [
-            'application/json',
-        ],
-        'postSingleSignOnUsersUserIdSpaceRoles' => [
+        'postPaymentInvoiceReimbursementsIdIban' => [
             'application/json',
         ],
     ];
@@ -111,7 +108,7 @@ class SingleSignOnUsersRolesService
         ?ClientInterface $client = null,
         ?HeaderSelector  $selector = null,
     ) {
-        $this->client = $client ?: new Client();
+        $this->client = $client ?: CaBundleFallbackClientFactory::create();
         $this->config = $config ?: Configuration::getDefaultConfiguration();
         $this->headerSelector = $selector ?: new HeaderSelector();
         $this->hostIndex = $hostIndex;
@@ -157,604 +154,48 @@ class SingleSignOnUsersRolesService
     }
 
     /**
-     * Operation deleteSingleSignOnUsersUserIdAccountRoles
+     * Operation getPaymentInvoiceReimbursements
      *
-     * Unassign a role from a single sign-on user for an account
+     * List all invoice reimbursements
      *
-     * @param int $user_id user_id (required)
-     * @param int $role_id role_id (required)
-     * @param int $account Specifies the ID of the account the operation should be executed in. (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteSingleSignOnUsersUserIdAccountRoles'] to see the possible values for this operation
-     *
-     * @throws \Secupay\Sdk\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return void
-     */
-    public function deleteSingleSignOnUsersUserIdAccountRoles(int $user_id, int $role_id, int $account, string $contentType = self::contentTypes['deleteSingleSignOnUsersUserIdAccountRoles'][0])
-    {
-        $this->deleteSingleSignOnUsersUserIdAccountRolesWithHttpInfo($user_id, $role_id, $account, $contentType);
-    }
-
-    /**
-     * Operation deleteSingleSignOnUsersUserIdAccountRolesWithHttpInfo
-     *
-     * Unassign a role from a single sign-on user for an account
-     *
-     * @param int $user_id user_id (required)
-     * @param int $role_id role_id (required)
-     * @param int $account Specifies the ID of the account the operation should be executed in. (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteSingleSignOnUsersUserIdAccountRoles'] to see the possible values for this operation
-     *
-     * @throws \Secupay\Sdk\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return array of null, HTTP status code, HTTP response headers (array of strings)
-     */
-    public function deleteSingleSignOnUsersUserIdAccountRolesWithHttpInfo(int $user_id, int $role_id, int $account, string $contentType = self::contentTypes['deleteSingleSignOnUsersUserIdAccountRoles'][0])
-    {
-        $request = $this->deleteSingleSignOnUsersUserIdAccountRolesRequest($user_id, $role_id, $account, $contentType);
-
-        try {
-            $requestTimeout = $this->config->getRequestTimeout();
-            $options = $this->createHttpClientOption($requestTimeout);
-            try {
-                $response = $this->client->send($request, $options);
-            } catch (RequestException $e) {
-                throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
-                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
-                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
-                );
-            } catch (ConnectException $e) {
-                throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
-                    null,
-                    null
-                );
-            }
-
-            $statusCode = $response->getStatusCode();
-
-
-            return [null, $statusCode, $response->getHeaders()];
-        } catch (ApiException $e) {
-            switch ($e->getCode()) {
-                case 400:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 401:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 403:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 404:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 406:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 415:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 422:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 429:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                
-                default:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-            }
-        
-            if ($this->responseWithinRangeCode('5XX', $e->getCode())) {
-                $data = ObjectSerializer::deserialize(
-                    $e->getResponseBody(),
-                    '\Secupay\Sdk\Model\RestApiErrorResponse',
-                    $e->getResponseHeaders()
-                );
-                $e->setResponseObject($data);
-                throw $e;
-            }
-
-            throw $e;
-        }
-    }
-
-    /**
-     * Create request for operation 'deleteSingleSignOnUsersUserIdAccountRoles'
-     *
-     * @param int $user_id user_id (required)
-     * @param int $role_id role_id (required)
-     * @param int $account Specifies the ID of the account the operation should be executed in. (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteSingleSignOnUsersUserIdAccountRoles'] to see the possible values for this operation
-     *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
-     */
-    public function deleteSingleSignOnUsersUserIdAccountRolesRequest(int $user_id, int $role_id, int $account, string $contentType = self::contentTypes['deleteSingleSignOnUsersUserIdAccountRoles'][0])
-    {
-
-        // verify the required parameter 'user_id' is set
-        if ($user_id === null || (is_array($user_id) && count($user_id) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $user_id when calling deleteSingleSignOnUsersUserIdAccountRoles'
-            );
-        }
-
-        // verify the required parameter 'role_id' is set
-        if ($role_id === null || (is_array($role_id) && count($role_id) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $role_id when calling deleteSingleSignOnUsersUserIdAccountRoles'
-            );
-        }
-
-        // verify the required parameter 'account' is set
-        if ($account === null || (is_array($account) && count($account) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $account when calling deleteSingleSignOnUsersUserIdAccountRoles'
-            );
-        }
-
-
-        $resourcePath = '/single-sign-on-users/{userId}/account-roles';
-        $httpMethod = 'DELETE';
-        $formParams = [];
-        $queryParams = [];
-        $headerParams = [];
-        $httpBody = '';
-        $multipart = false;
-
-        // query params
-        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $role_id,
-            'roleId', // param base name
-            'integer', // openApiType
-            'form', // style
-            true, // explode
-            true // required
-        ) ?? []);
-
-        // header params
-        if ($account !== null) {
-            $headerParams['account'] = ObjectSerializer::toHeaderValue($account);
-        }
-
-        // path params
-        if ($user_id !== null) {
-            $resourcePath = str_replace(
-                '{' . 'userId' . '}',
-                ObjectSerializer::toPathValue($user_id),
-                $resourcePath
-            );
-        }
-
-
-        $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
-            $contentType,
-            $multipart
-        );
-
-        // for model (json/xml)
-        if (count($formParams) > 0) {
-            if ($multipart) {
-                $multipartContents = [];
-                foreach ($formParams as $formParamName => $formParamValue) {
-                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
-                    foreach ($formParamValueItems as $formParamValueItem) {
-                        $multipartContents[] = [
-                            'name' => $formParamName,
-                            'contents' => $formParamValueItem
-                        ];
-                    }
-                }
-                // for HTTP post (form)
-                $httpBody = new MultipartStream($multipartContents);
-
-            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
-            } else {
-                // for HTTP post (form)
-                $httpBody = ObjectSerializer::buildQuery($formParams);
-            }
-        }
-
-        $query = ObjectSerializer::buildQuery($queryParams);
-
-        $auth_headers = [];
-        // this endpoint requires Bearer (JWT) authentication (access token)
-        foreach ($this->authentications as $auth) {
-            $auth_headers = $auth->generateAuthParams($resourcePath, $httpMethod, $query);
-        }
-
-        $defaultHeaders = $this->config->getDefaultHeaders();
-        if ($this->config->getUserAgent()) {
-            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
-        }
-
-        $headers = array_merge(
-            $defaultHeaders,
-            $headerParams,
-            $auth_headers,
-            $headers
-        );
-
-        $operationHost = $this->config->getHost();
-        return new Request(
-            $httpMethod,
-            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
-            $headers,
-            $httpBody
-        );
-    }
-
-    /**
-     * Operation deleteSingleSignOnUsersUserIdSpaceRoles
-     *
-     * Unassign a role from a single sign-on user for a space
-     *
-     * @param int $user_id user_id (required)
-     * @param int $role_id role_id (required)
      * @param int $space Specifies the ID of the space the operation should be executed in. (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteSingleSignOnUsersUserIdSpaceRoles'] to see the possible values for this operation
+     * @param int|null $after Set to an object&#39;s ID to retrieve the page of objects coming immediately after the named object. (optional)
+     * @param int|null $before Set to an object&#39;s ID to retrieve the page of objects coming immediately before the named object. (optional)
+     * @param string[]|null $expand expand (optional)
+     * @param int|null $limit A limit on the number of objects to be returned, between 1 and 100. Default is 10. (optional)
+     * @param string|null $order Specify to retrieve objects in chronological (ASC) or reverse chronological (DESC) order. See {@see \Secupay\Sdk\Model\SortingOrder}. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPaymentInvoiceReimbursements'] to see the possible values for this operation
      *
      * @throws \Secupay\Sdk\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return void
+     * @return \Secupay\Sdk\Model\InvoiceReimbursementListResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse
      */
-    public function deleteSingleSignOnUsersUserIdSpaceRoles(int $user_id, int $role_id, int $space, string $contentType = self::contentTypes['deleteSingleSignOnUsersUserIdSpaceRoles'][0])
+    public function getPaymentInvoiceReimbursements(int $space, ?int $after = null, ?int $before = null, ?array $expand = null, ?int $limit = null, ?string $order = null, string $contentType = self::contentTypes['getPaymentInvoiceReimbursements'][0])
     {
-        $this->deleteSingleSignOnUsersUserIdSpaceRolesWithHttpInfo($user_id, $role_id, $space, $contentType);
-    }
-
-    /**
-     * Operation deleteSingleSignOnUsersUserIdSpaceRolesWithHttpInfo
-     *
-     * Unassign a role from a single sign-on user for a space
-     *
-     * @param int $user_id user_id (required)
-     * @param int $role_id role_id (required)
-     * @param int $space Specifies the ID of the space the operation should be executed in. (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteSingleSignOnUsersUserIdSpaceRoles'] to see the possible values for this operation
-     *
-     * @throws \Secupay\Sdk\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return array of null, HTTP status code, HTTP response headers (array of strings)
-     */
-    public function deleteSingleSignOnUsersUserIdSpaceRolesWithHttpInfo(int $user_id, int $role_id, int $space, string $contentType = self::contentTypes['deleteSingleSignOnUsersUserIdSpaceRoles'][0])
-    {
-        $request = $this->deleteSingleSignOnUsersUserIdSpaceRolesRequest($user_id, $role_id, $space, $contentType);
-
-        try {
-            $requestTimeout = $this->config->getRequestTimeout();
-            $options = $this->createHttpClientOption($requestTimeout);
-            try {
-                $response = $this->client->send($request, $options);
-            } catch (RequestException $e) {
-                throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
-                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
-                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
-                );
-            } catch (ConnectException $e) {
-                throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
-                    null,
-                    null
-                );
-            }
-
-            $statusCode = $response->getStatusCode();
-
-
-            return [null, $statusCode, $response->getHeaders()];
-        } catch (ApiException $e) {
-            switch ($e->getCode()) {
-                case 400:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 401:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 403:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 404:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 406:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 415:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 422:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 429:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                
-                default:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-            }
-        
-            if ($this->responseWithinRangeCode('5XX', $e->getCode())) {
-                $data = ObjectSerializer::deserialize(
-                    $e->getResponseBody(),
-                    '\Secupay\Sdk\Model\RestApiErrorResponse',
-                    $e->getResponseHeaders()
-                );
-                $e->setResponseObject($data);
-                throw $e;
-            }
-
-            throw $e;
-        }
-    }
-
-    /**
-     * Create request for operation 'deleteSingleSignOnUsersUserIdSpaceRoles'
-     *
-     * @param int $user_id user_id (required)
-     * @param int $role_id role_id (required)
-     * @param int $space Specifies the ID of the space the operation should be executed in. (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteSingleSignOnUsersUserIdSpaceRoles'] to see the possible values for this operation
-     *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
-     */
-    public function deleteSingleSignOnUsersUserIdSpaceRolesRequest(int $user_id, int $role_id, int $space, string $contentType = self::contentTypes['deleteSingleSignOnUsersUserIdSpaceRoles'][0])
-    {
-
-        // verify the required parameter 'user_id' is set
-        if ($user_id === null || (is_array($user_id) && count($user_id) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $user_id when calling deleteSingleSignOnUsersUserIdSpaceRoles'
-            );
-        }
-
-        // verify the required parameter 'role_id' is set
-        if ($role_id === null || (is_array($role_id) && count($role_id) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $role_id when calling deleteSingleSignOnUsersUserIdSpaceRoles'
-            );
-        }
-
-        // verify the required parameter 'space' is set
-        if ($space === null || (is_array($space) && count($space) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $space when calling deleteSingleSignOnUsersUserIdSpaceRoles'
-            );
-        }
-
-
-        $resourcePath = '/single-sign-on-users/{userId}/space-roles';
-        $httpMethod = 'DELETE';
-        $formParams = [];
-        $queryParams = [];
-        $headerParams = [];
-        $httpBody = '';
-        $multipart = false;
-
-        // query params
-        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $role_id,
-            'roleId', // param base name
-            'integer', // openApiType
-            'form', // style
-            true, // explode
-            true // required
-        ) ?? []);
-
-        // header params
-        if ($space !== null) {
-            $headerParams['space'] = ObjectSerializer::toHeaderValue($space);
-        }
-
-        // path params
-        if ($user_id !== null) {
-            $resourcePath = str_replace(
-                '{' . 'userId' . '}',
-                ObjectSerializer::toPathValue($user_id),
-                $resourcePath
-            );
-        }
-
-
-        $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
-            $contentType,
-            $multipart
-        );
-
-        // for model (json/xml)
-        if (count($formParams) > 0) {
-            if ($multipart) {
-                $multipartContents = [];
-                foreach ($formParams as $formParamName => $formParamValue) {
-                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
-                    foreach ($formParamValueItems as $formParamValueItem) {
-                        $multipartContents[] = [
-                            'name' => $formParamName,
-                            'contents' => $formParamValueItem
-                        ];
-                    }
-                }
-                // for HTTP post (form)
-                $httpBody = new MultipartStream($multipartContents);
-
-            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
-            } else {
-                // for HTTP post (form)
-                $httpBody = ObjectSerializer::buildQuery($formParams);
-            }
-        }
-
-        $query = ObjectSerializer::buildQuery($queryParams);
-
-        $auth_headers = [];
-        // this endpoint requires Bearer (JWT) authentication (access token)
-        foreach ($this->authentications as $auth) {
-            $auth_headers = $auth->generateAuthParams($resourcePath, $httpMethod, $query);
-        }
-
-        $defaultHeaders = $this->config->getDefaultHeaders();
-        if ($this->config->getUserAgent()) {
-            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
-        }
-
-        $headers = array_merge(
-            $defaultHeaders,
-            $headerParams,
-            $auth_headers,
-            $headers
-        );
-
-        $operationHost = $this->config->getHost();
-        return new Request(
-            $httpMethod,
-            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
-            $headers,
-            $httpBody
-        );
-    }
-
-    /**
-     * Operation getSingleSignOnUsersUserIdAccountRoles
-     *
-     * List all roles of a single sign-on user for an account
-     *
-     * @param int $user_id user_id (required)
-     * @param int $account Specifies the ID of the account the operation should be executed in. (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getSingleSignOnUsersUserIdAccountRoles'] to see the possible values for this operation
-     *
-     * @throws \Secupay\Sdk\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return \Secupay\Sdk\Model\UserAccountRoleListResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse
-     */
-    public function getSingleSignOnUsersUserIdAccountRoles(int $user_id, int $account, string $contentType = self::contentTypes['getSingleSignOnUsersUserIdAccountRoles'][0])
-    {
-        list($response) = $this->getSingleSignOnUsersUserIdAccountRolesWithHttpInfo($user_id, $account, $contentType);
+        list($response) = $this->getPaymentInvoiceReimbursementsWithHttpInfo($space, $after, $before, $expand, $limit, $order, $contentType);
         return $response;
     }
 
     /**
-     * Operation getSingleSignOnUsersUserIdAccountRolesWithHttpInfo
+     * Operation getPaymentInvoiceReimbursementsWithHttpInfo
      *
-     * List all roles of a single sign-on user for an account
+     * List all invoice reimbursements
      *
-     * @param int $user_id user_id (required)
-     * @param int $account Specifies the ID of the account the operation should be executed in. (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getSingleSignOnUsersUserIdAccountRoles'] to see the possible values for this operation
+     * @param int $space Specifies the ID of the space the operation should be executed in. (required)
+     * @param int|null $after Set to an object&#39;s ID to retrieve the page of objects coming immediately after the named object. (optional)
+     * @param int|null $before Set to an object&#39;s ID to retrieve the page of objects coming immediately before the named object. (optional)
+     * @param string[]|null $expand expand (optional)
+     * @param int|null $limit A limit on the number of objects to be returned, between 1 and 100. Default is 10. (optional)
+     * @param string|null $order Specify to retrieve objects in chronological (ASC) or reverse chronological (DESC) order. See {@see \Secupay\Sdk\Model\SortingOrder}. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPaymentInvoiceReimbursements'] to see the possible values for this operation
      *
      * @throws \Secupay\Sdk\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return array of \Secupay\Sdk\Model\UserAccountRoleListResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Secupay\Sdk\Model\InvoiceReimbursementListResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function getSingleSignOnUsersUserIdAccountRolesWithHttpInfo(int $user_id, int $account, string $contentType = self::contentTypes['getSingleSignOnUsersUserIdAccountRoles'][0])
+    public function getPaymentInvoiceReimbursementsWithHttpInfo(int $space, ?int $after = null, ?int $before = null, ?array $expand = null, ?int $limit = null, ?string $order = null, string $contentType = self::contentTypes['getPaymentInvoiceReimbursements'][0])
     {
-        $request = $this->getSingleSignOnUsersUserIdAccountRolesRequest($user_id, $account, $contentType);
+        $request = $this->getPaymentInvoiceReimbursementsRequest($space, $after, $before, $expand, $limit, $order, $contentType);
 
         try {
             $requestTimeout = $this->config->getRequestTimeout();
@@ -783,7 +224,7 @@ class SingleSignOnUsersRolesService
             switch($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Secupay\Sdk\Model\UserAccountRoleListResponse',
+                        '\Secupay\Sdk\Model\InvoiceReimbursementListResponse',
                         $request,
                         $response,
                     );
@@ -866,7 +307,7 @@ class SingleSignOnUsersRolesService
             }
 
             return $this->handleResponseWithDataType(
-                '\Secupay\Sdk\Model\UserAccountRoleListResponse',
+                '\Secupay\Sdk\Model\InvoiceReimbursementListResponse',
                 $request,
                 $response,
             );
@@ -875,7 +316,7 @@ class SingleSignOnUsersRolesService
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\UserAccountRoleListResponse',
+                        '\Secupay\Sdk\Model\InvoiceReimbursementListResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -970,34 +411,48 @@ class SingleSignOnUsersRolesService
     }
 
     /**
-     * Create request for operation 'getSingleSignOnUsersUserIdAccountRoles'
+     * Create request for operation 'getPaymentInvoiceReimbursements'
      *
-     * @param int $user_id user_id (required)
-     * @param int $account Specifies the ID of the account the operation should be executed in. (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getSingleSignOnUsersUserIdAccountRoles'] to see the possible values for this operation
+     * @param int $space Specifies the ID of the space the operation should be executed in. (required)
+     * @param int|null $after Set to an object&#39;s ID to retrieve the page of objects coming immediately after the named object. (optional)
+     * @param int|null $before Set to an object&#39;s ID to retrieve the page of objects coming immediately before the named object. (optional)
+     * @param string[]|null $expand expand (optional)
+     * @param int|null $limit A limit on the number of objects to be returned, between 1 and 100. Default is 10. (optional)
+     * @param string|null $order Specify to retrieve objects in chronological (ASC) or reverse chronological (DESC) order. See {@see \Secupay\Sdk\Model\SortingOrder}. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPaymentInvoiceReimbursements'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getSingleSignOnUsersUserIdAccountRolesRequest(int $user_id, int $account, string $contentType = self::contentTypes['getSingleSignOnUsersUserIdAccountRoles'][0])
+    public function getPaymentInvoiceReimbursementsRequest(int $space, ?int $after = null, ?int $before = null, ?array $expand = null, ?int $limit = null, ?string $order = null, string $contentType = self::contentTypes['getPaymentInvoiceReimbursements'][0])
     {
 
-        // verify the required parameter 'user_id' is set
-        if ($user_id === null || (is_array($user_id) && count($user_id) === 0)) {
+        // verify the required parameter 'space' is set
+        if ($space === null || (is_array($space) && count($space) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $user_id when calling getSingleSignOnUsersUserIdAccountRoles'
+                'Missing the required parameter $space when calling getPaymentInvoiceReimbursements'
             );
         }
 
-        // verify the required parameter 'account' is set
-        if ($account === null || (is_array($account) && count($account) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $account when calling getSingleSignOnUsersUserIdAccountRoles'
-            );
+        if ($after !== null && $after < 1) {
+            throw new \InvalidArgumentException('invalid value for "$after" when calling InvoiceReimbursementsService.getPaymentInvoiceReimbursements, must be bigger than or equal to 1.');
         }
+        
+        if ($before !== null && $before < 1) {
+            throw new \InvalidArgumentException('invalid value for "$before" when calling InvoiceReimbursementsService.getPaymentInvoiceReimbursements, must be bigger than or equal to 1.');
+        }
+        
+        
+        if ($limit !== null && $limit > 100) {
+            throw new \InvalidArgumentException('invalid value for "$limit" when calling InvoiceReimbursementsService.getPaymentInvoiceReimbursements, must be smaller than or equal to 100.');
+        }
+        if ($limit !== null && $limit < 1) {
+            throw new \InvalidArgumentException('invalid value for "$limit" when calling InvoiceReimbursementsService.getPaymentInvoiceReimbursements, must be bigger than or equal to 1.');
+        }
+        
 
 
-        $resourcePath = '/single-sign-on-users/{userId}/account-roles';
+        $resourcePath = '/payment/invoice-reimbursements';
         $httpMethod = 'GET';
         $formParams = [];
         $queryParams = [];
@@ -1005,785 +460,428 @@ class SingleSignOnUsersRolesService
         $httpBody = '';
         $multipart = false;
 
-
-        // header params
-        if ($account !== null) {
-            $headerParams['account'] = ObjectSerializer::toHeaderValue($account);
-        }
-
-        // path params
-        if ($user_id !== null) {
-            $resourcePath = str_replace(
-                '{' . 'userId' . '}',
-                ObjectSerializer::toPathValue($user_id),
-                $resourcePath
-            );
-        }
-
-
-        $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
-            $contentType,
-            $multipart
-        );
-
-        // for model (json/xml)
-        if (count($formParams) > 0) {
-            if ($multipart) {
-                $multipartContents = [];
-                foreach ($formParams as $formParamName => $formParamValue) {
-                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
-                    foreach ($formParamValueItems as $formParamValueItem) {
-                        $multipartContents[] = [
-                            'name' => $formParamName,
-                            'contents' => $formParamValueItem
-                        ];
-                    }
-                }
-                // for HTTP post (form)
-                $httpBody = new MultipartStream($multipartContents);
-
-            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
-            } else {
-                // for HTTP post (form)
-                $httpBody = ObjectSerializer::buildQuery($formParams);
-            }
-        }
-
-        $query = ObjectSerializer::buildQuery($queryParams);
-
-        $auth_headers = [];
-        // this endpoint requires Bearer (JWT) authentication (access token)
-        foreach ($this->authentications as $auth) {
-            $auth_headers = $auth->generateAuthParams($resourcePath, $httpMethod, $query);
-        }
-
-        $defaultHeaders = $this->config->getDefaultHeaders();
-        if ($this->config->getUserAgent()) {
-            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
-        }
-
-        $headers = array_merge(
-            $defaultHeaders,
-            $headerParams,
-            $auth_headers,
-            $headers
-        );
-
-        $operationHost = $this->config->getHost();
-        return new Request(
-            $httpMethod,
-            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
-            $headers,
-            $httpBody
-        );
-    }
-
-    /**
-     * Operation getSingleSignOnUsersUserIdSpaceRoles
-     *
-     * List all roles of a single sign-on user for a space
-     *
-     * @param int $user_id user_id (required)
-     * @param int $space Specifies the ID of the space the operation should be executed in. (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getSingleSignOnUsersUserIdSpaceRoles'] to see the possible values for this operation
-     *
-     * @throws \Secupay\Sdk\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return \Secupay\Sdk\Model\UserSpaceRoleListResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse
-     */
-    public function getSingleSignOnUsersUserIdSpaceRoles(int $user_id, int $space, string $contentType = self::contentTypes['getSingleSignOnUsersUserIdSpaceRoles'][0])
-    {
-        list($response) = $this->getSingleSignOnUsersUserIdSpaceRolesWithHttpInfo($user_id, $space, $contentType);
-        return $response;
-    }
-
-    /**
-     * Operation getSingleSignOnUsersUserIdSpaceRolesWithHttpInfo
-     *
-     * List all roles of a single sign-on user for a space
-     *
-     * @param int $user_id user_id (required)
-     * @param int $space Specifies the ID of the space the operation should be executed in. (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getSingleSignOnUsersUserIdSpaceRoles'] to see the possible values for this operation
-     *
-     * @throws \Secupay\Sdk\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return array of \Secupay\Sdk\Model\UserSpaceRoleListResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse, HTTP status code, HTTP response headers (array of strings)
-     */
-    public function getSingleSignOnUsersUserIdSpaceRolesWithHttpInfo(int $user_id, int $space, string $contentType = self::contentTypes['getSingleSignOnUsersUserIdSpaceRoles'][0])
-    {
-        $request = $this->getSingleSignOnUsersUserIdSpaceRolesRequest($user_id, $space, $contentType);
-
-        try {
-            $requestTimeout = $this->config->getRequestTimeout();
-            $options = $this->createHttpClientOption($requestTimeout);
-            try {
-                $response = $this->client->send($request, $options);
-            } catch (RequestException $e) {
-                throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
-                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
-                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
-                );
-            } catch (ConnectException $e) {
-                throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
-                    null,
-                    null
-                );
-            }
-
-            $statusCode = $response->getStatusCode();
-
-
-            switch($statusCode) {
-                case 200:
-                    return $this->handleResponseWithDataType(
-                        '\Secupay\Sdk\Model\UserSpaceRoleListResponse',
-                        $request,
-                        $response,
-                    );
-                case 400:
-                    return $this->handleResponseWithDataType(
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $request,
-                        $response,
-                    );
-                case 401:
-                    return $this->handleResponseWithDataType(
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $request,
-                        $response,
-                    );
-                case 403:
-                    return $this->handleResponseWithDataType(
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $request,
-                        $response,
-                    );
-                case 404:
-                    return $this->handleResponseWithDataType(
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $request,
-                        $response,
-                    );
-                case 406:
-                    return $this->handleResponseWithDataType(
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $request,
-                        $response,
-                    );
-                case 415:
-                    return $this->handleResponseWithDataType(
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $request,
-                        $response,
-                    );
-                case 422:
-                    return $this->handleResponseWithDataType(
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $request,
-                        $response,
-                    );
-                case 429:
-                    return $this->handleResponseWithDataType(
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $request,
-                        $response,
-                    );
-                
-                default:
-                    return $this->handleResponseWithDataType(
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $request,
-                        $response,
-                    );
-            }
-
-            if ($this->responseWithinRangeCode('5XX', $statusCode)) {
-                return $this->handleResponseWithDataType(
-                    '\Secupay\Sdk\Model\RestApiErrorResponse',
-                    $request,
-                    $response,
-                );
-            }
-
-            if ($statusCode < 200 || $statusCode > 299) {
-                throw new ApiException(
-                    sprintf(
-                        '[%d] Error connecting to the API (%s)',
-                        $statusCode,
-                        (string) $request->getUri()
-                    ),
-                    $statusCode,
-                    $response->getHeaders(),
-                    (string) $response->getBody()
-                );
-            }
-
-            return $this->handleResponseWithDataType(
-                '\Secupay\Sdk\Model\UserSpaceRoleListResponse',
-                $request,
-                $response,
-            );
-        } catch (ApiException $e) {
-            switch ($e->getCode()) {
-                case 200:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\UserSpaceRoleListResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 400:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 401:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 403:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 404:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 406:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 415:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 422:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 429:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                
-                default:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-            }
-        
-            if ($this->responseWithinRangeCode('5XX', $e->getCode())) {
-                $data = ObjectSerializer::deserialize(
-                    $e->getResponseBody(),
-                    '\Secupay\Sdk\Model\RestApiErrorResponse',
-                    $e->getResponseHeaders()
-                );
-                $e->setResponseObject($data);
-                throw $e;
-            }
-
-            throw $e;
-        }
-    }
-
-    /**
-     * Create request for operation 'getSingleSignOnUsersUserIdSpaceRoles'
-     *
-     * @param int $user_id user_id (required)
-     * @param int $space Specifies the ID of the space the operation should be executed in. (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getSingleSignOnUsersUserIdSpaceRoles'] to see the possible values for this operation
-     *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
-     */
-    public function getSingleSignOnUsersUserIdSpaceRolesRequest(int $user_id, int $space, string $contentType = self::contentTypes['getSingleSignOnUsersUserIdSpaceRoles'][0])
-    {
-
-        // verify the required parameter 'user_id' is set
-        if ($user_id === null || (is_array($user_id) && count($user_id) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $user_id when calling getSingleSignOnUsersUserIdSpaceRoles'
-            );
-        }
-
-        // verify the required parameter 'space' is set
-        if ($space === null || (is_array($space) && count($space) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $space when calling getSingleSignOnUsersUserIdSpaceRoles'
-            );
-        }
-
-
-        $resourcePath = '/single-sign-on-users/{userId}/space-roles';
-        $httpMethod = 'GET';
-        $formParams = [];
-        $queryParams = [];
-        $headerParams = [];
-        $httpBody = '';
-        $multipart = false;
-
-
-        // header params
-        if ($space !== null) {
-            $headerParams['space'] = ObjectSerializer::toHeaderValue($space);
-        }
-
-        // path params
-        if ($user_id !== null) {
-            $resourcePath = str_replace(
-                '{' . 'userId' . '}',
-                ObjectSerializer::toPathValue($user_id),
-                $resourcePath
-            );
-        }
-
-
-        $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
-            $contentType,
-            $multipart
-        );
-
-        // for model (json/xml)
-        if (count($formParams) > 0) {
-            if ($multipart) {
-                $multipartContents = [];
-                foreach ($formParams as $formParamName => $formParamValue) {
-                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
-                    foreach ($formParamValueItems as $formParamValueItem) {
-                        $multipartContents[] = [
-                            'name' => $formParamName,
-                            'contents' => $formParamValueItem
-                        ];
-                    }
-                }
-                // for HTTP post (form)
-                $httpBody = new MultipartStream($multipartContents);
-
-            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
-            } else {
-                // for HTTP post (form)
-                $httpBody = ObjectSerializer::buildQuery($formParams);
-            }
-        }
-
-        $query = ObjectSerializer::buildQuery($queryParams);
-
-        $auth_headers = [];
-        // this endpoint requires Bearer (JWT) authentication (access token)
-        foreach ($this->authentications as $auth) {
-            $auth_headers = $auth->generateAuthParams($resourcePath, $httpMethod, $query);
-        }
-
-        $defaultHeaders = $this->config->getDefaultHeaders();
-        if ($this->config->getUserAgent()) {
-            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
-        }
-
-        $headers = array_merge(
-            $defaultHeaders,
-            $headerParams,
-            $auth_headers,
-            $headers
-        );
-
-        $operationHost = $this->config->getHost();
-        return new Request(
-            $httpMethod,
-            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
-            $headers,
-            $httpBody
-        );
-    }
-
-    /**
-     * Operation postSingleSignOnUsersUserIdAccountRoles
-     *
-     * Assign a role to a single sign-on user for an account
-     *
-     * @param int $user_id user_id (required)
-     * @param int $role_id role_id (required)
-     * @param int $account Specifies the ID of the account the operation should be executed in. (required)
-     * @param bool|null $applies_on_sub_account Whether the role should be assigned to the user in subaccounts only. (optional)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postSingleSignOnUsersUserIdAccountRoles'] to see the possible values for this operation
-     *
-     * @throws \Secupay\Sdk\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return \Secupay\Sdk\Model\UserAccountRole|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse
-     */
-    public function postSingleSignOnUsersUserIdAccountRoles(int $user_id, int $role_id, int $account, ?bool $applies_on_sub_account = null, string $contentType = self::contentTypes['postSingleSignOnUsersUserIdAccountRoles'][0])
-    {
-        list($response) = $this->postSingleSignOnUsersUserIdAccountRolesWithHttpInfo($user_id, $role_id, $account, $applies_on_sub_account, $contentType);
-        return $response;
-    }
-
-    /**
-     * Operation postSingleSignOnUsersUserIdAccountRolesWithHttpInfo
-     *
-     * Assign a role to a single sign-on user for an account
-     *
-     * @param int $user_id user_id (required)
-     * @param int $role_id role_id (required)
-     * @param int $account Specifies the ID of the account the operation should be executed in. (required)
-     * @param bool|null $applies_on_sub_account Whether the role should be assigned to the user in subaccounts only. (optional)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postSingleSignOnUsersUserIdAccountRoles'] to see the possible values for this operation
-     *
-     * @throws \Secupay\Sdk\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return array of \Secupay\Sdk\Model\UserAccountRole|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse, HTTP status code, HTTP response headers (array of strings)
-     */
-    public function postSingleSignOnUsersUserIdAccountRolesWithHttpInfo(int $user_id, int $role_id, int $account, ?bool $applies_on_sub_account = null, string $contentType = self::contentTypes['postSingleSignOnUsersUserIdAccountRoles'][0])
-    {
-        $request = $this->postSingleSignOnUsersUserIdAccountRolesRequest($user_id, $role_id, $account, $applies_on_sub_account, $contentType);
-
-        try {
-            $requestTimeout = $this->config->getRequestTimeout();
-            $options = $this->createHttpClientOption($requestTimeout);
-            try {
-                $response = $this->client->send($request, $options);
-            } catch (RequestException $e) {
-                throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
-                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
-                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
-                );
-            } catch (ConnectException $e) {
-                throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
-                    null,
-                    null
-                );
-            }
-
-            $statusCode = $response->getStatusCode();
-
-
-            switch($statusCode) {
-                case 200:
-                    return $this->handleResponseWithDataType(
-                        '\Secupay\Sdk\Model\UserAccountRole',
-                        $request,
-                        $response,
-                    );
-                case 400:
-                    return $this->handleResponseWithDataType(
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $request,
-                        $response,
-                    );
-                case 401:
-                    return $this->handleResponseWithDataType(
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $request,
-                        $response,
-                    );
-                case 403:
-                    return $this->handleResponseWithDataType(
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $request,
-                        $response,
-                    );
-                case 404:
-                    return $this->handleResponseWithDataType(
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $request,
-                        $response,
-                    );
-                case 406:
-                    return $this->handleResponseWithDataType(
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $request,
-                        $response,
-                    );
-                case 409:
-                    return $this->handleResponseWithDataType(
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $request,
-                        $response,
-                    );
-                case 415:
-                    return $this->handleResponseWithDataType(
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $request,
-                        $response,
-                    );
-                case 422:
-                    return $this->handleResponseWithDataType(
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $request,
-                        $response,
-                    );
-                case 429:
-                    return $this->handleResponseWithDataType(
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $request,
-                        $response,
-                    );
-                
-                default:
-                    return $this->handleResponseWithDataType(
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $request,
-                        $response,
-                    );
-            }
-
-            if ($this->responseWithinRangeCode('5XX', $statusCode)) {
-                return $this->handleResponseWithDataType(
-                    '\Secupay\Sdk\Model\RestApiErrorResponse',
-                    $request,
-                    $response,
-                );
-            }
-
-            if ($statusCode < 200 || $statusCode > 299) {
-                throw new ApiException(
-                    sprintf(
-                        '[%d] Error connecting to the API (%s)',
-                        $statusCode,
-                        (string) $request->getUri()
-                    ),
-                    $statusCode,
-                    $response->getHeaders(),
-                    (string) $response->getBody()
-                );
-            }
-
-            return $this->handleResponseWithDataType(
-                '\Secupay\Sdk\Model\UserAccountRole',
-                $request,
-                $response,
-            );
-        } catch (ApiException $e) {
-            switch ($e->getCode()) {
-                case 200:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\UserAccountRole',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 400:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 401:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 403:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 404:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 406:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 409:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 415:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 422:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 429:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                
-                default:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\RestApiErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-            }
-        
-            if ($this->responseWithinRangeCode('5XX', $e->getCode())) {
-                $data = ObjectSerializer::deserialize(
-                    $e->getResponseBody(),
-                    '\Secupay\Sdk\Model\RestApiErrorResponse',
-                    $e->getResponseHeaders()
-                );
-                $e->setResponseObject($data);
-                throw $e;
-            }
-
-            throw $e;
-        }
-    }
-
-    /**
-     * Create request for operation 'postSingleSignOnUsersUserIdAccountRoles'
-     *
-     * @param int $user_id user_id (required)
-     * @param int $role_id role_id (required)
-     * @param int $account Specifies the ID of the account the operation should be executed in. (required)
-     * @param bool|null $applies_on_sub_account Whether the role should be assigned to the user in subaccounts only. (optional)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postSingleSignOnUsersUserIdAccountRoles'] to see the possible values for this operation
-     *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
-     */
-    public function postSingleSignOnUsersUserIdAccountRolesRequest(int $user_id, int $role_id, int $account, ?bool $applies_on_sub_account = null, string $contentType = self::contentTypes['postSingleSignOnUsersUserIdAccountRoles'][0])
-    {
-
-        // verify the required parameter 'user_id' is set
-        if ($user_id === null || (is_array($user_id) && count($user_id) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $user_id when calling postSingleSignOnUsersUserIdAccountRoles'
-            );
-        }
-
-        // verify the required parameter 'role_id' is set
-        if ($role_id === null || (is_array($role_id) && count($role_id) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $role_id when calling postSingleSignOnUsersUserIdAccountRoles'
-            );
-        }
-
-        // verify the required parameter 'account' is set
-        if ($account === null || (is_array($account) && count($account) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $account when calling postSingleSignOnUsersUserIdAccountRoles'
-            );
-        }
-
-
-
-        $resourcePath = '/single-sign-on-users/{userId}/account-roles';
-        $httpMethod = 'POST';
-        $formParams = [];
-        $queryParams = [];
-        $headerParams = [];
-        $httpBody = '';
-        $multipart = false;
-
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $role_id,
-            'roleId', // param base name
+            $after,
+            'after', // param base name
             'integer', // openApiType
             'form', // style
             true, // explode
-            true // required
+            false // required
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $applies_on_sub_account,
-            'appliesOnSubAccount', // param base name
-            'boolean', // openApiType
+            $before,
+            'before', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $expand,
+            'expand', // param base name
+            'array', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $limit,
+            'limit', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $order,
+            'order', // param base name
+            'SortingOrder', // openApiType
             'form', // style
             true, // explode
             false // required
         ) ?? []);
 
         // header params
-        if ($account !== null) {
-            $headerParams['account'] = ObjectSerializer::toHeaderValue($account);
+        if ($space !== null) {
+            $headerParams['space'] = ObjectSerializer::toHeaderValue($space);
+        }
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        $query = ObjectSerializer::buildQuery($queryParams);
+
+        $auth_headers = [];
+        // this endpoint requires Bearer (JWT) authentication (access token)
+        foreach ($this->authentications as $auth) {
+            $auth_headers = $auth->generateAuthParams($resourcePath, $httpMethod, $query);
+        }
+
+        $defaultHeaders = $this->config->getDefaultHeaders();
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $auth_headers,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        return new Request(
+            $httpMethod,
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation getPaymentInvoiceReimbursementsId
+     *
+     * Retrieve an invoice reimbursement
+     *
+     * @param int $id id (required)
+     * @param int $space Specifies the ID of the space the operation should be executed in. (required)
+     * @param string[]|null $expand expand (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPaymentInvoiceReimbursementsId'] to see the possible values for this operation
+     *
+     * @throws \Secupay\Sdk\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return \Secupay\Sdk\Model\InvoiceReimbursement|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse
+     */
+    public function getPaymentInvoiceReimbursementsId(int $id, int $space, ?array $expand = null, string $contentType = self::contentTypes['getPaymentInvoiceReimbursementsId'][0])
+    {
+        list($response) = $this->getPaymentInvoiceReimbursementsIdWithHttpInfo($id, $space, $expand, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation getPaymentInvoiceReimbursementsIdWithHttpInfo
+     *
+     * Retrieve an invoice reimbursement
+     *
+     * @param int $id id (required)
+     * @param int $space Specifies the ID of the space the operation should be executed in. (required)
+     * @param string[]|null $expand expand (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPaymentInvoiceReimbursementsId'] to see the possible values for this operation
+     *
+     * @throws \Secupay\Sdk\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return array of \Secupay\Sdk\Model\InvoiceReimbursement|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function getPaymentInvoiceReimbursementsIdWithHttpInfo(int $id, int $space, ?array $expand = null, string $contentType = self::contentTypes['getPaymentInvoiceReimbursementsId'][0])
+    {
+        $request = $this->getPaymentInvoiceReimbursementsIdRequest($id, $space, $expand, $contentType);
+
+        try {
+            $requestTimeout = $this->config->getRequestTimeout();
+            $options = $this->createHttpClientOption($requestTimeout);
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Secupay\Sdk\Model\InvoiceReimbursement',
+                        $request,
+                        $response,
+                    );
+                case 400:
+                    return $this->handleResponseWithDataType(
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $request,
+                        $response,
+                    );
+                case 406:
+                    return $this->handleResponseWithDataType(
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $request,
+                        $response,
+                    );
+                case 415:
+                    return $this->handleResponseWithDataType(
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $request,
+                        $response,
+                    );
+                case 429:
+                    return $this->handleResponseWithDataType(
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $request,
+                        $response,
+                    );
+                
+                default:
+                    return $this->handleResponseWithDataType(
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $request,
+                        $response,
+                    );
+            }
+
+            if ($this->responseWithinRangeCode('5XX', $statusCode)) {
+                return $this->handleResponseWithDataType(
+                    '\Secupay\Sdk\Model\RestApiErrorResponse',
+                    $request,
+                    $response,
+                );
+            }
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Secupay\Sdk\Model\InvoiceReimbursement',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Secupay\Sdk\Model\InvoiceReimbursement',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 406:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 415:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 429:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                
+                default:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            if ($this->responseWithinRangeCode('5XX', $e->getCode())) {
+                $data = ObjectSerializer::deserialize(
+                    $e->getResponseBody(),
+                    '\Secupay\Sdk\Model\RestApiErrorResponse',
+                    $e->getResponseHeaders()
+                );
+                $e->setResponseObject($data);
+                throw $e;
+            }
+
+            throw $e;
+        }
+    }
+
+    /**
+     * Create request for operation 'getPaymentInvoiceReimbursementsId'
+     *
+     * @param int $id id (required)
+     * @param int $space Specifies the ID of the space the operation should be executed in. (required)
+     * @param string[]|null $expand expand (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPaymentInvoiceReimbursementsId'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function getPaymentInvoiceReimbursementsIdRequest(int $id, int $space, ?array $expand = null, string $contentType = self::contentTypes['getPaymentInvoiceReimbursementsId'][0])
+    {
+
+        // verify the required parameter 'id' is set
+        if ($id === null || (is_array($id) && count($id) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $id when calling getPaymentInvoiceReimbursementsId'
+            );
+        }
+
+        // verify the required parameter 'space' is set
+        if ($space === null || (is_array($space) && count($space) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $space when calling getPaymentInvoiceReimbursementsId'
+            );
+        }
+
+        
+
+        $resourcePath = '/payment/invoice-reimbursements/{id}';
+        $httpMethod = 'GET';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $expand,
+            'expand', // param base name
+            'array', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+
+        // header params
+        if ($space !== null) {
+            $headerParams['space'] = ObjectSerializer::toHeaderValue($space);
         }
 
         // path params
-        if ($user_id !== null) {
+        if ($id !== null) {
             $resourcePath = str_replace(
-                '{' . 'userId' . '}',
-                ObjectSerializer::toPathValue($user_id),
+                '{' . 'id' . '}',
+                ObjectSerializer::toPathValue($id),
                 $resourcePath
             );
         }
@@ -1850,42 +948,48 @@ class SingleSignOnUsersRolesService
     }
 
     /**
-     * Operation postSingleSignOnUsersUserIdSpaceRoles
+     * Operation getPaymentInvoiceReimbursementsSearch
      *
-     * Assign a role to a single sign-on user for a space
+     * Search invoice reimbursements
      *
-     * @param int $user_id user_id (required)
-     * @param int $role_id role_id (required)
      * @param int $space Specifies the ID of the space the operation should be executed in. (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postSingleSignOnUsersUserIdSpaceRoles'] to see the possible values for this operation
+     * @param string[]|null $expand expand (optional)
+     * @param int|null $limit A limit on the number of objects to be returned, between 1 and 100. Default is 10. (optional)
+     * @param int|null $offset A cursor for pagination, specifies the number of objects to skip. (optional)
+     * @param string|null $order The fields and order to sort the objects by. (optional)
+     * @param string|null $query The search query to filter the objects by. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPaymentInvoiceReimbursementsSearch'] to see the possible values for this operation
      *
      * @throws \Secupay\Sdk\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return \Secupay\Sdk\Model\UserSpaceRole|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse
+     * @return \Secupay\Sdk\Model\InvoiceReimbursementSearchResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse
      */
-    public function postSingleSignOnUsersUserIdSpaceRoles(int $user_id, int $role_id, int $space, string $contentType = self::contentTypes['postSingleSignOnUsersUserIdSpaceRoles'][0])
+    public function getPaymentInvoiceReimbursementsSearch(int $space, ?array $expand = null, ?int $limit = null, ?int $offset = null, ?string $order = null, ?string $query = null, string $contentType = self::contentTypes['getPaymentInvoiceReimbursementsSearch'][0])
     {
-        list($response) = $this->postSingleSignOnUsersUserIdSpaceRolesWithHttpInfo($user_id, $role_id, $space, $contentType);
+        list($response) = $this->getPaymentInvoiceReimbursementsSearchWithHttpInfo($space, $expand, $limit, $offset, $order, $query, $contentType);
         return $response;
     }
 
     /**
-     * Operation postSingleSignOnUsersUserIdSpaceRolesWithHttpInfo
+     * Operation getPaymentInvoiceReimbursementsSearchWithHttpInfo
      *
-     * Assign a role to a single sign-on user for a space
+     * Search invoice reimbursements
      *
-     * @param int $user_id user_id (required)
-     * @param int $role_id role_id (required)
      * @param int $space Specifies the ID of the space the operation should be executed in. (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postSingleSignOnUsersUserIdSpaceRoles'] to see the possible values for this operation
+     * @param string[]|null $expand expand (optional)
+     * @param int|null $limit A limit on the number of objects to be returned, between 1 and 100. Default is 10. (optional)
+     * @param int|null $offset A cursor for pagination, specifies the number of objects to skip. (optional)
+     * @param string|null $order The fields and order to sort the objects by. (optional)
+     * @param string|null $query The search query to filter the objects by. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPaymentInvoiceReimbursementsSearch'] to see the possible values for this operation
      *
      * @throws \Secupay\Sdk\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return array of \Secupay\Sdk\Model\UserSpaceRole|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Secupay\Sdk\Model\InvoiceReimbursementSearchResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function postSingleSignOnUsersUserIdSpaceRolesWithHttpInfo(int $user_id, int $role_id, int $space, string $contentType = self::contentTypes['postSingleSignOnUsersUserIdSpaceRoles'][0])
+    public function getPaymentInvoiceReimbursementsSearchWithHttpInfo(int $space, ?array $expand = null, ?int $limit = null, ?int $offset = null, ?string $order = null, ?string $query = null, string $contentType = self::contentTypes['getPaymentInvoiceReimbursementsSearch'][0])
     {
-        $request = $this->postSingleSignOnUsersUserIdSpaceRolesRequest($user_id, $role_id, $space, $contentType);
+        $request = $this->getPaymentInvoiceReimbursementsSearchRequest($space, $expand, $limit, $offset, $order, $query, $contentType);
 
         try {
             $requestTimeout = $this->config->getRequestTimeout();
@@ -1914,7 +1018,420 @@ class SingleSignOnUsersRolesService
             switch($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Secupay\Sdk\Model\UserSpaceRole',
+                        '\Secupay\Sdk\Model\InvoiceReimbursementSearchResponse',
+                        $request,
+                        $response,
+                    );
+                case 400:
+                    return $this->handleResponseWithDataType(
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $request,
+                        $response,
+                    );
+                case 406:
+                    return $this->handleResponseWithDataType(
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $request,
+                        $response,
+                    );
+                case 415:
+                    return $this->handleResponseWithDataType(
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $request,
+                        $response,
+                    );
+                case 429:
+                    return $this->handleResponseWithDataType(
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $request,
+                        $response,
+                    );
+                
+                default:
+                    return $this->handleResponseWithDataType(
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $request,
+                        $response,
+                    );
+            }
+
+            if ($this->responseWithinRangeCode('5XX', $statusCode)) {
+                return $this->handleResponseWithDataType(
+                    '\Secupay\Sdk\Model\RestApiErrorResponse',
+                    $request,
+                    $response,
+                );
+            }
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Secupay\Sdk\Model\InvoiceReimbursementSearchResponse',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Secupay\Sdk\Model\InvoiceReimbursementSearchResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 406:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 415:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 429:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                
+                default:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            if ($this->responseWithinRangeCode('5XX', $e->getCode())) {
+                $data = ObjectSerializer::deserialize(
+                    $e->getResponseBody(),
+                    '\Secupay\Sdk\Model\RestApiErrorResponse',
+                    $e->getResponseHeaders()
+                );
+                $e->setResponseObject($data);
+                throw $e;
+            }
+
+            throw $e;
+        }
+    }
+
+    /**
+     * Create request for operation 'getPaymentInvoiceReimbursementsSearch'
+     *
+     * @param int $space Specifies the ID of the space the operation should be executed in. (required)
+     * @param string[]|null $expand expand (optional)
+     * @param int|null $limit A limit on the number of objects to be returned, between 1 and 100. Default is 10. (optional)
+     * @param int|null $offset A cursor for pagination, specifies the number of objects to skip. (optional)
+     * @param string|null $order The fields and order to sort the objects by. (optional)
+     * @param string|null $query The search query to filter the objects by. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPaymentInvoiceReimbursementsSearch'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function getPaymentInvoiceReimbursementsSearchRequest(int $space, ?array $expand = null, ?int $limit = null, ?int $offset = null, ?string $order = null, ?string $query = null, string $contentType = self::contentTypes['getPaymentInvoiceReimbursementsSearch'][0])
+    {
+
+        // verify the required parameter 'space' is set
+        if ($space === null || (is_array($space) && count($space) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $space when calling getPaymentInvoiceReimbursementsSearch'
+            );
+        }
+
+        
+        if ($limit !== null && $limit > 100) {
+            throw new \InvalidArgumentException('invalid value for "$limit" when calling InvoiceReimbursementsService.getPaymentInvoiceReimbursementsSearch, must be smaller than or equal to 100.');
+        }
+        if ($limit !== null && $limit < 1) {
+            throw new \InvalidArgumentException('invalid value for "$limit" when calling InvoiceReimbursementsService.getPaymentInvoiceReimbursementsSearch, must be bigger than or equal to 1.');
+        }
+        
+        if ($offset !== null && $offset > 10000) {
+            throw new \InvalidArgumentException('invalid value for "$offset" when calling InvoiceReimbursementsService.getPaymentInvoiceReimbursementsSearch, must be smaller than or equal to 10000.');
+        }
+        
+
+
+
+        $resourcePath = '/payment/invoice-reimbursements/search';
+        $httpMethod = 'GET';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $expand,
+            'expand', // param base name
+            'array', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $limit,
+            'limit', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $offset,
+            'offset', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $order,
+            'order', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $query,
+            'query', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+
+        // header params
+        if ($space !== null) {
+            $headerParams['space'] = ObjectSerializer::toHeaderValue($space);
+        }
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        $query = ObjectSerializer::buildQuery($queryParams);
+
+        $auth_headers = [];
+        // this endpoint requires Bearer (JWT) authentication (access token)
+        foreach ($this->authentications as $auth) {
+            $auth_headers = $auth->generateAuthParams($resourcePath, $httpMethod, $query);
+        }
+
+        $defaultHeaders = $this->config->getDefaultHeaders();
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $auth_headers,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        return new Request(
+            $httpMethod,
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation postPaymentInvoiceReimbursementsIdConnector
+     *
+     * Update payment connector configuration
+     *
+     * @param int $id id (required)
+     * @param int $payment_connector_configuration_id payment_connector_configuration_id (required)
+     * @param int $space Specifies the ID of the space the operation should be executed in. (required)
+     * @param string[]|null $expand expand (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postPaymentInvoiceReimbursementsIdConnector'] to see the possible values for this operation
+     *
+     * @throws \Secupay\Sdk\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return \Secupay\Sdk\Model\InvoiceReimbursement|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse
+     */
+    public function postPaymentInvoiceReimbursementsIdConnector(int $id, int $payment_connector_configuration_id, int $space, ?array $expand = null, string $contentType = self::contentTypes['postPaymentInvoiceReimbursementsIdConnector'][0])
+    {
+        list($response) = $this->postPaymentInvoiceReimbursementsIdConnectorWithHttpInfo($id, $payment_connector_configuration_id, $space, $expand, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation postPaymentInvoiceReimbursementsIdConnectorWithHttpInfo
+     *
+     * Update payment connector configuration
+     *
+     * @param int $id id (required)
+     * @param int $payment_connector_configuration_id payment_connector_configuration_id (required)
+     * @param int $space Specifies the ID of the space the operation should be executed in. (required)
+     * @param string[]|null $expand expand (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postPaymentInvoiceReimbursementsIdConnector'] to see the possible values for this operation
+     *
+     * @throws \Secupay\Sdk\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return array of \Secupay\Sdk\Model\InvoiceReimbursement|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function postPaymentInvoiceReimbursementsIdConnectorWithHttpInfo(int $id, int $payment_connector_configuration_id, int $space, ?array $expand = null, string $contentType = self::contentTypes['postPaymentInvoiceReimbursementsIdConnector'][0])
+    {
+        $request = $this->postPaymentInvoiceReimbursementsIdConnectorRequest($id, $payment_connector_configuration_id, $space, $expand, $contentType);
+
+        try {
+            $requestTimeout = $this->config->getRequestTimeout();
+            $options = $this->createHttpClientOption($requestTimeout);
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Secupay\Sdk\Model\InvoiceReimbursement',
                         $request,
                         $response,
                     );
@@ -2003,7 +1520,7 @@ class SingleSignOnUsersRolesService
             }
 
             return $this->handleResponseWithDataType(
-                '\Secupay\Sdk\Model\UserSpaceRole',
+                '\Secupay\Sdk\Model\InvoiceReimbursement',
                 $request,
                 $response,
             );
@@ -2012,7 +1529,7 @@ class SingleSignOnUsersRolesService
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Secupay\Sdk\Model\UserSpaceRole',
+                        '\Secupay\Sdk\Model\InvoiceReimbursement',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -2115,42 +1632,44 @@ class SingleSignOnUsersRolesService
     }
 
     /**
-     * Create request for operation 'postSingleSignOnUsersUserIdSpaceRoles'
+     * Create request for operation 'postPaymentInvoiceReimbursementsIdConnector'
      *
-     * @param int $user_id user_id (required)
-     * @param int $role_id role_id (required)
+     * @param int $id id (required)
+     * @param int $payment_connector_configuration_id payment_connector_configuration_id (required)
      * @param int $space Specifies the ID of the space the operation should be executed in. (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postSingleSignOnUsersUserIdSpaceRoles'] to see the possible values for this operation
+     * @param string[]|null $expand expand (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postPaymentInvoiceReimbursementsIdConnector'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function postSingleSignOnUsersUserIdSpaceRolesRequest(int $user_id, int $role_id, int $space, string $contentType = self::contentTypes['postSingleSignOnUsersUserIdSpaceRoles'][0])
+    public function postPaymentInvoiceReimbursementsIdConnectorRequest(int $id, int $payment_connector_configuration_id, int $space, ?array $expand = null, string $contentType = self::contentTypes['postPaymentInvoiceReimbursementsIdConnector'][0])
     {
 
-        // verify the required parameter 'user_id' is set
-        if ($user_id === null || (is_array($user_id) && count($user_id) === 0)) {
+        // verify the required parameter 'id' is set
+        if ($id === null || (is_array($id) && count($id) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $user_id when calling postSingleSignOnUsersUserIdSpaceRoles'
+                'Missing the required parameter $id when calling postPaymentInvoiceReimbursementsIdConnector'
             );
         }
 
-        // verify the required parameter 'role_id' is set
-        if ($role_id === null || (is_array($role_id) && count($role_id) === 0)) {
+        // verify the required parameter 'payment_connector_configuration_id' is set
+        if ($payment_connector_configuration_id === null || (is_array($payment_connector_configuration_id) && count($payment_connector_configuration_id) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $role_id when calling postSingleSignOnUsersUserIdSpaceRoles'
+                'Missing the required parameter $payment_connector_configuration_id when calling postPaymentInvoiceReimbursementsIdConnector'
             );
         }
 
         // verify the required parameter 'space' is set
         if ($space === null || (is_array($space) && count($space) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $space when calling postSingleSignOnUsersUserIdSpaceRoles'
+                'Missing the required parameter $space when calling postPaymentInvoiceReimbursementsIdConnector'
             );
         }
 
+        
 
-        $resourcePath = '/single-sign-on-users/{userId}/space-roles';
+        $resourcePath = '/payment/invoice-reimbursements/{id}/connector';
         $httpMethod = 'POST';
         $formParams = [];
         $queryParams = [];
@@ -2160,12 +1679,21 @@ class SingleSignOnUsersRolesService
 
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $role_id,
-            'roleId', // param base name
+            $payment_connector_configuration_id,
+            'paymentConnectorConfigurationId', // param base name
             'integer', // openApiType
             'form', // style
             true, // explode
             true // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $expand,
+            'expand', // param base name
+            'array', // openApiType
+            'form', // style
+            true, // explode
+            false // required
         ) ?? []);
 
         // header params
@@ -2174,10 +1702,424 @@ class SingleSignOnUsersRolesService
         }
 
         // path params
-        if ($user_id !== null) {
+        if ($id !== null) {
             $resourcePath = str_replace(
-                '{' . 'userId' . '}',
-                ObjectSerializer::toPathValue($user_id),
+                '{' . 'id' . '}',
+                ObjectSerializer::toPathValue($id),
+                $resourcePath
+            );
+        }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        $query = ObjectSerializer::buildQuery($queryParams);
+
+        $auth_headers = [];
+        // this endpoint requires Bearer (JWT) authentication (access token)
+        foreach ($this->authentications as $auth) {
+            $auth_headers = $auth->generateAuthParams($resourcePath, $httpMethod, $query);
+        }
+
+        $defaultHeaders = $this->config->getDefaultHeaders();
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $auth_headers,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        return new Request(
+            $httpMethod,
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation postPaymentInvoiceReimbursementsIdIban
+     *
+     * Update IBAN
+     *
+     * @param int $id id (required)
+     * @param int $space Specifies the ID of the space the operation should be executed in. (required)
+     * @param string|null $recipient_iban recipient_iban (optional)
+     * @param string|null $sender_iban sender_iban (optional)
+     * @param string[]|null $expand expand (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postPaymentInvoiceReimbursementsIdIban'] to see the possible values for this operation
+     *
+     * @throws \Secupay\Sdk\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return \Secupay\Sdk\Model\InvoiceReimbursement|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse
+     */
+    public function postPaymentInvoiceReimbursementsIdIban(int $id, int $space, ?string $recipient_iban = null, ?string $sender_iban = null, ?array $expand = null, string $contentType = self::contentTypes['postPaymentInvoiceReimbursementsIdIban'][0])
+    {
+        list($response) = $this->postPaymentInvoiceReimbursementsIdIbanWithHttpInfo($id, $space, $recipient_iban, $sender_iban, $expand, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation postPaymentInvoiceReimbursementsIdIbanWithHttpInfo
+     *
+     * Update IBAN
+     *
+     * @param int $id id (required)
+     * @param int $space Specifies the ID of the space the operation should be executed in. (required)
+     * @param string|null $recipient_iban recipient_iban (optional)
+     * @param string|null $sender_iban sender_iban (optional)
+     * @param string[]|null $expand expand (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postPaymentInvoiceReimbursementsIdIban'] to see the possible values for this operation
+     *
+     * @throws \Secupay\Sdk\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return array of \Secupay\Sdk\Model\InvoiceReimbursement|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse|\Secupay\Sdk\Model\RestApiErrorResponse, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function postPaymentInvoiceReimbursementsIdIbanWithHttpInfo(int $id, int $space, ?string $recipient_iban = null, ?string $sender_iban = null, ?array $expand = null, string $contentType = self::contentTypes['postPaymentInvoiceReimbursementsIdIban'][0])
+    {
+        $request = $this->postPaymentInvoiceReimbursementsIdIbanRequest($id, $space, $recipient_iban, $sender_iban, $expand, $contentType);
+
+        try {
+            $requestTimeout = $this->config->getRequestTimeout();
+            $options = $this->createHttpClientOption($requestTimeout);
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Secupay\Sdk\Model\InvoiceReimbursement',
+                        $request,
+                        $response,
+                    );
+                case 400:
+                    return $this->handleResponseWithDataType(
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $request,
+                        $response,
+                    );
+                case 406:
+                    return $this->handleResponseWithDataType(
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $request,
+                        $response,
+                    );
+                case 409:
+                    return $this->handleResponseWithDataType(
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $request,
+                        $response,
+                    );
+                case 415:
+                    return $this->handleResponseWithDataType(
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $request,
+                        $response,
+                    );
+                case 429:
+                    return $this->handleResponseWithDataType(
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $request,
+                        $response,
+                    );
+                
+                default:
+                    return $this->handleResponseWithDataType(
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $request,
+                        $response,
+                    );
+            }
+
+            if ($this->responseWithinRangeCode('5XX', $statusCode)) {
+                return $this->handleResponseWithDataType(
+                    '\Secupay\Sdk\Model\RestApiErrorResponse',
+                    $request,
+                    $response,
+                );
+            }
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Secupay\Sdk\Model\InvoiceReimbursement',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Secupay\Sdk\Model\InvoiceReimbursement',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 406:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 409:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 415:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 429:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                
+                default:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Secupay\Sdk\Model\RestApiErrorResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            if ($this->responseWithinRangeCode('5XX', $e->getCode())) {
+                $data = ObjectSerializer::deserialize(
+                    $e->getResponseBody(),
+                    '\Secupay\Sdk\Model\RestApiErrorResponse',
+                    $e->getResponseHeaders()
+                );
+                $e->setResponseObject($data);
+                throw $e;
+            }
+
+            throw $e;
+        }
+    }
+
+    /**
+     * Create request for operation 'postPaymentInvoiceReimbursementsIdIban'
+     *
+     * @param int $id id (required)
+     * @param int $space Specifies the ID of the space the operation should be executed in. (required)
+     * @param string|null $recipient_iban recipient_iban (optional)
+     * @param string|null $sender_iban sender_iban (optional)
+     * @param string[]|null $expand expand (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['postPaymentInvoiceReimbursementsIdIban'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function postPaymentInvoiceReimbursementsIdIbanRequest(int $id, int $space, ?string $recipient_iban = null, ?string $sender_iban = null, ?array $expand = null, string $contentType = self::contentTypes['postPaymentInvoiceReimbursementsIdIban'][0])
+    {
+
+        // verify the required parameter 'id' is set
+        if ($id === null || (is_array($id) && count($id) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $id when calling postPaymentInvoiceReimbursementsIdIban'
+            );
+        }
+
+        // verify the required parameter 'space' is set
+        if ($space === null || (is_array($space) && count($space) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $space when calling postPaymentInvoiceReimbursementsIdIban'
+            );
+        }
+
+
+
+        
+
+        $resourcePath = '/payment/invoice-reimbursements/{id}/iban';
+        $httpMethod = 'POST';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $recipient_iban,
+            'recipientIban', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $sender_iban,
+            'senderIban', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $expand,
+            'expand', // param base name
+            'array', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+
+        // header params
+        if ($space !== null) {
+            $headerParams['space'] = ObjectSerializer::toHeaderValue($space);
+        }
+
+        // path params
+        if ($id !== null) {
+            $resourcePath = str_replace(
+                '{' . 'id' . '}',
+                ObjectSerializer::toPathValue($id),
                 $resourcePath
             );
         }

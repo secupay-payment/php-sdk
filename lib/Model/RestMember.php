@@ -27,7 +27,7 @@ use \ArrayAccess;
 use \Secupay\Sdk\ObjectSerializer;
 
 /**
- * UserAccountRole model
+ * RestMember model
  *
  * @category Class
  * @package     Secupay\Sdk
@@ -35,10 +35,10 @@ use \Secupay\Sdk\ObjectSerializer;
  * @license     Apache-2.0
  * The Apache License, Version 2.0
  * See the full license at https://www.apache.org/licenses/LICENSE-2.0.txt
- * @version     5.2.2
+ * @version     5.2.3
  * @implements \ArrayAccess<string, mixed>
  */
-class UserAccountRole implements ModelInterface, ArrayAccess, \JsonSerializable
+class RestMember implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -47,7 +47,7 @@ class UserAccountRole implements ModelInterface, ArrayAccess, \JsonSerializable
       *
       * @var string
       */
-    protected static $openAPIModelName = 'UserAccountRole';
+    protected static $openAPIModelName = 'RestMember';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -55,12 +55,10 @@ class UserAccountRole implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var string[]
       */
     protected static $openAPITypes = [
-        'role' => 'int',
+        'roles' => '\Secupay\Sdk\Model\RoleRef[]',
+        'name' => 'string',
         'id' => 'int',
-        'applies_on_sub_account' => 'bool',
-        'user' => 'int',
-        'version' => 'int',
-        'account' => 'int'
+        'user_type' => '\Secupay\Sdk\Model\UserType'
     ];
 
     /**
@@ -71,12 +69,10 @@ class UserAccountRole implements ModelInterface, ArrayAccess, \JsonSerializable
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'role' => 'int64',
+        'roles' => null,
+        'name' => null,
         'id' => 'int64',
-        'applies_on_sub_account' => null,
-        'user' => 'int64',
-        'version' => 'int32',
-        'account' => 'int64'
+        'user_type' => null
     ];
 
     /**
@@ -85,12 +81,10 @@ class UserAccountRole implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'role' => false,
+        'roles' => false,
+        'name' => false,
         'id' => false,
-        'applies_on_sub_account' => false,
-        'user' => false,
-        'version' => false,
-        'account' => false
+        'user_type' => false
     ];
 
     /**
@@ -179,12 +173,10 @@ class UserAccountRole implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $attributeMap = [
-        'role' => 'role',
+        'roles' => 'roles',
+        'name' => 'name',
         'id' => 'id',
-        'applies_on_sub_account' => 'appliesOnSubAccount',
-        'user' => 'user',
-        'version' => 'version',
-        'account' => 'account'
+        'user_type' => 'userType'
     ];
 
     /**
@@ -193,12 +185,10 @@ class UserAccountRole implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $setters = [
-        'role' => 'setRole',
+        'roles' => 'setRoles',
+        'name' => 'setName',
         'id' => 'setId',
-        'applies_on_sub_account' => 'setAppliesOnSubAccount',
-        'user' => 'setUser',
-        'version' => 'setVersion',
-        'account' => 'setAccount'
+        'user_type' => 'setUserType'
     ];
 
     /**
@@ -207,12 +197,10 @@ class UserAccountRole implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $getters = [
-        'role' => 'getRole',
+        'roles' => 'getRoles',
+        'name' => 'getName',
         'id' => 'getId',
-        'applies_on_sub_account' => 'getAppliesOnSubAccount',
-        'user' => 'getUser',
-        'version' => 'getVersion',
-        'account' => 'getAccount'
+        'user_type' => 'getUserType'
     ];
 
     /**
@@ -272,12 +260,10 @@ class UserAccountRole implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('role', $data ?? [], null);
+        $this->setIfExists('roles', $data ?? [], null);
+        $this->setIfExists('name', $data ?? [], null);
         $this->setIfExists('id', $data ?? [], null);
-        $this->setIfExists('applies_on_sub_account', $data ?? [], null);
-        $this->setIfExists('user', $data ?? [], null);
-        $this->setIfExists('version', $data ?? [], null);
-        $this->setIfExists('account', $data ?? [], null);
+        $this->setIfExists('user_type', $data ?? [], null);
     }
 
     /**
@@ -323,28 +309,55 @@ class UserAccountRole implements ModelInterface, ArrayAccess, \JsonSerializable
 
 
     /**
-     * Gets role
+     * Gets roles
      *
-     * @return int|null
+     * @return \Secupay\Sdk\Model\RoleRef[]|null
      */
-    public function getRole()
+    public function getRoles()
     {
-        return $this->container['role'];
+        return $this->container['roles'];
     }
 
     /**
-     * Sets role
+     * Sets roles
      *
-     * @param int|null $role The role that is assigned to the user.
+     * @param \Secupay\Sdk\Model\RoleRef[]|null $roles The roles the user holds.
      *
      * @return self
      */
-    public function setRole($role)
+    public function setRoles($roles)
     {
-        if (is_null($role)) {
-            throw new \InvalidArgumentException('non-nullable role cannot be null');
+        if (is_null($roles)) {
+            throw new \InvalidArgumentException('non-nullable roles cannot be null');
         }
-        $this->container['role'] = $role;
+        $this->container['roles'] = $roles;
+
+        return $this;
+    }
+
+    /**
+     * Gets name
+     *
+     * @return string|null
+     */
+    public function getName()
+    {
+        return $this->container['name'];
+    }
+
+    /**
+     * Sets name
+     *
+     * @param string|null $name The name used to identify the user.
+     *
+     * @return self
+     */
+    public function setName($name)
+    {
+        if (is_null($name)) {
+            throw new \InvalidArgumentException('non-nullable name cannot be null');
+        }
+        $this->container['name'] = $name;
 
         return $this;
     }
@@ -377,109 +390,28 @@ class UserAccountRole implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Gets applies_on_sub_account
+     * Gets user_type
      *
-     * @return bool|null
+     * @return \Secupay\Sdk\Model\UserType|null
      */
-    public function getAppliesOnSubAccount()
+    public function getUserType()
     {
-        return $this->container['applies_on_sub_account'];
+        return $this->container['user_type'];
     }
 
     /**
-     * Sets applies_on_sub_account
+     * Sets user_type
      *
-     * @param bool|null $applies_on_sub_account Whether the role is assigned to the user in subaccounts only.
+     * @param \Secupay\Sdk\Model\UserType|null $user_type user_type
      *
      * @return self
      */
-    public function setAppliesOnSubAccount($applies_on_sub_account)
+    public function setUserType($user_type)
     {
-        if (is_null($applies_on_sub_account)) {
-            throw new \InvalidArgumentException('non-nullable applies_on_sub_account cannot be null');
+        if (is_null($user_type)) {
+            throw new \InvalidArgumentException('non-nullable user_type cannot be null');
         }
-        $this->container['applies_on_sub_account'] = $applies_on_sub_account;
-
-        return $this;
-    }
-
-    /**
-     * Gets user
-     *
-     * @return int|null
-     */
-    public function getUser()
-    {
-        return $this->container['user'];
-    }
-
-    /**
-     * Sets user
-     *
-     * @param int|null $user The user whose role this defines.
-     *
-     * @return self
-     */
-    public function setUser($user)
-    {
-        if (is_null($user)) {
-            throw new \InvalidArgumentException('non-nullable user cannot be null');
-        }
-        $this->container['user'] = $user;
-
-        return $this;
-    }
-
-    /**
-     * Gets version
-     *
-     * @return int|null
-     */
-    public function getVersion()
-    {
-        return $this->container['version'];
-    }
-
-    /**
-     * Sets version
-     *
-     * @param int|null $version The version is used for optimistic locking and incremented whenever the object is updated.
-     *
-     * @return self
-     */
-    public function setVersion($version)
-    {
-        if (is_null($version)) {
-            throw new \InvalidArgumentException('non-nullable version cannot be null');
-        }
-        $this->container['version'] = $version;
-
-        return $this;
-    }
-
-    /**
-     * Gets account
-     *
-     * @return int|null
-     */
-    public function getAccount()
-    {
-        return $this->container['account'];
-    }
-
-    /**
-     * Sets account
-     *
-     * @param int|null $account The account in which the role is assigned to the user.
-     *
-     * @return self
-     */
-    public function setAccount($account)
-    {
-        if (is_null($account)) {
-            throw new \InvalidArgumentException('non-nullable account cannot be null');
-        }
-        $this->container['account'] = $account;
+        $this->container['user_type'] = $user_type;
 
         return $this;
     }

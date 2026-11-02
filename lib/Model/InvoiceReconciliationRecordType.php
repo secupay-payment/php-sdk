@@ -27,7 +27,7 @@ use \ArrayAccess;
 use \Secupay\Sdk\ObjectSerializer;
 
 /**
- * UserSpaceRole model
+ * InvoiceReconciliationRecordType model
  *
  * @category Class
  * @package     Secupay\Sdk
@@ -35,10 +35,10 @@ use \Secupay\Sdk\ObjectSerializer;
  * @license     Apache-2.0
  * The Apache License, Version 2.0
  * See the full license at https://www.apache.org/licenses/LICENSE-2.0.txt
- * @version     5.2.2
+ * @version     5.2.3
  * @implements \ArrayAccess<string, mixed>
  */
-class UserSpaceRole implements ModelInterface, ArrayAccess, \JsonSerializable
+class InvoiceReconciliationRecordType implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -47,7 +47,7 @@ class UserSpaceRole implements ModelInterface, ArrayAccess, \JsonSerializable
       *
       * @var string
       */
-    protected static $openAPIModelName = 'UserSpaceRole';
+    protected static $openAPIModelName = 'InvoiceReconciliationRecordType';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -55,11 +55,9 @@ class UserSpaceRole implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var string[]
       */
     protected static $openAPITypes = [
-        'role' => 'int',
-        'id' => 'int',
-        'user' => 'int',
-        'version' => 'int',
-        'space' => 'int'
+        'name' => 'array<string,string>',
+        'description' => 'array<string,string>',
+        'id' => 'int'
     ];
 
     /**
@@ -70,11 +68,9 @@ class UserSpaceRole implements ModelInterface, ArrayAccess, \JsonSerializable
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'role' => 'int64',
-        'id' => 'int64',
-        'user' => 'int64',
-        'version' => 'int32',
-        'space' => 'int64'
+        'name' => null,
+        'description' => null,
+        'id' => 'int64'
     ];
 
     /**
@@ -83,11 +79,9 @@ class UserSpaceRole implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'role' => false,
-        'id' => false,
-        'user' => false,
-        'version' => false,
-        'space' => false
+        'name' => false,
+        'description' => false,
+        'id' => false
     ];
 
     /**
@@ -176,11 +170,9 @@ class UserSpaceRole implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $attributeMap = [
-        'role' => 'role',
-        'id' => 'id',
-        'user' => 'user',
-        'version' => 'version',
-        'space' => 'space'
+        'name' => 'name',
+        'description' => 'description',
+        'id' => 'id'
     ];
 
     /**
@@ -189,11 +181,9 @@ class UserSpaceRole implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $setters = [
-        'role' => 'setRole',
-        'id' => 'setId',
-        'user' => 'setUser',
-        'version' => 'setVersion',
-        'space' => 'setSpace'
+        'name' => 'setName',
+        'description' => 'setDescription',
+        'id' => 'setId'
     ];
 
     /**
@@ -202,11 +192,9 @@ class UserSpaceRole implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $getters = [
-        'role' => 'getRole',
-        'id' => 'getId',
-        'user' => 'getUser',
-        'version' => 'getVersion',
-        'space' => 'getSpace'
+        'name' => 'getName',
+        'description' => 'getDescription',
+        'id' => 'getId'
     ];
 
     /**
@@ -266,11 +254,9 @@ class UserSpaceRole implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('role', $data ?? [], null);
+        $this->setIfExists('name', $data ?? [], null);
+        $this->setIfExists('description', $data ?? [], null);
         $this->setIfExists('id', $data ?? [], null);
-        $this->setIfExists('user', $data ?? [], null);
-        $this->setIfExists('version', $data ?? [], null);
-        $this->setIfExists('space', $data ?? [], null);
     }
 
     /**
@@ -316,28 +302,55 @@ class UserSpaceRole implements ModelInterface, ArrayAccess, \JsonSerializable
 
 
     /**
-     * Gets role
+     * Gets name
      *
-     * @return int|null
+     * @return array<string,string>|null
      */
-    public function getRole()
+    public function getName()
     {
-        return $this->container['role'];
+        return $this->container['name'];
     }
 
     /**
-     * Sets role
+     * Sets name
      *
-     * @param int|null $role The role that is assigned to the user.
+     * @param array<string,string>|null $name The localized name of the object.
      *
      * @return self
      */
-    public function setRole($role)
+    public function setName($name)
     {
-        if (is_null($role)) {
-            throw new \InvalidArgumentException('non-nullable role cannot be null');
+        if (is_null($name)) {
+            throw new \InvalidArgumentException('non-nullable name cannot be null');
         }
-        $this->container['role'] = $role;
+        $this->container['name'] = $name;
+
+        return $this;
+    }
+
+    /**
+     * Gets description
+     *
+     * @return array<string,string>|null
+     */
+    public function getDescription()
+    {
+        return $this->container['description'];
+    }
+
+    /**
+     * Sets description
+     *
+     * @param array<string,string>|null $description The localized description of the object.
+     *
+     * @return self
+     */
+    public function setDescription($description)
+    {
+        if (is_null($description)) {
+            throw new \InvalidArgumentException('non-nullable description cannot be null');
+        }
+        $this->container['description'] = $description;
 
         return $this;
     }
@@ -365,87 +378,6 @@ class UserSpaceRole implements ModelInterface, ArrayAccess, \JsonSerializable
             throw new \InvalidArgumentException('non-nullable id cannot be null');
         }
         $this->container['id'] = $id;
-
-        return $this;
-    }
-
-    /**
-     * Gets user
-     *
-     * @return int|null
-     */
-    public function getUser()
-    {
-        return $this->container['user'];
-    }
-
-    /**
-     * Sets user
-     *
-     * @param int|null $user The user whose role this defines.
-     *
-     * @return self
-     */
-    public function setUser($user)
-    {
-        if (is_null($user)) {
-            throw new \InvalidArgumentException('non-nullable user cannot be null');
-        }
-        $this->container['user'] = $user;
-
-        return $this;
-    }
-
-    /**
-     * Gets version
-     *
-     * @return int|null
-     */
-    public function getVersion()
-    {
-        return $this->container['version'];
-    }
-
-    /**
-     * Sets version
-     *
-     * @param int|null $version The version is used for optimistic locking and incremented whenever the object is updated.
-     *
-     * @return self
-     */
-    public function setVersion($version)
-    {
-        if (is_null($version)) {
-            throw new \InvalidArgumentException('non-nullable version cannot be null');
-        }
-        $this->container['version'] = $version;
-
-        return $this;
-    }
-
-    /**
-     * Gets space
-     *
-     * @return int|null
-     */
-    public function getSpace()
-    {
-        return $this->container['space'];
-    }
-
-    /**
-     * Sets space
-     *
-     * @param int|null $space The space in which the role is assigned to the user.
-     *
-     * @return self
-     */
-    public function setSpace($space)
-    {
-        if (is_null($space)) {
-            throw new \InvalidArgumentException('non-nullable space cannot be null');
-        }
-        $this->container['space'] = $space;
 
         return $this;
     }

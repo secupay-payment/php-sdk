@@ -27,7 +27,7 @@ use \ArrayAccess;
 use \Secupay\Sdk\ObjectSerializer;
 
 /**
- * UserAccountRoleListResponse model
+ * PaymentTerminalLocationCrudModelRestApiCreate model
  *
  * @category Class
  * @package     Secupay\Sdk
@@ -35,10 +35,10 @@ use \Secupay\Sdk\ObjectSerializer;
  * @license     Apache-2.0
  * The Apache License, Version 2.0
  * See the full license at https://www.apache.org/licenses/LICENSE-2.0.txt
- * @version     5.2.2
+ * @version     5.2.3
  * @implements \ArrayAccess<string, mixed>
  */
-class UserAccountRoleListResponse implements ModelInterface, ArrayAccess, \JsonSerializable
+class PaymentTerminalLocationCrudModelRestApiCreate implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -47,7 +47,7 @@ class UserAccountRoleListResponse implements ModelInterface, ArrayAccess, \JsonS
       *
       * @var string
       */
-    protected static $openAPIModelName = 'User_Account_Role_List_Response';
+    protected static $openAPIModelName = 'PaymentTerminalLocationCrudModel.RestApiCreate';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -55,9 +55,11 @@ class UserAccountRoleListResponse implements ModelInterface, ArrayAccess, \JsonS
       * @var string[]
       */
     protected static $openAPITypes = [
-        'data' => '\Secupay\Sdk\Model\UserAccountRole[]',
-        'has_more' => 'bool',
-        'limit' => 'int'
+        'production_merchant_id' => 'string',
+        'address' => '\Secupay\Sdk\Model\PaymentTerminalAddressCreate',
+        'name' => 'string',
+        'external_id' => 'string',
+        'contact_address' => '\Secupay\Sdk\Model\PaymentTerminalAddressCreate'
     ];
 
     /**
@@ -68,9 +70,11 @@ class UserAccountRoleListResponse implements ModelInterface, ArrayAccess, \JsonS
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'data' => null,
-        'has_more' => null,
-        'limit' => 'int32'
+        'production_merchant_id' => null,
+        'address' => null,
+        'name' => null,
+        'external_id' => null,
+        'contact_address' => null
     ];
 
     /**
@@ -79,9 +83,11 @@ class UserAccountRoleListResponse implements ModelInterface, ArrayAccess, \JsonS
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'data' => false,
-        'has_more' => false,
-        'limit' => false
+        'production_merchant_id' => false,
+        'address' => false,
+        'name' => false,
+        'external_id' => false,
+        'contact_address' => false
     ];
 
     /**
@@ -170,9 +176,11 @@ class UserAccountRoleListResponse implements ModelInterface, ArrayAccess, \JsonS
      * @var string[]
      */
     protected static $attributeMap = [
-        'data' => 'data',
-        'has_more' => 'hasMore',
-        'limit' => 'limit'
+        'production_merchant_id' => 'productionMerchantId',
+        'address' => 'address',
+        'name' => 'name',
+        'external_id' => 'externalId',
+        'contact_address' => 'contactAddress'
     ];
 
     /**
@@ -181,9 +189,11 @@ class UserAccountRoleListResponse implements ModelInterface, ArrayAccess, \JsonS
      * @var string[]
      */
     protected static $setters = [
-        'data' => 'setData',
-        'has_more' => 'setHasMore',
-        'limit' => 'setLimit'
+        'production_merchant_id' => 'setProductionMerchantId',
+        'address' => 'setAddress',
+        'name' => 'setName',
+        'external_id' => 'setExternalId',
+        'contact_address' => 'setContactAddress'
     ];
 
     /**
@@ -192,9 +202,11 @@ class UserAccountRoleListResponse implements ModelInterface, ArrayAccess, \JsonS
      * @var string[]
      */
     protected static $getters = [
-        'data' => 'getData',
-        'has_more' => 'getHasMore',
-        'limit' => 'getLimit'
+        'production_merchant_id' => 'getProductionMerchantId',
+        'address' => 'getAddress',
+        'name' => 'getName',
+        'external_id' => 'getExternalId',
+        'contact_address' => 'getContactAddress'
     ];
 
     /**
@@ -254,9 +266,11 @@ class UserAccountRoleListResponse implements ModelInterface, ArrayAccess, \JsonS
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('data', $data ?? [], null);
-        $this->setIfExists('has_more', $data ?? [], null);
-        $this->setIfExists('limit', $data ?? [], null);
+        $this->setIfExists('production_merchant_id', $data ?? [], null);
+        $this->setIfExists('address', $data ?? [], null);
+        $this->setIfExists('name', $data ?? [], null);
+        $this->setIfExists('external_id', $data ?? [], null);
+        $this->setIfExists('contact_address', $data ?? [], null);
     }
 
     /**
@@ -286,6 +300,27 @@ class UserAccountRoleListResponse implements ModelInterface, ArrayAccess, \JsonS
     {
         $invalidProperties = [];
 
+        if (!is_null($this->container['production_merchant_id']) && (mb_strlen($this->container['production_merchant_id']) > 15)) {
+            $invalidProperties[] = "invalid value for 'production_merchant_id', the character length must be smaller than or equal to 15.";
+        }
+
+        if (!is_null($this->container['production_merchant_id']) && (mb_strlen($this->container['production_merchant_id']) < 15)) {
+            $invalidProperties[] = "invalid value for 'production_merchant_id', the character length must be bigger than or equal to 15.";
+        }
+
+        if (!is_null($this->container['production_merchant_id']) && !preg_match("/([0-9a-zA-Z])+/", $this->container['production_merchant_id'])) {
+            $invalidProperties[] = "invalid value for 'production_merchant_id', must be conform to the pattern /([0-9a-zA-Z])+/.";
+        }
+
+        if ($this->container['address'] === null) {
+            $invalidProperties[] = "'address' can't be null";
+        }
+        if ($this->container['name'] === null) {
+            $invalidProperties[] = "'name' can't be null";
+        }
+        if ($this->container['external_id'] === null) {
+            $invalidProperties[] = "'external_id' can't be null";
+        }
         return $invalidProperties;
     }
 
@@ -302,82 +337,146 @@ class UserAccountRoleListResponse implements ModelInterface, ArrayAccess, \JsonS
 
 
     /**
-     * Gets data
+     * Gets production_merchant_id
      *
-     * @return \Secupay\Sdk\Model\UserAccountRole[]|null
+     * @return string|null
      */
-    public function getData()
+    public function getProductionMerchantId()
     {
-        return $this->container['data'];
+        return $this->container['production_merchant_id'];
     }
 
     /**
-     * Sets data
+     * Sets production_merchant_id
      *
-     * @param \Secupay\Sdk\Model\UserAccountRole[]|null $data An array containing the actual response objects.
+     * @param string|null $production_merchant_id The production merchant identifier assigned to the location.
      *
      * @return self
      */
-    public function setData($data)
+    public function setProductionMerchantId($production_merchant_id)
     {
-        if (is_null($data)) {
-            throw new \InvalidArgumentException('non-nullable data cannot be null');
+        if (is_null($production_merchant_id)) {
+            throw new \InvalidArgumentException('non-nullable production_merchant_id cannot be null');
         }
-        $this->container['data'] = $data;
+        if ((mb_strlen($production_merchant_id) > 15)) {
+            throw new \InvalidArgumentException('invalid length for $production_merchant_id when calling PaymentTerminalLocationCrudModelRestApiCreate., must be smaller than or equal to 15.');
+        }
+        if ((mb_strlen($production_merchant_id) < 15)) {
+            throw new \InvalidArgumentException('invalid length for $production_merchant_id when calling PaymentTerminalLocationCrudModelRestApiCreate., must be bigger than or equal to 15.');
+        }
+        if ((!preg_match("/([0-9a-zA-Z])+/", ObjectSerializer::toString($production_merchant_id)))) {
+            throw new \InvalidArgumentException("invalid value for \$production_merchant_id when calling PaymentTerminalLocationCrudModelRestApiCreate., must conform to the pattern /([0-9a-zA-Z])+/.");
+        }
+
+        $this->container['production_merchant_id'] = $production_merchant_id;
 
         return $this;
     }
 
     /**
-     * Gets has_more
+     * Gets address
      *
-     * @return bool|null
+     * @return \Secupay\Sdk\Model\PaymentTerminalAddressCreate
      */
-    public function getHasMore()
+    public function getAddress()
     {
-        return $this->container['has_more'];
+        return $this->container['address'];
     }
 
     /**
-     * Sets has_more
+     * Sets address
      *
-     * @param bool|null $has_more Whether there are more objects available after this set. If false, there are no more objects to retrieve.
+     * @param \Secupay\Sdk\Model\PaymentTerminalAddressCreate $address address
      *
      * @return self
      */
-    public function setHasMore($has_more)
+    public function setAddress($address)
     {
-        if (is_null($has_more)) {
-            throw new \InvalidArgumentException('non-nullable has_more cannot be null');
+        if (is_null($address)) {
+            throw new \InvalidArgumentException('non-nullable address cannot be null');
         }
-        $this->container['has_more'] = $has_more;
+        $this->container['address'] = $address;
 
         return $this;
     }
 
     /**
-     * Gets limit
+     * Gets name
      *
-     * @return int|null
+     * @return string
      */
-    public function getLimit()
+    public function getName()
     {
-        return $this->container['limit'];
+        return $this->container['name'];
     }
 
     /**
-     * Sets limit
+     * Sets name
      *
-     * @param int|null $limit The applied limit on the number of objects returned.
+     * @param string $name The name used to identify the payment terminal location.
      *
      * @return self
      */
-    public function setLimit($limit)
+    public function setName($name)
     {
-        if (is_null($limit)) {
-            throw new \InvalidArgumentException('non-nullable limit cannot be null');
+        if (is_null($name)) {
+            throw new \InvalidArgumentException('non-nullable name cannot be null');
         }
-        $this->container['limit'] = $limit;
+        $this->container['name'] = $name;
+
+        return $this;
+    }
+
+    /**
+     * Gets external_id
+     *
+     * @return string
+     */
+    public function getExternalId()
+    {
+        return $this->container['external_id'];
+    }
+
+    /**
+     * Sets external_id
+     *
+     * @param string $external_id A client-generated nonce which uniquely identifies some action to be executed. Subsequent requests with the same external ID do not execute the action again, but return the original result.
+     *
+     * @return self
+     */
+    public function setExternalId($external_id)
+    {
+        if (is_null($external_id)) {
+            throw new \InvalidArgumentException('non-nullable external_id cannot be null');
+        }
+        $this->container['external_id'] = $external_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets contact_address
+     *
+     * @return \Secupay\Sdk\Model\PaymentTerminalAddressCreate|null
+     */
+    public function getContactAddress()
+    {
+        return $this->container['contact_address'];
+    }
+
+    /**
+     * Sets contact_address
+     *
+     * @param \Secupay\Sdk\Model\PaymentTerminalAddressCreate|null $contact_address contact_address
+     *
+     * @return self
+     */
+    public function setContactAddress($contact_address)
+    {
+        if (is_null($contact_address)) {
+            throw new \InvalidArgumentException('non-nullable contact_address cannot be null');
+        }
+        $this->container['contact_address'] = $contact_address;
 
         return $this;
     }

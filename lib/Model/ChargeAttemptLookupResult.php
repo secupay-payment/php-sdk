@@ -27,7 +27,7 @@ use \ArrayAccess;
 use \Secupay\Sdk\ObjectSerializer;
 
 /**
- * UserSpaceRoleListResponse model
+ * ChargeAttemptLookupResult model
  *
  * @category Class
  * @package     Secupay\Sdk
@@ -35,10 +35,10 @@ use \Secupay\Sdk\ObjectSerializer;
  * @license     Apache-2.0
  * The Apache License, Version 2.0
  * See the full license at https://www.apache.org/licenses/LICENSE-2.0.txt
- * @version     5.2.2
+ * @version     5.2.3
  * @implements \ArrayAccess<string, mixed>
  */
-class UserSpaceRoleListResponse implements ModelInterface, ArrayAccess, \JsonSerializable
+class ChargeAttemptLookupResult implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -47,7 +47,7 @@ class UserSpaceRoleListResponse implements ModelInterface, ArrayAccess, \JsonSer
       *
       * @var string
       */
-    protected static $openAPIModelName = 'User_Space_Role_List_Response';
+    protected static $openAPIModelName = 'ChargeAttemptLookupResult';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -55,9 +55,8 @@ class UserSpaceRoleListResponse implements ModelInterface, ArrayAccess, \JsonSer
       * @var string[]
       */
     protected static $openAPITypes = [
-        'data' => '\Secupay\Sdk\Model\UserSpaceRole[]',
-        'has_more' => 'bool',
-        'limit' => 'int'
+        'successful_charge_attempt' => '\Secupay\Sdk\Model\ChargeAttemptProjection',
+        'transaction' => '\Secupay\Sdk\Model\TransactionProjection'
     ];
 
     /**
@@ -68,9 +67,8 @@ class UserSpaceRoleListResponse implements ModelInterface, ArrayAccess, \JsonSer
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'data' => null,
-        'has_more' => null,
-        'limit' => 'int32'
+        'successful_charge_attempt' => null,
+        'transaction' => null
     ];
 
     /**
@@ -79,9 +77,8 @@ class UserSpaceRoleListResponse implements ModelInterface, ArrayAccess, \JsonSer
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'data' => false,
-        'has_more' => false,
-        'limit' => false
+        'successful_charge_attempt' => false,
+        'transaction' => false
     ];
 
     /**
@@ -170,9 +167,8 @@ class UserSpaceRoleListResponse implements ModelInterface, ArrayAccess, \JsonSer
      * @var string[]
      */
     protected static $attributeMap = [
-        'data' => 'data',
-        'has_more' => 'hasMore',
-        'limit' => 'limit'
+        'successful_charge_attempt' => 'successfulChargeAttempt',
+        'transaction' => 'transaction'
     ];
 
     /**
@@ -181,9 +177,8 @@ class UserSpaceRoleListResponse implements ModelInterface, ArrayAccess, \JsonSer
      * @var string[]
      */
     protected static $setters = [
-        'data' => 'setData',
-        'has_more' => 'setHasMore',
-        'limit' => 'setLimit'
+        'successful_charge_attempt' => 'setSuccessfulChargeAttempt',
+        'transaction' => 'setTransaction'
     ];
 
     /**
@@ -192,9 +187,8 @@ class UserSpaceRoleListResponse implements ModelInterface, ArrayAccess, \JsonSer
      * @var string[]
      */
     protected static $getters = [
-        'data' => 'getData',
-        'has_more' => 'getHasMore',
-        'limit' => 'getLimit'
+        'successful_charge_attempt' => 'getSuccessfulChargeAttempt',
+        'transaction' => 'getTransaction'
     ];
 
     /**
@@ -254,9 +248,8 @@ class UserSpaceRoleListResponse implements ModelInterface, ArrayAccess, \JsonSer
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('data', $data ?? [], null);
-        $this->setIfExists('has_more', $data ?? [], null);
-        $this->setIfExists('limit', $data ?? [], null);
+        $this->setIfExists('successful_charge_attempt', $data ?? [], null);
+        $this->setIfExists('transaction', $data ?? [], null);
     }
 
     /**
@@ -302,82 +295,55 @@ class UserSpaceRoleListResponse implements ModelInterface, ArrayAccess, \JsonSer
 
 
     /**
-     * Gets data
+     * Gets successful_charge_attempt
      *
-     * @return \Secupay\Sdk\Model\UserSpaceRole[]|null
+     * @return \Secupay\Sdk\Model\ChargeAttemptProjection|null
      */
-    public function getData()
+    public function getSuccessfulChargeAttempt()
     {
-        return $this->container['data'];
+        return $this->container['successful_charge_attempt'];
     }
 
     /**
-     * Sets data
+     * Sets successful_charge_attempt
      *
-     * @param \Secupay\Sdk\Model\UserSpaceRole[]|null $data An array containing the actual response objects.
+     * @param \Secupay\Sdk\Model\ChargeAttemptProjection|null $successful_charge_attempt successful_charge_attempt
      *
      * @return self
      */
-    public function setData($data)
+    public function setSuccessfulChargeAttempt($successful_charge_attempt)
     {
-        if (is_null($data)) {
-            throw new \InvalidArgumentException('non-nullable data cannot be null');
+        if (is_null($successful_charge_attempt)) {
+            throw new \InvalidArgumentException('non-nullable successful_charge_attempt cannot be null');
         }
-        $this->container['data'] = $data;
+        $this->container['successful_charge_attempt'] = $successful_charge_attempt;
 
         return $this;
     }
 
     /**
-     * Gets has_more
+     * Gets transaction
      *
-     * @return bool|null
+     * @return \Secupay\Sdk\Model\TransactionProjection|null
      */
-    public function getHasMore()
+    public function getTransaction()
     {
-        return $this->container['has_more'];
+        return $this->container['transaction'];
     }
 
     /**
-     * Sets has_more
+     * Sets transaction
      *
-     * @param bool|null $has_more Whether there are more objects available after this set. If false, there are no more objects to retrieve.
+     * @param \Secupay\Sdk\Model\TransactionProjection|null $transaction transaction
      *
      * @return self
      */
-    public function setHasMore($has_more)
+    public function setTransaction($transaction)
     {
-        if (is_null($has_more)) {
-            throw new \InvalidArgumentException('non-nullable has_more cannot be null');
+        if (is_null($transaction)) {
+            throw new \InvalidArgumentException('non-nullable transaction cannot be null');
         }
-        $this->container['has_more'] = $has_more;
-
-        return $this;
-    }
-
-    /**
-     * Gets limit
-     *
-     * @return int|null
-     */
-    public function getLimit()
-    {
-        return $this->container['limit'];
-    }
-
-    /**
-     * Sets limit
-     *
-     * @param int|null $limit The applied limit on the number of objects returned.
-     *
-     * @return self
-     */
-    public function setLimit($limit)
-    {
-        if (is_null($limit)) {
-            throw new \InvalidArgumentException('non-nullable limit cannot be null');
-        }
-        $this->container['limit'] = $limit;
+        $this->container['transaction'] = $transaction;
 
         return $this;
     }
